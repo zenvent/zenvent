@@ -1,0 +1,10 @@
+body {
+    background-image: url("media/bg.png");
+    background-repeat: repeat;
+    padding-top: 12rem;
+}
+
+img.center {
+    display: block;
+    margin: 0 auto;
+}
