@@ -5,6 +5,7 @@ description: "Just about everything you'll need to style in the theme: headings,
 modified: 2014-12-24
 tags: [sample post]
 image:
+  path: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png
   feature: abstract-3.jpg
   credit: dargadgetz
   creditlink: http://www.dargadgetz.com/ios-7-abstract-wallpaper-pack-for-iphone-5-and-ipod-touch-retina/
