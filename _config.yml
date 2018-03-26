@@ -11,19 +11,8 @@ url:
 owner:
   name:           Zac
   avatar:         avatar.jpg
-  bio:            "My Bio..."
+  bio:            "I am a maker. Construction, prototyping, and programming peak my interest. I invest heavily in robotics such as CNC machining, 3D printing, and laser fabrication. Electronic parts and experiments litter my home."
   email:          zac@zenvent.com
-  # Social networking links used in footer. Update and remove as you like.
-  twitter:        
-  facebook:       
-  github:         
-  stackexchange:  
-  linkedin:       
-  instagram:      
-  flickr:         
-  tumblr:         
-  # google plus id, include the '+', eg +mmistakes
-  google_plus:
 
 # Background image to be tiled on all pages
 background: 
