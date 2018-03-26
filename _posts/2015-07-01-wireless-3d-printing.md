@@ -24,9 +24,13 @@ Lo and behold others have desired this too, a guy named Guy Sheffer started a pr
 ## Download: 
 
 OctoPi - <http://octoprint.org/download/>
+
 Disk Imager - <http://sourceforge.net/projects/win32diskimager/>
+
 PuTTY - <http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html>
+
 Cura (15.04.2) - <https://ultimaker.com/en/products/cura-software/list>
+
 
 
 In my tutorial I will show you how to setup for both of the 3D printers I have, though the process should be similar with most printers.
@@ -55,10 +59,6 @@ You should now be able to log into OctoPi by typing "http://octopi.local" or "ht
 The Pi is almost ready to control your printer, but first you need to configure your setup. There are two ways you can use OctoPrint, either as a slicer and printer, or just as a printer. Meaning you can upload files to slice and print, or you can slice 3D models on your PC first then upload them to be printed. You will have more control on your PC with slicing.
 
 Copy the settings in the images below (for your printer) to configure OctoPrint. Once you have done this, you are ready to print sliced files! If you'd like to be able to upload 3D models and slice them on OctoPrint, proceed to the next step as well.
-
-## TinyBoy Fabrikator Mini 3D Printer Settings
-
-
 
 
 ## Configure Cura for your PC and OctoPrint (Optional)

@@ -2,7 +2,7 @@
 layout: page
 title: About ZENVENT
 image:
-  feature: abstract-1.png
+  feature: title.png
 comments: false
 ---
 
