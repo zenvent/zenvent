@@ -139,9 +139,6 @@ To streamline the creation of posts and pages, [Jekyll::Compose](https://github.
 
 For the most part you can leave these as is since the author/owner details are pulled from `_config.yml`. That said you'll probably want to customize the copyright stuff in `footer.html` to your liking.
 
-### Reading Time
-
-On by default. To turn off remove `reading_time` from `_config.yml`. Default words per minute is set at 200 and can changed by updating `words_per_minute` in `_config.yml`.
 
 ### Feature Images
 
