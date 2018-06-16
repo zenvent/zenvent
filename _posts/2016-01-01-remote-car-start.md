@@ -32,8 +32,6 @@ If you follow the tutorial, basic computer and electronics skills. I am assuming
 
 *This tutorial assumes you already have remote start on your car*
 
-[I'm an inline-style link](https://www.google.com)
-
 ## Estimated Cost
 
 Materials:  $45
