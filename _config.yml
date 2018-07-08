@@ -31,7 +31,7 @@ sass:
   style:            compressed
 
 # Comments
-disqus_shortname:   default
+disqus_shortname:   zenvent
 
 # Social
 analytics-id:       "default"
