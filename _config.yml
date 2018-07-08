@@ -4,7 +4,7 @@ bio:                'Think. Build. Create.'
 description:        'ZENVENT'
 locale:             en_US
 baseurl:            "www.zenvent.com"
-url:                "www.zenvent.com"
+url:                "https://www.zenvent.com"
 
 defaults:
 - scope:
