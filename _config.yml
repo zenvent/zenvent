@@ -3,8 +3,8 @@ title:              'ZENVENT'
 bio:                'Think. Build. Create.'
 description:        'ZENVENT'
 locale:             en_US
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://www.zenvent.com" # the base hostname & protocol for your site
+baseurl:            ""
+url:                "https://www.zenvent.com"
 
 defaults:
 - scope:
@@ -35,15 +35,13 @@ disqus_shortname:   default
 
 # Social
 analytics-id:       "default"
-twitter:            default
-facebook:           default
-instagram:          default
-github:             default
+facebook:           https://facebook.com/https://www.facebook.com/THEZENVENT/
+linkedin:           https://www.linkedin.com/in/zacrabtree/
+github:             https://github.com/zenvent
+youtube:            https://www.youtube.com/user/zenvent/
 
 # personal
-location:           Los Angeles, CA
-phone:              310-318-5555
-email:              info@default.com
+email:              zac@zenvent.com
 
 # Gems
 gems:
@@ -53,11 +51,8 @@ gems:
   - jekyll-gist
   - jekyll-paginate
 
-paginate: 10
+paginate: 5
 paginate_path: "/blog/page:num/"
-
-jekyll-mentions:
-    base_url: https://github.com
 
 # Exclude list
 exclude: [README.md, Gemfile, Gemfile.lock, node_modules, gulpfile.js, package.json, _site, src, vendor, CNAME, LICENSE, Rakefile, old]
