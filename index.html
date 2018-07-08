@@ -1,33 +1,100 @@
 ---
-layout: post-index
-description: "ZENVENT"
-tags: [Jekyll, theme, themes, responsive, blog, modern]
-comments: false
-image:
-  feature: title.png
+layout: null
+title: ZENVENT
+description: Every great website starts with a great homepage. The homepage tells your viewers what your site is all about and gives your viewers a place to come back to.
+sitemap:
+    priority: 1.0
+    lastmod: 2017-11-02
+    changefreq: weekly
 ---
+<!DOCTYPE HTML>
+<html>
+	<head>
+    {% include head.html %}
 
-{% for post in paginator.posts %}
-<article class="hentry">
-  <header>
-    {% if post.image.feature %}
-      <div class="entry-image-index">
-        <a href="{{ site.url }}{{ post.url }}" title="{{ post.title }}"><img src="{{ site.url }}/images/{{ post.image.feature }}" alt="{{ post.title }}"></a>
-      </div><!-- /.entry-image -->
-    {% endif %}
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="{{ post.date | date_to_xmlschema }}"><a href="{{ site.url }}{{ post.url }}">{{ post.date | date: "%B %d, %Y" }}</a></time></span><span class="author vcard"><span class="fn"><a href="{{ site.url }}/about/" title="About {{ site.owner.name }}">{{ site.owner.name }}</a></span></span>
-    </div><!-- /.entry-meta -->
-    {% if post.link %}
-      <h1 class="entry-title"><a href="{{ site.url }}{{ post.url }}" class="permalink" rel="bookmark" title="{{ post.title }}"><i class="fa fa-bookmark"></i></a> <a href="{{ post.link }}">{{ post.title }}</a></h1>
-    {% else %}
-      <h1 class="entry-title"><a href="{{ site.url }}{{ post.url }}" rel="bookmark" title="{{ post.title }}" itemprop="url">{{ post.title }}</a></h1>
-    {% endif %}
-  </header>
-  <div class="entry-content">
-    {{ post.content }}
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-{% endfor %}
 
-{% include pagination.html %}
+	</head>
+	<body class="is-loading">
+
+		<!-- Wrapper -->
+		<div id="wrapper" class="fade-in">
+	
+			<!-- Header -->
+			<header id="header">
+				<a href="{{ " / " | absolute_url }}" class="logo">{{site.title}}</a>
+			</header>
+	
+	
+			<!-- Nav -->
+			<nav id="nav">
+				{% include nav.html %}
+			</nav>
+	
+			<!-- Main -->
+			<div id="main">
+	
+				<!-- Featured Post -->
+				<article class="post featured">
+						<div class="postCard">
+						{% assign post = site.posts.first %}
+					
+					<a href="{{ post.url | absolute_url }}" class="image fit">
+						<img src="{{ post.image | absolute_url }}" alt="" />
+					</a>
+					<header class="major">
+							<h2>
+									<a href="{{ post.url | absolute_url }}">{{ post.title }}</a>
+							</h2>
+						</header>
+					<a href="{{ post.url | absolute_url }}">{{ post.excerpt }}</a>
+					</div>
+				</article>
+
+								<!-- Post -->
+								<!-- <section class="posts">
+										{% for post in site.posts offset:1 %}
+										<article>
+											<header>
+												<h2>
+													<a href="{{ post.url | absolute_url }}">{{ post.title }}</a>
+												</h2>
+											</header>
+											<a href="{{ post.url | absolute_url }}" class="image fit">
+												<img src="{{ post.image | absolute_url }}" alt="" />
+											</a>
+											<a href="{{ post.url | absolute_url }}">{{ post.excerpt }}</a>
+										</article>
+										{% endfor %}
+									</section> -->
+				
+				<!-- Post -->
+				<section class="posts">
+					{% for post in site.posts offset:1 %}
+					<article>
+						<div class="postCard">
+						<a href="{{ post.url | absolute_url }}" class="image fit">
+							<img src="{{ post.image | absolute_url }}" alt="" />
+						</a>
+						<header>
+								<h2>
+									<a href="{{ post.url | absolute_url }}">{{ post.title }}</a>
+								</h2>
+							</header>
+						<a href="{{ post.url | absolute_url }}">{{ post.excerpt }}</a>
+					</div>
+					</article>
+					{% endfor %}
+				</section>
+			
+			</div>
+	
+			<!-- Footer -->
+			{% include foot.html %}
+	
+		</div>
+	
+		<!-- Scripts -->
+		{% include scripts-main.html %} {% include tracking.html %}
+	
+	</body>
+</html>

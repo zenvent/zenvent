@@ -1,55 +1,86 @@
-<!doctype html>
-<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
-<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
-<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!DOCTYPE HTML>
+<html>
+
 <head>
-{% include head.html %}
+  {% include head.html %}
 </head>
 
-<body id="post" {% if page.image.feature %}class="feature"{% endif %}>
+<body class="is-loading">
 
-{% include browser-upgrade.html %}
-{% include navigation.html %}
+  <!-- Wrapper -->
+  <div id="wrapper" class="fade-in">
 
-{% if page.image.feature %}
-<div class="entry-header">
-  <div class="entry-image">
-    <img src="{{ site.url }}/images/{{ page.image.feature }}" alt="{{ page.title }}">
-  </div><!-- /.entry-image -->
-</div><!-- /.entry-header -->
-{% endif %}
-
-<div id="main" role="main">
-  <article class="hentry">
-    <header class="header-title">
-      <div class="header-title-wrap">
-        {% if page.link %}
-          <h1 class="entry-title"><i class="fa fa-bookmark permalink"></i> <a href="{{ page.link }}">{{ page.title }}</a></h1>
-        {% else %}
-          <h1 class="entry-title"><a href="{{ site.url }}{{ page.url }}" rel="bookmark" title="{{ page.title }}">{{ page.title }}</a></h1>
-        {% endif %}
-        <h2><span class="entry-date date published"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time></span></h2>
-      </div><!-- /.header-title-wrap -->
+    <!-- Header -->
+    <header id="header">
+      <a href="{{ " / " | absolute_url }}" class="logo">{{site.title}}</a>
     </header>
-    <div class="entry-content">
-      {{ content }}
-      <footer class="entry-meta">
-        {% if page.modified %}<span>Updated on <span class="entry-date date updated"><time datetime="{{ page.modified }}">{{ page.modified | date: "%B %d, %Y" }}</time></span></span>
-        <span class="author vcard"><span class="fn">{{ site.owner.name }}</span></span>{% endif %}
-      </footer>
-    </div><!-- /.entry-content -->
-    {% if page.comments != false and site.disqus_shortname %}<section id="disqus_thread"></section><!-- /#disqus_thread -->{% endif %}
-  </article>
-</div><!-- /#main -->
 
-<div class="footer-wrapper">
-  <footer role="contentinfo">
-    {% include footer.html %}
-  </footer>
-</div><!-- /.footer-wrapper -->
+    <!-- Nav -->
+    <nav id="nav">
+      {% include nav.html %}
+    </nav>
 
-{% include scripts.html %}	        
+    <!-- Main -->
+    <div id="main">
+      <section class="post">
+        <header class="major">
+          <span class="date">{{page.date | date_to_string}}</span>
+          <h1>{{page.title}}</h1>
+          <p>{{page.excerpt}}</p>
+        </header>
+        <div class="image main">
+          <img src="{{page.image}}" alt="">
+        </div>
+        <p>{{content}}</p>
+      </section>
+
+      <div class="comments-wrapper">
+        <div id="disqus_thread"></div>
+        <script>
+          /**
+           *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+           *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+           */
+
+          var disqus_config = function () {
+            this.page.url = '{{ absolute_url }}{{ page.url }}';  /*Replace PAGE_URL with your page's canonical URL variable*/
+            this.page.identifier = '{{ page.url }}'; /*Replace PAGE_IDENTIFIER with your page's unique identifier variable*/
+          };
+
+          (function () {  /* dont endit below this line */
+            var d = document, s = d.createElement('script');
+
+            s.src = 'https://{{ site.disqus_shortname }}.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+      <!-- /.comments-wrapper -->
+
+
+      <!-- Footer -->
+      <footer>
+        <!-- <ul class="actions">
+          <li>
+            <a href="{{ " /blog/ " | absolute_url }}" class="button">Return Home</a>
+          </li>
+        </ul>
+      </footer> -->
+    </div>
+
+    <!-- Footer -->
+    {% include foot.html %}
+
+  </div>
+
+  <!-- Scripts -->
+  {% include scripts-main.html %} {% include tracking.html %}
 
 </body>
+
 </html>

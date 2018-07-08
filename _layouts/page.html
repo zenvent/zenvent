@@ -1,50 +1,51 @@
-<!doctype html>
-<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
-<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
-<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!DOCTYPE HTML>
+<html>
+
 <head>
-{% include head.html %}
+	{% include head.html %}
 </head>
 
-<body id="page" {% if page.image.feature %}class="feature"{% endif %}>
+<body class="is-loading">
 
-{% include browser-upgrade.html %}
-{% include navigation.html %}
+	<!-- Wrapper -->
+	<div id="wrapper" class="fade-in">
 
-{% if page.image.feature %}
-<div class="entry-header">
-  <div class="entry-image">
-    <img src="{{ site.url }}/images/{{ page.image.feature }}" alt="{{ page.title }}">
-  </div><!-- /.entry-image -->
-</div><!-- /.entry-header -->
-{% endif %}
+		<!-- Header -->
+		<header id="header">
+			<a href="{{ " / " | absolute_url }}" class="logo">{{site.title}}</a>
+		</header>
 
-<div id="main" role="main">
-  <article class="hentry">
-    <header class="header-title">
-      <div class="header-title-wrap">
-        <h1 class="entry-title">{{ page.title }}</h1>
-      </div><!-- /.header-title-wrap -->
-    </header>
-    <div class="entry-content">
-      {{ content }}
-      <footer class="entry-meta">
-        {% if page.modified %}<span>Updated on <span class="entry-date date published updated"><time datetime="{{ page.modified }}">{{ page.modified | date: "%B %d, %Y" }}</time></span></span>
-        <span class="author vcard"><span class="fn">{{ site.owner.name }}</span></span>{% endif %}
-      </footer>
-    </div><!-- /.entry-content -->
-    {% if page.comments != false and site.disqus_shortname %}<section id="disqus_thread"></section><!-- /#disqus_thread -->{% endif %}
-  </article>
-</div><!-- /#main -->
+		<!-- Nav -->
+		<nav id="nav">
+			{% include nav.html %}
+		</nav>
 
-<div class="footer-wrapper">
-  <footer role="contentinfo">
-    {% include footer.html %}
-  </footer>
-</div><!-- /.footer-wrapper -->
+		<!-- Main -->
+		<div id="main">
 
-{% include scripts.html %}          
+			<!-- Post -->
+			<section class="post">
+				<p>{{content}}</p>
+			</section>
+
+			<!-- Footer -->
+			<!-- <footer>
+				<ul class="actions">
+					<li>
+						<a href="{{ " /blog/ " | absolute_url }}" class="button">Return Home</a>
+					</li>
+				</ul>
+			</footer> -->
+		</div>
+
+		<!-- Footer -->
+		{% include foot.html %}
+
+	</div>
+
+	<!-- Scripts -->
+	{% include scripts-main.html %} {% include tracking.html %}
 
 </body>
+
 </html>

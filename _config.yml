@@ -1,78 +1,63 @@
-title:            ZENVENT
-description:      ZENVENT
-disqus_shortname: 
-reading_time:     false
-words_per_minute: 200
-# Your site's domain goes here (eg: https://mmistakes.github.io, http://yourdomain.com, etc)
-# When testing locally leave blank or use http://localhost:4000
-url:
+# Site
+title:              'ZENVENT'
+bio:                'Think. Build. Create.'
+description:        'ZENVENT'
+locale:             en_US
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://www.zenvent.com" # the base hostname & protocol for your site
 
-# Owner/author information
-owner:
-  name:           Zac
-  avatar:         avatar.jpg
-  bio:            "I am a maker. Construction, prototyping, and programming peak my interest. I invest heavily in robotics such as CNC machining, 3D printing, and laser fabrication. Electronic parts and experiments litter my home."
-  email:          zac@zenvent.com
+defaults:
+- scope:
+    path: ''
+    type: posts
+  values:
+    permalink: "/blog/:title/"
+    layout: post
+    author: 'zac'
 
-# Background image to be tiled on all pages
-background: 
-
-# Analytics and webmaster tools stuff goes here
-google_analytics:   
-google_verify:      
-# https://ssl.bing.com/webmaster/configure/verify/ownership Option 2 content= goes here
-bing_verify:         
-
-# http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-timezone:    America/New_York
-future:      false  # publish future dated posts --  true, false (default) 
-highlighter: rouge
-markdown:    kramdown
-gems:
-  - jekyll-sitemap
-  - jekyll-paginate
-  - jekyll-gist
-  - jekyll-feed
-sass:
-  sass_dir: _sass
-  style: compressed
-
-# https://github.com/mojombo/jekyll/wiki/Permalinks
-permalink:   /:categories/:title/
-
-# Amount of post to show on home page
-paginate: 5
-
+# Jekyll
+permalink:          /blog/:title/
+markdown:           kramdown
+highlighter:        rouge
 kramdown:
-  input: GFM
-  auto_ids: true
-  footnote_nr: 1
-  entity_output: as_char
-  toc_levels: 1..6
-  enable_coderay: false
+  auto_ids:         true
+  footnote_nr:      1
+  entity_output:    as_char
+  toc_levels:       1..6
+  enable_coderay:   false
+mathjax:            true
+sass:
+  sass_dir:         _sass
+  style:            compressed
 
-include: 
-  - .htaccess
-exclude: 
-  - "*.less"
-  - "*.sublime-project"
-  - "*.sublime-workspace"
-  - .asset-cache
-  - .bundle
-  - .jekyll-assets-cache
-  - .sass-cache
-  - CHANGELOG
-  - Capfile
-  - Gemfile
-  - Gruntfile.js
-  - LICENSE
-  - README
-  - Rakefile
-  - config
-  - gulpfile.js
-  - lib
-  - log
-  - node_modules
-  - package.json
-  - spec
-  - tmp
+# Comments
+disqus_shortname:   default
+
+# Social
+analytics-id:       "default"
+twitter:            default
+facebook:           default
+instagram:          default
+github:             default
+
+# personal
+location:           Los Angeles, CA
+phone:              310-318-5555
+email:              info@default.com
+
+# Gems
+gems:
+  - jekyll-mentions
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-gist
+  - jekyll-paginate
+
+paginate: 10
+paginate_path: "/blog/page:num/"
+
+jekyll-mentions:
+    base_url: https://github.com
+
+# Exclude list
+exclude: [README.md, Gemfile, Gemfile.lock, node_modules, gulpfile.js, package.json, _site, src, vendor, CNAME, LICENSE, Rakefile, old]

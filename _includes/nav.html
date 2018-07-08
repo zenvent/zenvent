@@ -1,0 +1,34 @@
+<ul class="links">
+  <li class="{% if page.url == "/" %} active {% endif %}">
+    <a href="{{ "/" | absolute_url }}">home</a>
+  </li>
+  <!-- <li class="{% if page.url contains '/store/' %} active {% endif %}">
+    <a href="{{ "/store/" | absolute_url }}">store</a>
+  </li> -->
+  <li class="{% if page.url contains '/about/' %} active {% endif %}">
+    <a href="{{ "/about/" | absolute_url }}">about</a>
+  </li>
+</ul>
+
+<ul class="icons">
+  <li>
+    <a href="https://www.youtube.com/user/zenvent/" class="icon fa-youtube" rel="nofollow">
+      <span class="label">Instagram</span>
+    </a>
+  </li>
+  <li>
+    <a href="https://facebook.com/https://www.facebook.com/THEZENVENT/" class="icon fa-facebook" rel="nofollow">
+      <span class="label">Facebook</span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/zenvent" class="icon fa-github" rel="nofollow">
+      <span class="label">GitHub</span>
+    </a>
+  </li>
+  <li>
+    <a href="https://www.linkedin.com/in/zacrabtree/" class="icon fa-linkedin" rel="nofollow">
+      <span class="label">LinkedIn</span>
+    </a>
+  </li>
+</ul>

@@ -1,10 +1,9 @@
 ---
 layout: post
-title: "Youtube Subscriber Counter"
-description: "Youtube Subscriber Counter"
+title: "Subscriber Counter"
+excerpt: "YouTube subscriber counter using an ESP8266."
 tags: [random, software, 3dprinting]
-image:
-  feature: /youtubeCounter/YouTubeCounterFront.jpg
+image: "/images/youtubeCounter/YouTubeCounterFront.jpg"
 ---
 
 I designed a YouTube subscriber counter for the ESP8266. It drives a 4-digit 7 segment display and updates regularly (over wifi).
