@@ -3,7 +3,7 @@ title:              'ZENVENT'
 bio:                'Think. Build. Create.'
 description:        'ZENVENT'
 locale:             en_US
-baseurl:            "www.zenvent.com"
+baseurl:            ""
 url:                "https://www.zenvent.com"
 
 defaults:
