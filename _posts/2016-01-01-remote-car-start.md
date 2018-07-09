@@ -9,7 +9,7 @@ image: "/images/remoteStart.jpg"
 I figured out a way to cheaply start my car using a text message. I wanted to be able to do this because my office is quite the distance from where I park, and my current remote starter has a range of only 20 feet or so. Learn how to do this yourself by click the link below or watching my video tutorial.
 
 <div class="videoWrapper">
-    <iframe width="560" height="349" src="https://www.youtube.com/embed/Fv8nzEdNOZs?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <iframe width="560" height="349" src="https://www.youtube.com/embed/Fv8nzEdNOZs?rel=0&amp;showinfo=0&autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 </div>
 
 ## Objective

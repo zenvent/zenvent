@@ -1,10 +1,10 @@
 ---
 layout: null
 title: ZENVENT
-description: Every great website starts with a great homepage. The homepage tells your viewers what your site is all about and gives your viewers a place to come back to.
+description: Home
 sitemap:
     priority: 1.0
-    lastmod: 2017-11-02
+    lastmod: 2018-7-08
     changefreq: weekly
 ---
 <!DOCTYPE HTML>
@@ -35,7 +35,7 @@ sitemap:
 	
 				<!-- Featured Post -->
 				<article class="post featured">
-						<div class="postCard">
+						<div class="postCard" onclick="location.href='{{ post.url | absolute_url }}';" style="cursor: pointer;">
 						{% assign post = site.posts.first %}
 					
 					<a href="{{ post.url | absolute_url }}" class="image fit">
@@ -50,28 +50,10 @@ sitemap:
 					</div>
 				</article>
 
-								<!-- Post -->
-								<!-- <section class="posts">
-										{% for post in site.posts offset:1 %}
-										<article>
-											<header>
-												<h2>
-													<a href="{{ post.url | absolute_url }}">{{ post.title }}</a>
-												</h2>
-											</header>
-											<a href="{{ post.url | absolute_url }}" class="image fit">
-												<img src="{{ post.image | absolute_url }}" alt="" />
-											</a>
-											<a href="{{ post.url | absolute_url }}">{{ post.excerpt }}</a>
-										</article>
-										{% endfor %}
-									</section> -->
-				
-				<!-- Post -->
 				<section class="posts">
 					{% for post in site.posts offset:1 %}
 					<article>
-						<div class="postCard">
+						<div class="postCard" onclick="location.href='{{ post.url | absolute_url }}';" style="cursor: pointer;">
 						<a href="{{ post.url | absolute_url }}" class="image fit">
 							<img src="{{ post.image | absolute_url }}" alt="" />
 						</a>
