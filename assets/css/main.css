@@ -3352,10 +3352,11 @@
 		width: calc(100% - 4rem);
 		max-width: 72rem;
 		z-index: 2;
+		padding: 2rem;
 	}
 
 		#main > * {
-			padding: 4rem 4rem 2rem 4rem ;
+			padding: 2rem 2rem 2rem 2rem ;
 			margin: 0;
 		}
 
@@ -3368,30 +3369,17 @@
 			align-items: center;
 		}
 
-		#main > .post {
-			padding: 8rem 8rem 6rem 8rem ;
-		}
-
 			#main > .post header.major > .date {
 				margin-top: -2rem;
 			}
 
 			#main > .post header.major > h1, #main > .post header.major h2 {
-				font-size: 4rem;
+				font-size: 3rem;
 				line-height: 1.1;
-				margin: 0 0 2rem 0;
 			}
 
 			#main > .post.featured {
 				text-align: center;
-			}
-
-			@media screen and (max-width: 1280px) {
-
-				#main > .post {
-					padding: 6rem 4rem 4rem 4rem ;
-				}
-
 			}
 
 			@media screen and (max-width: 736px) {
@@ -3447,7 +3435,7 @@
 			}
 
 			#main > .posts > * {
-				padding: 4rem;
+				padding: 2rem 2rem 2rem 2rem ;
 				width: 50%;
 			}
 
