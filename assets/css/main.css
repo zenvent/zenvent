@@ -3356,7 +3356,6 @@
 	}
 
 		#main > * {
-			padding: 2rem 2rem 2rem 2rem ;
 			margin: 0;
 		}
 
@@ -3385,7 +3384,6 @@
 			@media screen and (max-width: 736px) {
 
 				#main > .post {
-					padding: 4rem 2rem 2rem 2rem ;
 				}
 
 					#main > .post header.major > .date {
@@ -3808,4 +3806,17 @@
 	padding: 2rem;
 	font-size: 16px; 
     font-size: 6vw;
+}
+
+#disqus_thread {
+	position: relative;
+}
+#disqus_thread:after {
+	content: "";
+	display: block;
+	height: 55px;
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	background: white;
 }
