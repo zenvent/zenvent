@@ -60,5 +60,4 @@ I am a maker. Construction, prototyping, and of course programming peak my inter
 
 <div class="followMe">
 <a href="https://drive.google.com/open?id=1rXZ6Z-WBHCaMyiFvmLUu01bAecZ81KaX" class="icon fa-download fa-5x" rel="nofollow"></a>
-<a href="https://www.linkedin.com/in/zacrabtree/" class="icon fa-linkedin fa-5x" rel="nofollow"></a>
 </div>
