@@ -29,12 +29,3 @@ sitemap:
     </form>
 </section>
 
-***
-
-
-<div class="followMe">
-<a href="https://www.youtube.com/user/zenvent/" class="icon fa-youtube fa-5x" rel="nofollow"></a>
-<a href="https://facebook.com/https://www.facebook.com/THEZENVENT/" class="icon fa-facebook fa-5x" rel="nofollow"></a>
-<a href="https://github.com/zenvent" class="icon fa-github fa-5x" rel="nofollow"></a>
-<a href="https://www.linkedin.com/in/zacrabtree/" class="icon fa-linkedin fa-5x" rel="nofollow"></a>
-</div>

@@ -3539,8 +3539,7 @@
 		width: calc(100% - 4rem);
 		max-width: 72rem;
 		z-index: 2;
-		
-		height: 4rem;
+		height: 8rem;
 		-webkit-box-align: center!important;
 		-ms-flex-align: center!important;
 		align-items: center!important;
@@ -3567,8 +3566,7 @@
 		color: rgba(255, 255, 255, 0.25);
 		cursor: default;
 		font-family: "Source Sans Pro", Helvetica, sans-serif;
-		font-size: 0.8rem;
-		font-weight: 900;
+		font-size: 1rem;
 		letter-spacing: 0.075em;
 		line-height: 1.5;
 		text-align: center;
@@ -3577,6 +3575,10 @@
 		width: calc(100% - 4rem);
 		max-width: 72rem;
 		z-index: 2;
+	}
+	
+	#copyright a {
+		color: #ffffff;
 	}
 
 /* Nav Panel */
@@ -3816,4 +3818,6 @@
 
 .followMe a {
 	padding: 2rem;
+	font-size: 16px; 
+    font-size: 6vw;
 }
