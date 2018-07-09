@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "3D Print Wirelessly"
-excerpt: "Tutorial: How To Use Your 3D Printer Wirelessly"
+excerpt: "How to use your 3D printer wirelessly"
 tags: [tutorial, software]
 image: "/images/octoprint-600x400.png"
 ---

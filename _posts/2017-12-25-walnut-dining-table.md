@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Walnut & Steel Tables"
-excerpt: "DIRESTA inspired walnut dining table."
+excerpt: "DIRESTA inspired walnut dining table"
 tags: [tutorial, woodworking]
 image: "/images/table/tableSet.jpg"
 ---

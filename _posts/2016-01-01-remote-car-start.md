@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Cellular Car Starter"
-excerpt: "Tutorial: How to start your car with a cellphone."
+excerpt: "How to start your car with a cellphone"
 tags: [tutorial, electronics]
 image: "/images/remoteStart.jpg"
 ---

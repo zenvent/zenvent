@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Subscriber Counter"
-excerpt: "YouTube subscriber counter using an ESP8266."
+excerpt: "YouTube subscriber counter using an ESP8266"
 tags: [random, software, 3dprinting]
 image: "/images/youtubeCounter/YouTubeCounterFront.jpg"
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Flappy Doom Game"
-excerpt: "Fly through heck. Dodge pillars. Explode a lot."
+excerpt: "Fly through heck, dodge pillars, explode a lot"
 tags: [random, software]
 image: "/images/flappyDoom.PNG"
 ---
