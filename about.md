@@ -11,7 +11,7 @@ sitemap:
 
 I have a passion for technology. I write software by day, and tinker with hardware by night.
 
-I am a maker. Construction, prototyping, and programming peak my interest. I invest heavily in robotics such as CNC machining, 3D printing, and laser fabrication. Electronic parts and unfished experiments litter my home. 
+I am a maker. Construction, prototyping, and programming peak my interest. I invest heavily in robotics such as CNC machining, 3D printing, and laser fabrication. Electronic parts and unfinished experiments litter my home. 
 
 ZENVENT is a company and domain that I created to publish and sell my work.
 
