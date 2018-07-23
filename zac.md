@@ -1,6 +1,6 @@
 ---
 layout: page
-title: ZENVENT | Zac's Resume
+title: ZENVENT, Zac's Resume
 description: Zac's Resume
 sitemap:
     priority: 0.7
@@ -38,7 +38,7 @@ Full stack developer in a transforming environment (from waterfall to agile). Ad
 * Drastically reduced security risks and ASC (Application Security Champion) certification.
 * First to migrate older applications to new internal Cloud Foundry environment 
 
-> Java + Spring (JSF/JSP) | JAXB SOAP & REST | Maven | DB2 SQL (CRUD) | Hibernate ORM | Cloud Foundry | Jenkins + Shell
+> Java + Spring (JSF/JSP), JAXB SOAP & REST, Maven, DB2 SQL (CRUD), Hibernate ORM, Cloud Foundry, Jenkins + Shell
 
 ### Nationwide, Sr Software Developer, 2014 - 2016
 Full stack developer in an agile environment at Nationwide's Application Services department. Create new features and maintain existing functionality to transition a Tier 1 application from Swing to AngularJS. Lead, develop, and design complex features for massive retirement plan software.
@@ -47,7 +47,7 @@ Full stack developer in an agile environment at Nationwide's Application Service
 * Full stack development on a top tier application in transition from Swing to AngularJS
 * Senior status in one year, advanced career path of coworker, and mentored an intern
 
-> Java + Mojo | Ant/Gradle | Oracle SQL (CRUD) | Toplink ORM | ESP Batch | Swing | JAXB REST & SOAP | Angular
+> Java + Mojo, Ant/Gradle, Oracle SQL (CRUD), Toplink ORM, ESP Batch, Swing, JAXB REST & SOAP, Angular
 
 ### Cardinal Health, Software Analyst, 2012 - 2014
 Provide Tier 1 & 2 hardware and software support to clients and customers across the nation. Supported both EDI document flow & NPS team simultaneously. Small team with limited to no resources on a brand new software rollout aimed to change pharmacy workflow entirely.
@@ -56,10 +56,10 @@ Provide Tier 1 & 2 hardware and software support to clients and customers across
 * Created and maintained support application “zNote” which streamlined note taking and provided fast and easy access to frequently needed information for the team.
 * Worked closely with Fusion development team on new software deployments
 
-> HTML/CSS/AJAX | Unix | MySQL
+> HTML/CSS/AJAX, Unix, MySQL
 
 ## Education
-The Ohio State University – Columbus, OH | 2011
+The Ohio State University – Columbus, OH, 2011
 Associate Degree in General Education & Engineering
 
 ## Personal
