@@ -11,14 +11,13 @@ sitemap:
 Software Developer, IT Specialist
 
 ## Profile	
-Application developer interested in full stack development with a focus on back end functionality. 
-Enjoys an agile environment with collaborative staff and those who are always seeking to improve.
+Application developer interested in full stack development with a focus on back end functionality.  Enjoys an agile environment with collaborative staff and those who are always seeking to improve.
 
 ## Skills
 Proficient in Java and a good working knowledge of its ecosystems
 Solid understanding of object-oriented programming
-Familiar with various enterprise design and architectural patterns
-Capable with RESTful services, pub-sub messaging and security
+Familiar with enterprise design, architectural patterns, app security
+Capable with RESTful services, SOAP, MQ pub-sub messaging
 Experience with cloud technologies, deployment strategies, design concepts
 
 ## Technical
@@ -59,5 +58,5 @@ I am a maker. Construction, prototyping, and of course programming peak my inter
 </header>
 
 <div class="followMe">
-<a href="https://drive.google.com/open?id=1rXZ6Z-WBHCaMyiFvmLUu01bAecZ81KaX" class="icon fa-download fa-5x" rel="nofollow"></a>
+<a href="https://drive.google.com/file/d/1uGQvDnZndNfD3_7N_09QhevPgaaB-jfR/view?usp=drivesdk" class="icon fa-download fa-5x" rel="nofollow"></a>
 </div>
