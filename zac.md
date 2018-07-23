@@ -14,11 +14,11 @@ Software Developer, IT Specialist
 Application developer interested in full stack development with a focus on back end functionality.  Enjoys an agile environment with collaborative staff and those who are always seeking to improve.
 
 ## Skills
-Proficient in Java and a good working knowledge of its ecosystems
-Solid understanding of object-oriented programming
-Familiar with enterprise design, architectural patterns, app security
-Capable with RESTful services, SOAP, MQ pub-sub messaging
-Experience with cloud technologies, deployment strategies, design concepts
+- Proficient in Java and a good working knowledge of its ecosystems
+- Solid understanding of object-oriented programming
+- Familiar with enterprise design, architectural patterns, app security
+- Capable with RESTful services, SOAP, MQ pub-sub messaging
+- Experience with cloud technologies, deployment strategies, design concepts
 
 ## Technical
 
@@ -33,7 +33,6 @@ Experience with cloud technologies, deployment strategies, design concepts
 Full stack developer in a transforming environment (from waterfall to agile). Add functionality to existing applications, as well as enhancements such as security and performance. 
 
 Highlights
-
 * Application SME, technical lead and security champion
 * Lead production deployments, code review other teams, assist with other applications
 * Triage priority one production defects real time to prevent customer impact
@@ -41,7 +40,6 @@ Highlights
 * First to migrate older applications to new internal Cloud Foundry environment 
 
 Technology Stack
-
 `Java + Spring (JSF/JSP) | JAXB SOAP & REST | Maven Build | DB2 (CRUD) | Hibernate ORM | Cloud Foundry | Jenkins + Shell`
 
 
@@ -49,26 +47,22 @@ Technology Stack
 Full stack developer in an agile environment at Nationwide's Application Services department. Create new features and maintain existing functionality to transition a Tier 1 application from Swing to AngularJS. Lead, develop, and design complex features for massive retirement plan software.
 
 Highlights
-
 * Project tech lead for new mass alerting system, impacting millions of clients and customers
 * Full stack development on a top tier application in transition from Swing to AngularJS
 * Senior status in one year, advanced career path of coworker, and mentored an intern
 
 Technology Stack
-
-`Java + Mojo (Event Layer) | Ant / Gradle Build | SQL (CRUD) | Toplink ORM | ESP Job Scheduling | Java Swing to REST & SOAP service layer for Angular`
+`Java + Mojo (Event Layer) | Ant / Gradle Build | SQL (CRUD) | Toplink ORM | ESP Job Scheduling | Java Swing | REST & SOAP JAXB | Angular`
 
 ### Cardinal Health, Software Analyst, 2012 - 2014
 Provide Tier 1 & 2 hardware and software support to clients and customers across the nation. Supported both EDI document flow & NPS team simultaneously. Small team with limited to no resources on a brand new software rollout aimed to change pharmacy workflow entirely.
 
 Highlights
-
 * SME (Subject Matter Expert) for Nuclear Pharmacy Services (NPS)
 * Created and maintained support application “zNote” which streamlined note taking and provided fast and easy access to frequently needed information for the team.
 * Worked closely with Fusion development team on new software deployments
 
 Technology Stack
-
 `HTML/CSS/AJAX | Unix | MySQL`
 
 ## Education
