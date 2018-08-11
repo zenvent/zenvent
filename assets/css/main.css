@@ -3614,13 +3614,13 @@
 				background-color: #ffffff;
 			}
 
-
+		@media screen and (max-width: 980px) {
 
 			#navPanelToggle {
 				display: block;
 			}
 
-
+		}
 
 		@media screen and (max-width: 736px) {
 
@@ -3731,12 +3731,13 @@
 
 			}
 
-
+		@media screen and (max-width: 980px) {
 
 			#navPanel {
 				display: block;
 			}
 
+		}
 
 		@media screen and (max-width: 736px) {
 
@@ -3746,7 +3747,7 @@
 
 		}
 
-
+	@media screen and (max-width: 980px) {
 
 		body.is-navPanel-visible #wrapper {
 			opacity: 0.5;
@@ -3761,6 +3762,7 @@
 			visibility: visible;
 		}
 
+	}
 	
 
 /* Random CSS */
