@@ -3352,7 +3352,7 @@
 		width: calc(100% - 4rem);
 		max-width: 72rem;
 		z-index: 2;
-		padding: 2rem;
+		padding: 0rem;
 	}
 
 		#main > * {
