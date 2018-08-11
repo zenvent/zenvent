@@ -6,7 +6,7 @@ tags: [random]
 image: "/images/hackintosh/0.jpg"
 ---
 
-Created a custom case for my hackintosh, it resembles a minified iMac G5.
+Created a custom case for my hackintosh, it resembles a minified Power Mac G5.
 I have uploaded the parts to [Thingiverse](https://www.thingiverse.com/thing:3044775) in case you'd like to make one of your own.
 The case is easy to print on a 300x300 printer, flat parts can be printed or laser cut to save time. Everything slides together smoothly, bondo and primer were used to smooth the printed parts.
 
