@@ -29,7 +29,7 @@ The case is easy to print on a 300x300 printer, flat parts can be printed or las
 	</div>
 	
 	<div class="row 100% uniform">
-		<div class="6u"><span class="image fit"><img src="{{ "/images/hackintosh/6.jpg" | absolute_url }}" alt="" /></span></div>
+		<div class="12u"><span class="image fit"><img src="{{ "/images/hackintosh/6.jpg" | absolute_url }}" alt="" /></span></div>
 	</div>
 
 	<div class="row 50% uniform">
