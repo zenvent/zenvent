@@ -737,9 +737,6 @@
 		}
 
 	}
-
-	@media screen and (max-width: 980px) {
-
 		.row > * {
 			padding: 0 0 0 1.5rem;
 		}
@@ -950,8 +947,6 @@
 		.\-1u\28medium\29 {
 			margin-left: 8.33333%;
 		}
-
-	}
 
 	@media screen and (max-width: 736px) {
 
@@ -1969,7 +1964,7 @@
 			padding: 0 2.75rem;
 		}
 
-		@media screen and (max-width: 980px) {
+
 
 			input[type="submit"],
 			input[type="reset"],
@@ -1991,7 +1986,7 @@
 					line-height: 3.75rem;
 				}
 
-		}
+
 
 		input[type="submit"].disabled, input[type="submit"]:disabled,
 		input[type="reset"].disabled,
@@ -2152,13 +2147,13 @@
 		margin: 0 0 0.75rem 0;
 	}
 
-		@media screen and (max-width: 980px) {
+
 
 			label {
 				font-size: 0.9rem;
 			}
 
-		}
+
 
 	input[type="text"],
 	input[type="password"],
@@ -2778,13 +2773,13 @@
 					right: 0;
 				}
 
-		@media screen and (max-width: 980px) {
+
 
 			header br {
 				display: none;
 			}
 
-		}
+
 
 		@media screen and (max-width: 736px) {
 
@@ -2831,13 +2826,12 @@
 			text-transform: uppercase;
 		}
 
-			@media screen and (max-width: 980px) {
+
 
 				table th {
 					font-size: 0.9rem;
 				}
 
-			}
 
 		table thead {
 			border-bottom: solid 2px;
@@ -2962,13 +2956,13 @@
 			margin-left: 0.9375em;
 		}
 
-		@media screen and (max-width: 980px) {
+
 
 			.pagination a, .pagination span {
 				font-size: 0.9rem;
 			}
 
-		}
+
 
 		/* @media screen and (max-width: 480px) {
 
@@ -3171,14 +3165,14 @@
 				color: #18bfef !important;
 			}
 
-		@media screen and (max-width: 980px) {
+
 
 			#header {
 				height: 14rem;
 				padding-bottom: 4rem;
 			}
 
-		}
+
 
 		@media screen and (max-width: 736px) {
 
@@ -3335,13 +3329,13 @@
 			margin-bottom: 0;
 		}
 
-		@media screen and (max-width: 980px) {
+
 
 			#nav {
 				display: none;
 			}
 
-		}
+
 
 /* Main */
 
@@ -3455,7 +3449,7 @@
 					border-top-width: 0;
 				}
 
-			@media screen and (max-width: 980px) {
+
 
 				#main > .posts > * {
 					width: 50%;
@@ -3466,7 +3460,7 @@
 					width: 50%;
 				}
 
-			}
+
 
 			@media screen and (max-width: 736px) {
 
@@ -3620,13 +3614,13 @@
 				background-color: #ffffff;
 			}
 
-		@media screen and (max-width: 980px) {
+
 
 			#navPanelToggle {
 				display: block;
 			}
 
-		}
+
 
 		@media screen and (max-width: 736px) {
 
@@ -3737,13 +3731,12 @@
 
 			}
 
-		@media screen and (max-width: 980px) {
+
 
 			#navPanel {
 				display: block;
 			}
 
-		}
 
 		@media screen and (max-width: 736px) {
 
@@ -3753,7 +3746,7 @@
 
 		}
 
-	@media screen and (max-width: 980px) {
+
 
 		body.is-navPanel-visible #wrapper {
 			opacity: 0.5;
@@ -3768,7 +3761,6 @@
 			visibility: visible;
 		}
 
-	}
 	
 
 /* Random CSS */
