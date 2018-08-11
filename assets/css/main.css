@@ -2922,7 +2922,7 @@
 		width: calc(100% - 4rem);
 		max-width: 72rem;
 		z-index: 2;
-		padding: 0rem;
+		padding: 2rem;
 	}
 
 		#main > * {
