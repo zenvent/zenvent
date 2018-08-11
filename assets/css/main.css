@@ -3347,7 +3347,7 @@
 		width: calc(100% - 4rem);
 		max-width: 72rem;
 		z-index: 2;
-		padding-top: 2rem;
+		padding-top: 0.1rem;
 		padding-bottom: 2rem;
 	}
 
