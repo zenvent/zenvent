@@ -35,7 +35,7 @@ sitemap:
 	
 				<!-- Featured Post -->
 				<article class="post featured">
-					<div class="postCard" onclick="location.href='{{ post.url | absolute_url }}';" style="cursor: pointer; padding: 2rem;">
+					<div class="postCard" onclick="location.href='{{ post.url | absolute_url }}';" style="cursor: pointer;">
 						{% assign post = site.posts.first %}
 					
 					<a href="{{ post.url | absolute_url }}" class="image fit">

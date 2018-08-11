@@ -3379,9 +3379,15 @@
 
 			#main > .post.featured {
 				text-align: center;
+				padding: 2rem;
 			}
 
 			@media screen and (max-width: 736px) {
+
+				#main > .post.featured {
+					text-align: center;
+					padding: 0rem;
+				}
 
 				#main > .post {
 				}
