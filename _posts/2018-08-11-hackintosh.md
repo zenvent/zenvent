@@ -3,7 +3,7 @@ layout: post
 title: "#Mini G5 Hackintosh"
 excerpt: "Mini G5 Hackintosh"
 tags: [random]
-image: "/images/hackintosh/7a.jpg"
+image: "/images/hackintosh/0.jpg"
 ---
 
 Created a custom case for my hackintosh, it resembles a minified iMac G5.
