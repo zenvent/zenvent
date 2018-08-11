@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "#Mini G5 Hackintosh"
-excerpt: "Mini G5 Hackintosh"
+excerpt: "3D Printed & Laser Cut Custom PC Case"
 tags: [random]
 image: "/images/hackintosh/0.jpg"
 ---
