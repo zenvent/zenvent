@@ -1608,13 +1608,13 @@
 		-ms-overflow-style: scrollbar;
 	}
 
-	@media screen and (max-width: 480px) {
+	/* @media screen and (max-width: 480px) {
 
 		html, body {
 			min-width: 320px;
 		}
 
-	}
+	} */
 
 	body {
 		background-color: #1e252d;
@@ -2110,7 +2110,7 @@
 				width: 100%;
 			}
 
-		@media screen and (max-width: 480px) {
+		/* @media screen and (max-width: 480px) {
 
 			form {
 				width: calc(100% + 3rem);
@@ -2139,7 +2139,7 @@
 					width: calc(100% - 3rem);
 				}
 
-		}
+		} */
 
 	label {
 		display: block;
@@ -2633,7 +2633,7 @@
 						padding: 0 0 0 0.5rem;
 					}
 
-			@media screen and (max-width: 480px) {
+			/* @media screen and (max-width: 480px) {
 
 				ul.actions {
 					margin: 0 0 2rem 0;
@@ -2667,7 +2667,7 @@
 							padding-top: 0;
 						}
 
-			}
+			} */
 
 	dl {
 		margin: 0 0 2rem 0;
@@ -2970,13 +2970,13 @@
 
 		}
 
-		@media screen and (max-width: 480px) {
+		/* @media screen and (max-width: 480px) {
 
 			.pagination .page, .pagination .extra {
 				display: none;
 			}
 
-		}
+		} */
 
 	.pagination a, .pagination span {
 		border-color: #eeeeee;
@@ -3505,13 +3505,13 @@
 
 		}
 
-		@media screen and (max-width: 480px) {
+		/* @media screen and (max-width: 480px) {
 
 			#main {
 				width: 100%;
 			}
 
-		}
+		} */
 
 /* Footer */
 
