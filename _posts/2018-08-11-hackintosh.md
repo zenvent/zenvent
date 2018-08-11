@@ -8,6 +8,7 @@ image: "/images/hackintosh/0.jpg"
 
 Created a custom case for my hackintosh, it resembles a minified iMac G5.
 I have uploaded the parts to [Thingiverse](https://www.thingiverse.com/) in case you'd like to make one of your own.
+The case is easy to print on a 300x300 printer, flat parts can be printed or laser cut to save time. Everything slides together smoothly, bondo and primer were used to smooth the printed parts.
 
 ## Mac Build
 * [Intel Core i7 6700K](https://www.amazon.com/Intel-Unlocked-Skylake-Processor-BX80662I76700K/dp/B012M8LXQW/ref=sr_1_1?s=electronics&ie=UTF8&qid=1534008540&sr=1-1&keywords=i7+6700k)
@@ -27,8 +28,7 @@ I have uploaded the parts to [Thingiverse](https://www.thingiverse.com/) in case
 		<div class="6u"><span class="image fit"><img src="{{ "/images/hackintosh/5a.jpg" | absolute_url }}" alt="" /></span></div>
 	</div>
 	
-	<div class="row 50% uniform">
-		<div class="6u"><span class="image fit"><img src="{{ "/images/hackintosh/5b.jpg" | absolute_url }}" alt="" /></span></div>
+	<div class="row 100% uniform">
 		<div class="6u"><span class="image fit"><img src="{{ "/images/hackintosh/6.jpg" | absolute_url }}" alt="" /></span></div>
 	</div>
 
