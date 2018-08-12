@@ -1171,6 +1171,10 @@
 			margin: 0 0 1.5rem 0;
 		}
 
+		#main > * {
+			padding: 0 !important;
+		}
+
 	 }
 
 		/*
@@ -3374,7 +3378,7 @@
 		}
 
 			#main > .post header.major > .date {
-				margin-top: -2rem;
+				margin-top: 0rem;
 			}
 
 			#main > .post header.major > h1, #main > .post header.major h2 {
