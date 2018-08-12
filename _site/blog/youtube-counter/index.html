@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+<title>Subscriber Counter</title>
+<meta name="description" content="">
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/icon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/icon/favicon-16x16.png">
+<link rel="manifest" href="/assets/icon/manifest.json">
+<link rel="mask-icon" href="/assets/icon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="/assets/icon/favicon.ico">
+<meta name="msapplication-config" content="/assets/icon/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+<!-- CSS -->
+<link rel="stylesheet" href="/assets/css/main.css" />
+<noscript>
+    <link rel="stylesheet" href="/assets/css/noscript.css" />
+</noscript>
+</head>
+
+<body class="is-loading">
+
+  <!-- Wrapper -->
+  <div id="wrapper" class="fade-in">
+
+    <!-- Header -->
+    <header id="header">
+      <a href="/" class="logo">ZENVENT</a>
+    </header>
+
+    <!-- Nav -->
+    <nav id="nav">
+      <ul class="links">
+  <li class="">
+    <a href="/">home</a>
+  </li>
+  <!-- <li class="">
+    <a href="/store/">store</a>
+  </li> -->
+  <li class="">
+    <a href="/about/">about</a>
+  </li>
+  <li class="">
+    <a href="/contact/">contact</a>
+  </li>
+</ul>
+
+<ul class="icons">
+  <li>
+    <a href="https://www.youtube.com/user/zenvent/" class="icon fa-youtube" rel="nofollow">
+      <span class="label">YouTube</span>
+    </a>
+  </li>
+  <li>
+    <a href="https://facebook.com/https://www.facebook.com/THEZENVENT/" class="icon fa-facebook" rel="nofollow">
+      <span class="label">Facebook</span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/zenvent" class="icon fa-github" rel="nofollow">
+      <span class="label">GitHub</span>
+    </a>
+  </li>
+  <li>
+    <a href="https://www.linkedin.com/in/zacrabtree/" class="icon fa-linkedin" rel="nofollow">
+      <span class="label">LinkedIn</span>
+    </a>
+  </li>
+</ul>
+    </nav>
+
+    <!-- Main -->
+    <div id="main" style="padding: 2rem;">
+      <section class="post" style="margin-left: 2rem; margin-right: 2rem; margin-top: 2rem;">
+        <header class="major">
+          <span class="date">16 Jun 2018</span>
+          <h1>Subscriber Counter</h1>
+          <p>YouTube subscriber counter using an ESP8266</p>
+        </header>
+        <div class="image main">
+          <img src="/images/youtubeCounter/YouTubeCounterFront.jpg" alt="">
+        </div>
+        <p><p>I designed a YouTube subscriber counter for the ESP8266. It drives a 4-digit 7 segment display and updates regularly (over wifi).
+The TV case was designed in <a href="https://www.tinkercad.com/">TinkerCAD</a> then exported as STL. It can be 3D printed in two halves and glued together.
+The ‘screen’ is simply acrylic with metallic spray paint on the back- this gives the effect of static noise and is also semi-transparent to allow the LED lights through.</p>
+
+<h2 id="links">Links</h2>
+
+<ul>
+  <li><a href="https://www.thingiverse.com/thing:2950299">TV 3D Model</a></li>
+  <li><a href="https://amzn.to/2M4JqMH">ESP8266 $8</a></li>
+  <li><a href="https://amzn.to/2JkQ13S">Display $3</a></li>
+  <li><a href="https://github.com/zenvent/YouTube-Analytics-Display">The Code</a></li>
+</ul>
+
+</p>
+      <br>
+
+      <div class="comments-wrapper">
+          <div id="disqus_thread"></div>
+          <script>
+          var disqus_config = function () {
+            this.page.url = "http://zenvent.com";
+            this.page.identifier = '/blog/youtube-counter/'; 
+          };
+          
+          (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://zenvent.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+          })();
+          </script>
+          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </section>                         
+    </div>
+    <footer id="footer">
+    <div class="followMe">
+        <a href="https://www.youtube.com/user/zenvent/" class="icon fa-youtube" rel="nofollow"></a>
+        <a href="https://facebook.com/https://www.facebook.com/THEZENVENT/" class="icon fa-facebook" rel="nofollow"></a>
+        <a href="https://github.com/zenvent" class="icon fa-github" rel="nofollow"></a>
+        <a href="https://www.linkedin.com/in/zacrabtree/" class="icon fa-linkedin" rel="nofollow"></a>
+    </div>
+</footer>
+<div id="copyright">
+    <a href="/">© 2018 ZENVENT</a>
+</div>
+
+  </div>
+
+  <!-- Scripts -->
+  <!-- DYN -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.scrollex.min.js"></script>
+<script src="/assets/js/jquery.scrolly.min.js"></script>
+<script src="/assets/js/skel.min.js"></script>
+<script src="/assets/js/util.js"></script>
+<script src="/assets/js/main.js"></script>
+ <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122048100-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+
+  gtag('config', 'UA-122048100-1');
+</script>
+
+
+</body>
+
+</html>

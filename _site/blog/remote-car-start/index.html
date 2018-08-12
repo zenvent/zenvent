@@ -1,0 +1,183 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+<title>Cellular Car Starter</title>
+<meta name="description" content="">
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/icon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/icon/favicon-16x16.png">
+<link rel="manifest" href="/assets/icon/manifest.json">
+<link rel="mask-icon" href="/assets/icon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="/assets/icon/favicon.ico">
+<meta name="msapplication-config" content="/assets/icon/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+<!-- CSS -->
+<link rel="stylesheet" href="/assets/css/main.css" />
+<noscript>
+    <link rel="stylesheet" href="/assets/css/noscript.css" />
+</noscript>
+</head>
+
+<body class="is-loading">
+
+  <!-- Wrapper -->
+  <div id="wrapper" class="fade-in">
+
+    <!-- Header -->
+    <header id="header">
+      <a href="/" class="logo">ZENVENT</a>
+    </header>
+
+    <!-- Nav -->
+    <nav id="nav">
+      <ul class="links">
+  <li class="">
+    <a href="/">home</a>
+  </li>
+  <!-- <li class="">
+    <a href="/store/">store</a>
+  </li> -->
+  <li class="">
+    <a href="/about/">about</a>
+  </li>
+  <li class="">
+    <a href="/contact/">contact</a>
+  </li>
+</ul>
+
+<ul class="icons">
+  <li>
+    <a href="https://www.youtube.com/user/zenvent/" class="icon fa-youtube" rel="nofollow">
+      <span class="label">YouTube</span>
+    </a>
+  </li>
+  <li>
+    <a href="https://facebook.com/https://www.facebook.com/THEZENVENT/" class="icon fa-facebook" rel="nofollow">
+      <span class="label">Facebook</span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/zenvent" class="icon fa-github" rel="nofollow">
+      <span class="label">GitHub</span>
+    </a>
+  </li>
+  <li>
+    <a href="https://www.linkedin.com/in/zacrabtree/" class="icon fa-linkedin" rel="nofollow">
+      <span class="label">LinkedIn</span>
+    </a>
+  </li>
+</ul>
+    </nav>
+
+    <!-- Main -->
+    <div id="main" style="padding: 2rem;">
+      <section class="post" style="margin-left: 2rem; margin-right: 2rem; margin-top: 2rem;">
+        <header class="major">
+          <span class="date">01 Jan 2016</span>
+          <h1>Cellular Car Starter</h1>
+          <p>How to start your car with a cellphone</p>
+        </header>
+        <div class="image main">
+          <img src="/images/remoteStart.jpg" alt="">
+        </div>
+        <p><p>I figured out a way to cheaply start my car using a text message. I wanted to be able to do this because my office is quite the distance from where I park, and my current remote starter has a range of only 20 feet or so. Learn how to do this yourself by click the link below or watching my video tutorial.</p>
+
+<div class="videoWrapper">
+    <iframe width="560" height="349" src="https://www.youtube.com/embed/Fv8nzEdNOZs?rel=0&amp;showinfo=0&amp;autoplay=1&amp;mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+</div>
+
+<h2 id="objective">Objective</h2>
+
+<p>Extend the range of my vehicle’s auto-start using the cheapest solution I can think of. I would also like to keep vehicle modifications to a minimum (or none).</p>
+
+<h2 id="solution">Solution</h2>
+
+<p>Trigger the auto-start remote using an Arduino connected to a cell service. User will send an SMS message to the device, which will validate the message then trigger a relay which will cause the remote to send a signal and the car will start. The device will be left in the car and run off the vehicle’s battery.</p>
+
+<h2 id="skills-required">Skills required</h2>
+
+<p>If you follow the tutorial, basic computer and electronics skills. I am assuming you can make connections using a bread board or soldering iron. I am also assuming your car already has a remote starter installed, and that you are willing to sacrifice one of the remotes.</p>
+
+<h2 id="required-materials">Required Materials</h2>
+
+<ul>
+  <li><a href="http://amzn.to/1RGPjgW">Arduino Uno $10</a></li>
+  <li><a href="link: http://amzn.to/1OL7vVJ">Relay Module $5</a></li>
+  <li><a href="http://amzn.to/1RGQb5j">GPRS Shield $30</a></li>
+  <li><a href="https://ting.com/rates">SIM Card: Ting or T-Mobile</a></li>
+  <li><a href="http://amzn.to/1Nbx2C4">Breadboard &amp; Wires (or solder)</a></li>
+  <li>Car Start Remote Control</li>
+</ul>
+
+<p><em>This tutorial assumes you already have remote start on your car</em></p>
+
+<h2 id="estimated-cost">Estimated Cost</h2>
+
+<p>Materials:  $45</p>
+
+<p>SIM &amp; Service:  $10 SIM Card + $6 monthly</p>
+
+<p>Download Code: <code class="highlighter-rouge">https://github.com/zenvent/RemoteCarStart</code></p>
+
+</p>
+      <br>
+
+      <div class="comments-wrapper">
+          <div id="disqus_thread"></div>
+          <script>
+          var disqus_config = function () {
+            this.page.url = "http://zenvent.com";
+            this.page.identifier = '/blog/remote-car-start/'; 
+          };
+          
+          (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://zenvent.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+          })();
+          </script>
+          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </section>                         
+    </div>
+    <footer id="footer">
+    <div class="followMe">
+        <a href="https://www.youtube.com/user/zenvent/" class="icon fa-youtube" rel="nofollow"></a>
+        <a href="https://facebook.com/https://www.facebook.com/THEZENVENT/" class="icon fa-facebook" rel="nofollow"></a>
+        <a href="https://github.com/zenvent" class="icon fa-github" rel="nofollow"></a>
+        <a href="https://www.linkedin.com/in/zacrabtree/" class="icon fa-linkedin" rel="nofollow"></a>
+    </div>
+</footer>
+<div id="copyright">
+    <a href="/">© 2018 ZENVENT</a>
+</div>
+
+  </div>
+
+  <!-- Scripts -->
+  <!-- DYN -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.scrollex.min.js"></script>
+<script src="/assets/js/jquery.scrolly.min.js"></script>
+<script src="/assets/js/skel.min.js"></script>
+<script src="/assets/js/util.js"></script>
+<script src="/assets/js/main.js"></script>
+ <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122048100-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+
+  gtag('config', 'UA-122048100-1');
+</script>
+
+
+</body>
+
+</html>

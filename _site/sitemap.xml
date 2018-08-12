@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+    <url>
+      <loc>https://www.zenvent.com/blog/hackintosh/</loc>
+      
+        <lastmod>2018-08-11T00:00:00-04:00</lastmod>
+      
+      <changefreq>weekly</changefreq>
+      <priority>0.7</priority>
+    </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/blog/doge-beds/</loc>
+      
+        <lastmod>2018-07-06T00:00:00-04:00</lastmod>
+      
+      <changefreq>weekly</changefreq>
+      <priority>0.7</priority>
+    </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/blog/youtube-counter/</loc>
+      
+        <lastmod>2018-06-16T00:00:00-04:00</lastmod>
+      
+      <changefreq>weekly</changefreq>
+      <priority>0.7</priority>
+    </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/blog/walnut-dining-table/</loc>
+      
+        <lastmod>2017-12-25T00:00:00-05:00</lastmod>
+      
+      <changefreq>weekly</changefreq>
+      <priority>0.7</priority>
+    </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/blog/diablo/</loc>
+      
+        <lastmod>2017-06-01T00:00:00-04:00</lastmod>
+      
+      <changefreq>weekly</changefreq>
+      <priority>0.7</priority>
+    </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/blog/remote-car-start/</loc>
+      
+        <lastmod>2016-01-01T00:00:00-05:00</lastmod>
+      
+      <changefreq>weekly</changefreq>
+      <priority>0.7</priority>
+    </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/blog/wireless-3d-printing/</loc>
+      
+        <lastmod>2015-07-01T00:00:00-04:00</lastmod>
+      
+      <changefreq>weekly</changefreq>
+      <priority>0.7</priority>
+    </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/blog/flappy-doom/</loc>
+      
+        <lastmod>2014-07-01T00:00:00-04:00</lastmod>
+      
+      <changefreq>weekly</changefreq>
+      <priority>0.7</priority>
+    </url>
+  
+  
+    <url>
+      <loc>https://www.zenvent.com/about/</loc>
+       <lastmod>2018-07-08T00:00:00-04:00</lastmod>
+      
+       <changefreq>weekly</changefreq>
+      
+       <priority>0.7</priority>
+      
+     </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/contact/</loc>
+       <lastmod>2018-07-08T00:00:00-04:00</lastmod>
+      
+       <changefreq>weekly</changefreq>
+      
+       <priority>0.7</priority>
+      
+     </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/elements/</loc>
+       <lastmod>2018-07-08T00:00:00-04:00</lastmod>
+      
+       <changefreq>weekly</changefreq>
+      
+       <priority>0.7</priority>
+      
+     </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/</loc>
+       <lastmod>2018-07-08T00:00:00-04:00</lastmod>
+      
+       <changefreq>weekly</changefreq>
+      
+       <priority>1.0</priority>
+      
+     </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/sitemap.xml</loc>
+       <lastmod>2017-11-10T00:20:35+00:00</lastmod>
+      
+       <changefreq>weekly</changefreq>
+      
+       <priority>0.5</priority>
+      
+     </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/store/</loc>
+       <lastmod>2018-07-08T00:00:00-04:00</lastmod>
+      
+       <changefreq>weekly</changefreq>
+      
+       <priority>1.0</priority>
+      
+     </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/zac/</loc>
+       <lastmod>2018-07-08T00:00:00-04:00</lastmod>
+      
+       <changefreq>weekly</changefreq>
+      
+       <priority>0.7</priority>
+      
+     </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/feed.xml</loc>
+       <lastmod>2017-11-10T00:20:35+00:00</lastmod>
+      
+       <changefreq>weekly</changefreq>
+      
+       <priority>0.5</priority>
+      
+     </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/feed.xslt.xml</loc>
+       <lastmod>2017-11-10T00:20:35+00:00</lastmod>
+      
+       <changefreq>weekly</changefreq>
+      
+       <priority>0.5</priority>
+      
+     </url>
+  
+    <url>
+      <loc>https://www.zenvent.com/blog/page2/</loc>
+       <lastmod>2018-07-08T00:00:00-04:00</lastmod>
+      
+       <changefreq>weekly</changefreq>
+      
+       <priority>1.0</priority>
+      
+     </url>
+  
+</urlset>

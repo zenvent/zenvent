@@ -1,0 +1,207 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+<title>3D Print Wirelessly</title>
+<meta name="description" content="">
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/icon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/icon/favicon-16x16.png">
+<link rel="manifest" href="/assets/icon/manifest.json">
+<link rel="mask-icon" href="/assets/icon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="/assets/icon/favicon.ico">
+<meta name="msapplication-config" content="/assets/icon/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+<!-- CSS -->
+<link rel="stylesheet" href="/assets/css/main.css" />
+<noscript>
+    <link rel="stylesheet" href="/assets/css/noscript.css" />
+</noscript>
+</head>
+
+<body class="is-loading">
+
+  <!-- Wrapper -->
+  <div id="wrapper" class="fade-in">
+
+    <!-- Header -->
+    <header id="header">
+      <a href="/" class="logo">ZENVENT</a>
+    </header>
+
+    <!-- Nav -->
+    <nav id="nav">
+      <ul class="links">
+  <li class="">
+    <a href="/">home</a>
+  </li>
+  <!-- <li class="">
+    <a href="/store/">store</a>
+  </li> -->
+  <li class="">
+    <a href="/about/">about</a>
+  </li>
+  <li class="">
+    <a href="/contact/">contact</a>
+  </li>
+</ul>
+
+<ul class="icons">
+  <li>
+    <a href="https://www.youtube.com/user/zenvent/" class="icon fa-youtube" rel="nofollow">
+      <span class="label">YouTube</span>
+    </a>
+  </li>
+  <li>
+    <a href="https://facebook.com/https://www.facebook.com/THEZENVENT/" class="icon fa-facebook" rel="nofollow">
+      <span class="label">Facebook</span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/zenvent" class="icon fa-github" rel="nofollow">
+      <span class="label">GitHub</span>
+    </a>
+  </li>
+  <li>
+    <a href="https://www.linkedin.com/in/zacrabtree/" class="icon fa-linkedin" rel="nofollow">
+      <span class="label">LinkedIn</span>
+    </a>
+  </li>
+</ul>
+    </nav>
+
+    <!-- Main -->
+    <div id="main" style="padding: 2rem;">
+      <section class="post" style="margin-left: 2rem; margin-right: 2rem; margin-top: 2rem;">
+        <header class="major">
+          <span class="date">01 Jul 2015</span>
+          <h1>3D Print Wirelessly</h1>
+          <p>How to use your 3D printer wirelessly</p>
+        </header>
+        <div class="image main">
+          <img src="/images/octoprint-600x400.png" alt="">
+        </div>
+        <p><p>Ever since flashing my Davinci 1.0 I have desired to move the printer away from my main computer. The ‘music’ from the servos was beginning to become annoying. Not only that but I wanted to printer to function on its own, and be accessible via the internet.</p>
+
+<p>Lo and behold others have desired this too, a guy named Guy Sheffer started a project called OctoPi, which allows you to do just about everything using a cheap raspberry Pi. I use the setup in the instructions below for both my Davinci 1.0 and Fabrikator Mini 1.5.</p>
+
+<h2 id="materials">Materials:</h2>
+
+<ul>
+  <li>Raspberry Pi (any model, 2 will be faster)</li>
+  <li>SDHC Card (4GB+ Class 10)</li>
+  <li>USB Wireless Card</li>
+  <li>USB Wall Power Supply</li>
+  <li>3D Printer</li>
+  <li><strong>(Optional, Webcam)</strong></li>
+</ul>
+
+<h2 id="download">Download:</h2>
+
+<p>OctoPi - <a href="http://octoprint.org/download/">http://octoprint.org/download/</a></p>
+
+<p>Disk Imager - <a href="http://sourceforge.net/projects/win32diskimager/">http://sourceforge.net/projects/win32diskimager/</a></p>
+
+<p>PuTTY - <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html</a></p>
+
+<p>Cura (15.04.2) - <a href="https://ultimaker.com/en/products/cura-software/list">https://ultimaker.com/en/products/cura-software/list</a></p>
+
+<p>In my tutorial I will show you how to setup for both of the 3D printers I have, though the process should be similar with most printers.</p>
+
+<h2 id="setup-octopi-on-the-sd-card">Setup OctoPi on the SD card</h2>
+
+<p>Unzip the image and install the ‘.img’ file using Disk Imager.
+Open the SD card and edit “octopi-network.txt”, enter your network SSID and password.
+Insert the SD card into your Raspberry Pi, as well as plug in your USB WiFi and 3D printer.</p>
+
+<h2 id="setup-octopi-on-the-raspberry-pi">Setup OctoPi on the Raspberry Pi</h2>
+
+<p>Power up the Pi!
+Log into your Pi via SSH, I recommend Putty. Default username and password is “pi” and “raspberry” Note: You can type “passwd” to change your admin password for your pi
+Allow OctoPrint to use the entire SD card by running “sudo raspi-config” and select “Expand File System” (top option).
+Reboot your Pi!</p>
+
+<p>You should now be able to log into OctoPi by typing “http://octopi.local” or “http://<ipaddress>" into your browser.</ipaddress></p>
+
+<h2 id="configure-octoprint">Configure OctoPrint</h2>
+
+<p>The Pi is almost ready to control your printer, but first you need to configure your setup. There are two ways you can use OctoPrint, either as a slicer and printer, or just as a printer. Meaning you can upload files to slice and print, or you can slice 3D models on your PC first then upload them to be printed. You will have more control on your PC with slicing.</p>
+
+<p>Copy the settings in the images below (for your printer) to configure OctoPrint. Once you have done this, you are ready to print sliced files! If you’d like to be able to upload 3D models and slice them on OctoPrint, proceed to the next step as well.</p>
+
+<h2 id="configure-cura-for-your-pc-and-octoprint-optional">Configure Cura for your PC and OctoPrint (Optional)</h2>
+
+<p>OctoPrint comes with the Cura slicer already installed, to configure it you must first setup and install Cura on your PC. Once you have done that you can export the configuration (.ini) file and upload it to OctoPi. You only need to do this if you want to be able to slice with OctoPrint.</p>
+
+<p>Install Cura.
+Configure it using settings for your machine (described below).
+Navigate to “File” and click “Save Profile” in Cura. Save the .ini somewhere easy to get to.
+Go back to your browser and connect to your OctoPi server.
+Click OctoPrint Settings, and at the bottom you’ll see a Cura option.
+On the Cura options panel, select “Import Profile” and choose the .ini file you made earlier.
+You’re done!
+If you upload a 3D model, select this profile to slice your model. You can upload multiple profiles (maybe different fill densities, supports and so on) to use.</p>
+
+<p>TinyBoy Fabrikator Mini 3D Printer Settings
+Click the images below to see my Fabrikator Mini cura settings.</p>
+</p>
+      <br>
+
+      <div class="comments-wrapper">
+          <div id="disqus_thread"></div>
+          <script>
+          var disqus_config = function () {
+            this.page.url = "http://zenvent.com";
+            this.page.identifier = '/blog/wireless-3d-printing/'; 
+          };
+          
+          (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://zenvent.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+          })();
+          </script>
+          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </section>                         
+    </div>
+    <footer id="footer">
+    <div class="followMe">
+        <a href="https://www.youtube.com/user/zenvent/" class="icon fa-youtube" rel="nofollow"></a>
+        <a href="https://facebook.com/https://www.facebook.com/THEZENVENT/" class="icon fa-facebook" rel="nofollow"></a>
+        <a href="https://github.com/zenvent" class="icon fa-github" rel="nofollow"></a>
+        <a href="https://www.linkedin.com/in/zacrabtree/" class="icon fa-linkedin" rel="nofollow"></a>
+    </div>
+</footer>
+<div id="copyright">
+    <a href="/">© 2018 ZENVENT</a>
+</div>
+
+  </div>
+
+  <!-- Scripts -->
+  <!-- DYN -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.scrollex.min.js"></script>
+<script src="/assets/js/jquery.scrolly.min.js"></script>
+<script src="/assets/js/skel.min.js"></script>
+<script src="/assets/js/util.js"></script>
+<script src="/assets/js/main.js"></script>
+ <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122048100-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+
+  gtag('config', 'UA-122048100-1');
+</script>
+
+
+</body>
+
+</html>

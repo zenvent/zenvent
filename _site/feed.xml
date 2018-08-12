@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="https://www.zenvent.com/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.2.1">Jekyll</generator><link href="https://www.zenvent.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://www.zenvent.com/" rel="alternate" type="text/html" /><updated>2018-08-11T21:58:40-04:00</updated><id>https://www.zenvent.com/</id><title type="html">ZENVENT</title><subtitle>ZENVENT</subtitle><entry><title type="html">Mini G5 Hackintosh</title><link href="https://www.zenvent.com/blog/hackintosh/" rel="alternate" type="text/html" title="Mini G5 Hackintosh" /><published>2018-08-11T00:00:00-04:00</published><updated>2018-08-11T00:00:00-04:00</updated><id>https://www.zenvent.com/blog/hackintosh</id><content type="html" xml:base="https://www.zenvent.com/blog/hackintosh/">&lt;p&gt;Created a custom case for my hackintosh, it resembles a minified Power Mac G5.
+I have uploaded the parts to &lt;a href=&quot;https://www.thingiverse.com/thing:3044775&quot;&gt;Thingiverse&lt;/a&gt; in case you’d like to make one of your own.
+The case is easy to print on a 300x300 printer, flat parts can be printed or laser cut to save time. Everything slides together smoothly, bondo and primer were used to smooth the printed parts.&lt;/p&gt;
+
+&lt;h2 id=&quot;mac-build&quot;&gt;Mac Build&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.amazon.com/Intel-Unlocked-Skylake-Processor-BX80662I76700K/dp/B012M8LXQW/ref=sr_1_1?s=electronics&amp;amp;ie=UTF8&amp;amp;qid=1534008540&amp;amp;sr=1-1&amp;amp;keywords=i7+6700k&quot;&gt;Intel Core i7 6700K&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.amazon.com/Gigabyte-Durable-GA-Z170N-WIFI-Desktop-Motherboard/dp/B015IOOJ54&quot;&gt;GIGABYTE GA-Z170N-WIFI&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;16GB DDR4 RAM&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.amazon.com/gp/product/B0037AKXKM/ref=oh_aui_detailpage_o07_s00?ie=UTF8&amp;amp;psc=1&quot;&gt;ARCTIC Freezer Heatsink&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.amazon.com/gp/product/B007PENN9Y/ref=oh_aui_detailpage_o06_s00?ie=UTF8&amp;amp;psc=1&quot;&gt;Slimline Power Supply&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;box alt&quot;&gt;
+	&lt;div class=&quot;row 50% uniform&quot;&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/hackintosh/1.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/hackintosh/2.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+	&lt;/div&gt;
+	
+	&lt;div class=&quot;row 100% uniform&quot;&gt;
+		&lt;div class=&quot;12u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/hackintosh/3.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+	&lt;/div&gt;
+	
+	&lt;div class=&quot;row 50% uniform&quot;&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/hackintosh/5a.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/hackintosh/5b.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+	&lt;/div&gt;
+
+	&lt;div class=&quot;row 50% uniform&quot;&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/hackintosh/7a.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/hackintosh/7b.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/div&gt;</content><author><name>zac</name></author><category term="random" /><summary type="html">3D Printed &amp; Laser Cut Custom PC Case</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://www.zenvent.com/images/hackintosh/0.jpg" /></entry><entry><title type="html">Upholstered Dog Beds</title><link href="https://www.zenvent.com/blog/doge-beds/" rel="alternate" type="text/html" title="Upholstered Dog Beds" /><published>2018-07-06T00:00:00-04:00</published><updated>2018-07-06T00:00:00-04:00</updated><id>https://www.zenvent.com/blog/doge-beds</id><content type="html" xml:base="https://www.zenvent.com/blog/doge-beds/">&lt;p&gt;Cheap and easy to build dog beds. They have a modern/contemporary look. Can be built to match any existing furniture textures and colors.&lt;/p&gt;
+
+&lt;h3 id=&quot;parts-list&quot;&gt;Parts List&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Scrap hardwood for legs&lt;/li&gt;
+  &lt;li&gt;Few sheets of chip board (sold as shelves)&lt;/li&gt;
+  &lt;li&gt;Some thin batting&lt;/li&gt;
+  &lt;li&gt;Fabric/Linen Curtains&lt;/li&gt;
+  &lt;li&gt;Black Paint&lt;/li&gt;
+  &lt;li&gt;Iron Angles&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To make the process easier I upholstered each piece first, then used the iron angle to attach them all together. Use clamps to keep everything at 90 degrees. To stiffen the frame I attached a solid sheet of 1/4 MDF to the base. This will prevent the mattress from sagging and add most of the structural support.&lt;/p&gt;
+
+&lt;h3 id=&quot;build-video&quot;&gt;Build Video&lt;/h3&gt;
+&lt;div class=&quot;videoWrapper&quot;&gt;
+    &amp;lt;iframe width=&quot;560&quot; height=&quot;349&quot; src=&quot;&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/OB8PKdPe0Sk?rel=0&amp;amp;showinfo=0&amp;amp;autoplay=1&amp;amp;mute=1&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;
+&lt;/div&gt;</content><author><name>zac</name></author><category term="funiture" /><category term="custom" /><summary type="html">Custom beds for each of my dogs</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://www.zenvent.com/images/dogbeds/dogs.png" /></entry><entry><title type="html">Subscriber Counter</title><link href="https://www.zenvent.com/blog/youtube-counter/" rel="alternate" type="text/html" title="Subscriber Counter" /><published>2018-06-16T00:00:00-04:00</published><updated>2018-06-16T00:00:00-04:00</updated><id>https://www.zenvent.com/blog/youtube-counter</id><content type="html" xml:base="https://www.zenvent.com/blog/youtube-counter/">&lt;p&gt;I designed a YouTube subscriber counter for the ESP8266. It drives a 4-digit 7 segment display and updates regularly (over wifi).
+The TV case was designed in &lt;a href=&quot;https://www.tinkercad.com/&quot;&gt;TinkerCAD&lt;/a&gt; then exported as STL. It can be 3D printed in two halves and glued together.
+The ‘screen’ is simply acrylic with metallic spray paint on the back- this gives the effect of static noise and is also semi-transparent to allow the LED lights through.&lt;/p&gt;
+
+&lt;h2 id=&quot;links&quot;&gt;Links&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.thingiverse.com/thing:2950299&quot;&gt;TV 3D Model&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://amzn.to/2M4JqMH&quot;&gt;ESP8266 $8&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://amzn.to/2JkQ13S&quot;&gt;Display $3&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/zenvent/YouTube-Analytics-Display&quot;&gt;The Code&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>zac</name></author><category term="random" /><category term="software" /><category term="3dprinting" /><summary type="html">YouTube subscriber counter using an ESP8266</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://www.zenvent.com/images/youtubeCounter/YouTubeCounterFront.jpg" /></entry><entry><title type="html">Walnut &amp;amp; Steel Tables</title><link href="https://www.zenvent.com/blog/walnut-dining-table/" rel="alternate" type="text/html" title="Walnut &amp; Steel Tables" /><published>2017-12-25T00:00:00-05:00</published><updated>2017-12-25T00:00:00-05:00</updated><id>https://www.zenvent.com/blog/walnut-dining-table</id><content type="html" xml:base="https://www.zenvent.com/blog/walnut-dining-table/">&lt;p&gt;I made a custom dining table and side table for my mother. The design includes thick walnut strips with a birch plywood core and a very solid steel base. Watch the videos below to see how I made them from scratch, and maybe try it yourself!&lt;/p&gt;
+
+&lt;div class=&quot;videoWrapper&quot;&gt;
+    &amp;lt;iframe width=&quot;560&quot; height=&quot;349&quot; src=&quot;&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/_L7mW7nexso?rel=0&amp;amp;showinfo=0&amp;amp;autoplay=1&amp;amp;mute=1&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;
+&lt;/div&gt;
+
+&lt;p&gt;A complimentary accent table was also created, using scraps and on hand materials. I recorded it’s build process as well.&lt;/p&gt;
+
+&lt;div class=&quot;videoWrapper&quot;&gt;
+    &amp;lt;iframe width=&quot;560&quot; height=&quot;349&quot; src=&quot;&amp;lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/_zOJJlOJYIM?rel=0&amp;amp;showinfo=0&amp;amp;autoplay=1&amp;amp;mute=1&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;
+&lt;/div&gt;
+
+&lt;p&gt;Thanks for watching!&lt;/p&gt;
+
+&lt;div class=&quot;box alt&quot;&gt;
+	&lt;div class=&quot;row 50% uniform&quot;&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/table/smallTable.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/table/tableSet2.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/div&gt;</content><author><name>zac</name></author><category term="tutorial" /><category term="woodworking" /><summary type="html">DIRESTA inspired walnut dining table</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://www.zenvent.com/images/table/tableSet.jpg" /></entry><entry><title type="html">#TeamDiablo</title><link href="https://www.zenvent.com/blog/diablo/" rel="alternate" type="text/html" title="#TeamDiablo" /><published>2017-06-01T00:00:00-04:00</published><updated>2017-06-01T00:00:00-04:00</updated><id>https://www.zenvent.com/blog/diablo</id><content type="html" xml:base="https://www.zenvent.com/blog/diablo/">&lt;p&gt;My current team’s name at work is Diablo. To pretty up the workspace I created a cubicle signs for each of our members. Each completed sign consists of about 5 hours of print time!
+Each sign consists of mutliple parts to make painting and assebmly easy. No supports or sanding required.
+I have uploaded the parts to &lt;a href=&quot;https://www.thingiverse.com/thing:2991366&quot;&gt;Thingiverse&lt;/a&gt; in case you’d like to make one of your own.&lt;/p&gt;
+
+&lt;h2 id=&quot;printers-used&quot;&gt;Printers Used&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Anet A8&lt;/li&gt;
+  &lt;li&gt;Creality CR-10&lt;/li&gt;
+  &lt;li&gt;Folgertech FT5&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;box alt&quot;&gt;
+	&lt;div class=&quot;row 50% uniform&quot;&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/teamdiablo/final.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/teamdiablo/background.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+	&lt;/div&gt;
+	
+	&lt;div class=&quot;row 50% uniform&quot;&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/teamdiablo/shinyjpg.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/teamdiablo/bunch.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+	&lt;/div&gt;
+	
+	&lt;div class=&quot;row 50% uniform&quot;&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/teamdiablo/letters.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/teamdiablo/readytoassemble.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/div&gt;</content><author><name>zac</name></author><category term="random" /><summary type="html">Diablo themed signs for my team at work</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://www.zenvent.com/images/teamdiablo/all.jpg" /></entry><entry><title type="html">Cellular Car Starter</title><link href="https://www.zenvent.com/blog/remote-car-start/" rel="alternate" type="text/html" title="Cellular Car Starter" /><published>2016-01-01T00:00:00-05:00</published><updated>2016-01-01T00:00:00-05:00</updated><id>https://www.zenvent.com/blog/remote-car-start</id><content type="html" xml:base="https://www.zenvent.com/blog/remote-car-start/">&lt;p&gt;I figured out a way to cheaply start my car using a text message. I wanted to be able to do this because my office is quite the distance from where I park, and my current remote starter has a range of only 20 feet or so. Learn how to do this yourself by click the link below or watching my video tutorial.&lt;/p&gt;
+
+&lt;div class=&quot;videoWrapper&quot;&gt;
+    &lt;iframe width=&quot;560&quot; height=&quot;349&quot; src=&quot;https://www.youtube.com/embed/Fv8nzEdNOZs?rel=0&amp;amp;showinfo=0&amp;amp;autoplay=1&amp;amp;mute=1&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;objective&quot;&gt;Objective&lt;/h2&gt;
+
+&lt;p&gt;Extend the range of my vehicle’s auto-start using the cheapest solution I can think of. I would also like to keep vehicle modifications to a minimum (or none).&lt;/p&gt;
+
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+
+&lt;p&gt;Trigger the auto-start remote using an Arduino connected to a cell service. User will send an SMS message to the device, which will validate the message then trigger a relay which will cause the remote to send a signal and the car will start. The device will be left in the car and run off the vehicle’s battery.&lt;/p&gt;
+
+&lt;h2 id=&quot;skills-required&quot;&gt;Skills required&lt;/h2&gt;
+
+&lt;p&gt;If you follow the tutorial, basic computer and electronics skills. I am assuming you can make connections using a bread board or soldering iron. I am also assuming your car already has a remote starter installed, and that you are willing to sacrifice one of the remotes.&lt;/p&gt;
+
+&lt;h2 id=&quot;required-materials&quot;&gt;Required Materials&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://amzn.to/1RGPjgW&quot;&gt;Arduino Uno $10&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;link: http://amzn.to/1OL7vVJ&quot;&gt;Relay Module $5&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://amzn.to/1RGQb5j&quot;&gt;GPRS Shield $30&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://ting.com/rates&quot;&gt;SIM Card: Ting or T-Mobile&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://amzn.to/1Nbx2C4&quot;&gt;Breadboard &amp;amp; Wires (or solder)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Car Start Remote Control&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;em&gt;This tutorial assumes you already have remote start on your car&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;estimated-cost&quot;&gt;Estimated Cost&lt;/h2&gt;
+
+&lt;p&gt;Materials:  $45&lt;/p&gt;
+
+&lt;p&gt;SIM &amp;amp; Service:  $10 SIM Card + $6 monthly&lt;/p&gt;
+
+&lt;p&gt;Download Code: &lt;code class=&quot;highlighter-rouge&quot;&gt;https://github.com/zenvent/RemoteCarStart&lt;/code&gt;&lt;/p&gt;</content><author><name>zac</name></author><category term="tutorial" /><category term="electronics" /><summary type="html">How to start your car with a cellphone</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://www.zenvent.com/images/remoteStart.jpg" /></entry><entry><title type="html">3D Print Wirelessly</title><link href="https://www.zenvent.com/blog/wireless-3d-printing/" rel="alternate" type="text/html" title="3D Print Wirelessly" /><published>2015-07-01T00:00:00-04:00</published><updated>2015-07-01T00:00:00-04:00</updated><id>https://www.zenvent.com/blog/wireless-3d-printing</id><content type="html" xml:base="https://www.zenvent.com/blog/wireless-3d-printing/">&lt;p&gt;Ever since flashing my Davinci 1.0 I have desired to move the printer away from my main computer. The ‘music’ from the servos was beginning to become annoying. Not only that but I wanted to printer to function on its own, and be accessible via the internet.&lt;/p&gt;
+
+&lt;p&gt;Lo and behold others have desired this too, a guy named Guy Sheffer started a project called OctoPi, which allows you to do just about everything using a cheap raspberry Pi. I use the setup in the instructions below for both my Davinci 1.0 and Fabrikator Mini 1.5.&lt;/p&gt;
+
+&lt;h2 id=&quot;materials&quot;&gt;Materials:&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Raspberry Pi (any model, 2 will be faster)&lt;/li&gt;
+  &lt;li&gt;SDHC Card (4GB+ Class 10)&lt;/li&gt;
+  &lt;li&gt;USB Wireless Card&lt;/li&gt;
+  &lt;li&gt;USB Wall Power Supply&lt;/li&gt;
+  &lt;li&gt;3D Printer&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;(Optional, Webcam)&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;download&quot;&gt;Download:&lt;/h2&gt;
+
+&lt;p&gt;OctoPi - &lt;a href=&quot;http://octoprint.org/download/&quot;&gt;http://octoprint.org/download/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Disk Imager - &lt;a href=&quot;http://sourceforge.net/projects/win32diskimager/&quot;&gt;http://sourceforge.net/projects/win32diskimager/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;PuTTY - &lt;a href=&quot;http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html&quot;&gt;http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Cura (15.04.2) - &lt;a href=&quot;https://ultimaker.com/en/products/cura-software/list&quot;&gt;https://ultimaker.com/en/products/cura-software/list&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;In my tutorial I will show you how to setup for both of the 3D printers I have, though the process should be similar with most printers.&lt;/p&gt;
+
+&lt;h2 id=&quot;setup-octopi-on-the-sd-card&quot;&gt;Setup OctoPi on the SD card&lt;/h2&gt;
+
+&lt;p&gt;Unzip the image and install the ‘.img’ file using Disk Imager.
+Open the SD card and edit “octopi-network.txt”, enter your network SSID and password.
+Insert the SD card into your Raspberry Pi, as well as plug in your USB WiFi and 3D printer.&lt;/p&gt;
+
+&lt;h2 id=&quot;setup-octopi-on-the-raspberry-pi&quot;&gt;Setup OctoPi on the Raspberry Pi&lt;/h2&gt;
+
+&lt;p&gt;Power up the Pi!
+Log into your Pi via SSH, I recommend Putty. Default username and password is “pi” and “raspberry” Note: You can type “passwd” to change your admin password for your pi
+Allow OctoPrint to use the entire SD card by running “sudo raspi-config” and select “Expand File System” (top option).
+Reboot your Pi!&lt;/p&gt;
+
+&lt;p&gt;You should now be able to log into OctoPi by typing “http://octopi.local” or “http://&lt;ipaddress&gt;&quot; into your browser.&lt;/ipaddress&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;configure-octoprint&quot;&gt;Configure OctoPrint&lt;/h2&gt;
+
+&lt;p&gt;The Pi is almost ready to control your printer, but first you need to configure your setup. There are two ways you can use OctoPrint, either as a slicer and printer, or just as a printer. Meaning you can upload files to slice and print, or you can slice 3D models on your PC first then upload them to be printed. You will have more control on your PC with slicing.&lt;/p&gt;
+
+&lt;p&gt;Copy the settings in the images below (for your printer) to configure OctoPrint. Once you have done this, you are ready to print sliced files! If you’d like to be able to upload 3D models and slice them on OctoPrint, proceed to the next step as well.&lt;/p&gt;
+
+&lt;h2 id=&quot;configure-cura-for-your-pc-and-octoprint-optional&quot;&gt;Configure Cura for your PC and OctoPrint (Optional)&lt;/h2&gt;
+
+&lt;p&gt;OctoPrint comes with the Cura slicer already installed, to configure it you must first setup and install Cura on your PC. Once you have done that you can export the configuration (.ini) file and upload it to OctoPi. You only need to do this if you want to be able to slice with OctoPrint.&lt;/p&gt;
+
+&lt;p&gt;Install Cura.
+Configure it using settings for your machine (described below).
+Navigate to “File” and click “Save Profile” in Cura. Save the .ini somewhere easy to get to.
+Go back to your browser and connect to your OctoPi server.
+Click OctoPrint Settings, and at the bottom you’ll see a Cura option.
+On the Cura options panel, select “Import Profile” and choose the .ini file you made earlier.
+You’re done!
+If you upload a 3D model, select this profile to slice your model. You can upload multiple profiles (maybe different fill densities, supports and so on) to use.&lt;/p&gt;
+
+&lt;p&gt;TinyBoy Fabrikator Mini 3D Printer Settings
+Click the images below to see my Fabrikator Mini cura settings.&lt;/p&gt;</content><author><name>zac</name></author><category term="tutorial" /><category term="software" /><summary type="html">How to use your 3D printer wirelessly</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://www.zenvent.com/images/octoprint-600x400.png" /></entry><entry><title type="html">Flappy Doom Game</title><link href="https://www.zenvent.com/blog/flappy-doom/" rel="alternate" type="text/html" title="Flappy Doom Game" /><published>2014-07-01T00:00:00-04:00</published><updated>2014-07-01T00:00:00-04:00</updated><id>https://www.zenvent.com/blog/flappy-doom</id><content type="html" xml:base="https://www.zenvent.com/blog/flappy-doom/">&lt;p&gt;While experimenting with the Unity engine I accidentally made the best game in the universe.&lt;/p&gt;
+
+&lt;p&gt;Available on &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.ZENVENT.FlappyDoom&quot;&gt;Google Play HERE.&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;videoWrapper&quot;&gt;
+    &amp;lt;iframe width=&quot;560&quot; height=&quot;349&quot; src=&quot;&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/yIKss9czfHk?rel=0&amp;amp;controls=0&amp;amp;showinfo=0&amp;amp;autoplay=1&amp;amp;mute=1&amp;amp;loop=1&amp;amp;playlist=F1aeoRdCPhc&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;
+&lt;/div&gt;</content><author><name>zac</name></author><category term="random" /><category term="software" /><summary type="html">Fly through heck, dodge pillars, explode a lot</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://www.zenvent.com/images/flappyDoom.PNG" /></entry></feed>

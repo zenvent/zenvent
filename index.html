@@ -11,8 +11,6 @@ sitemap:
 <html>
 	<head>
     {% include head.html %}
-
-
 	</head>
 	<body class="is-loading">
 
@@ -42,10 +40,10 @@ sitemap:
 						<img src="{{ post.image | absolute_url }}" alt="" />
 					</a>
 					<header>
-							<h2>
-									<a href="{{ post.url | absolute_url }}">{{ post.title }}</a>
-							</h2>
-						</header>
+						<h2>
+							<a href="{{ post.url | absolute_url }}">{{ post.title }}</a>
+						</h2>
+					</header>
 					<a href="{{ post.url | absolute_url }}">{{ post.excerpt }}</a>
 					</div>
 				</article>
@@ -66,6 +64,23 @@ sitemap:
 					</div>
 					</article>
 					{% endfor %}
+
+					{% if site.posts%2 != 0 %}
+					<article>
+						<div class="postCard" onclick="location.href='{{ post.url | absolute_url }}';" style="cursor: pointer;">
+						<a href="{{ post.url | absolute_url }}" class="image fit">
+							<img src="{{ post.image | absolute_url }}" alt="" />
+						</a>
+						<header>
+								<h2>
+									<a href="{{ post.url | absolute_url }}">{{ post.title }}</a>
+								</h2>
+							</header>
+						<a href="{{ post.url | absolute_url }}">{{ post.excerpt }}</a>
+					</div>
+					</article>
+					{% endif %}
+
 				</section>
 			
 			</div>
