@@ -38,7 +38,7 @@
       .modal {
           display: none; /* Hidden by default */
           position: fixed; /* Stay in place */
-          z-index: 10; /* Sit on top */
+          z-index: 100000; /* Sit on top */
           padding-top: 100px; /* Location of the box */
           left: 0;
           top: 0;
@@ -53,16 +53,14 @@
       .modal-content {
           margin: auto;
           display: block;
-          width: 80%;
-          max-width: 700px;
+          width: 90%;
       }
       
       /* Caption of Modal Image */
       #caption {
           margin: auto;
           display: block;
-          width: 80%;
-          max-width: 700px;
+          width: 90%;
           text-align: center;
           color: #ccc;
           padding: 10px 0;
@@ -90,7 +88,7 @@
       /* The Close Button */
       .close {
           position: absolute;
-          top: 15px;
+          top: 30px;
           right: 35px;
           color: #f1f1f1;
           font-size: 40px;
@@ -166,11 +164,11 @@
     </nav>
 
     <!-- The Modal -->
-  <div id="myModal" class="modal">
-    <span class="close">×</span>
-    <img class="modal-content" id="modalImage">
-    <div id="caption"></div>
-  </div>
+    <div id="myModal" class="modal">
+      <span class="close">×</span>
+      <img class="modal-content" id="modalImage">
+      <div id="caption"></div>
+    </div>
 
     <!-- Main -->
     <div id="main" style="padding: 2rem;">
@@ -291,7 +289,7 @@
         captionText.innerHTML = img.alt;
       
         // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
+        var span = document.getElementById("myModal");
       
         // When the user clicks on <span> (x), close the modal
         span.onclick = function() { 
