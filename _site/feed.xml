@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="https://www.zenvent.com/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.2.1">Jekyll</generator><link href="https://www.zenvent.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://www.zenvent.com/" rel="alternate" type="text/html" /><updated>2018-08-11T21:58:40-04:00</updated><id>https://www.zenvent.com/</id><title type="html">ZENVENT</title><subtitle>ZENVENT</subtitle><entry><title type="html">Mini G5 Hackintosh</title><link href="https://www.zenvent.com/blog/hackintosh/" rel="alternate" type="text/html" title="Mini G5 Hackintosh" /><published>2018-08-11T00:00:00-04:00</published><updated>2018-08-11T00:00:00-04:00</updated><id>https://www.zenvent.com/blog/hackintosh</id><content type="html" xml:base="https://www.zenvent.com/blog/hackintosh/">&lt;p&gt;Created a custom case for my hackintosh, it resembles a minified Power Mac G5.
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="https://www.zenvent.com/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.2.1">Jekyll</generator><link href="https://www.zenvent.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://www.zenvent.com/" rel="alternate" type="text/html" /><updated>2018-08-11T22:55:28-04:00</updated><id>https://www.zenvent.com/</id><title type="html">ZENVENT</title><subtitle>ZENVENT</subtitle><entry><title type="html">Mini G5 Hackintosh</title><link href="https://www.zenvent.com/blog/hackintosh/" rel="alternate" type="text/html" title="Mini G5 Hackintosh" /><published>2018-08-11T00:00:00-04:00</published><updated>2018-08-11T00:00:00-04:00</updated><id>https://www.zenvent.com/blog/hackintosh</id><content type="html" xml:base="https://www.zenvent.com/blog/hackintosh/">&lt;p&gt;Created a custom case for my hackintosh, it resembles a minified Power Mac G5.
 I have uploaded the parts to &lt;a href=&quot;https://www.thingiverse.com/thing:3044775&quot;&gt;Thingiverse&lt;/a&gt; in case you’d like to make one of your own.
 The case is easy to print on a 300x300 printer, flat parts can be printed or laser cut to save time. Everything slides together smoothly, bondo and primer were used to smooth the printed parts.&lt;/p&gt;
 
@@ -13,22 +13,22 @@ The case is easy to print on a 300x300 printer, flat parts can be printed or las
 
 &lt;div class=&quot;box alt&quot;&gt;
 	&lt;div class=&quot;row 50% uniform&quot;&gt;
-		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/hackintosh/1.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
-		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/hackintosh/2.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img id=&quot;img1&quot; onclick=&quot;imageModel(this.id);&quot; src=&quot;/images/hackintosh/1.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img id=&quot;img2&quot; onclick=&quot;imageModel(this.id);&quot; src=&quot;/images/hackintosh/2.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
 	&lt;/div&gt;
 	
 	&lt;div class=&quot;row 100% uniform&quot;&gt;
-		&lt;div class=&quot;12u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/hackintosh/3.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;12u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img id=&quot;img3&quot; onclick=&quot;imageModel(this.id);&quot; src=&quot;/images/hackintosh/3.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
 	&lt;/div&gt;
 	
 	&lt;div class=&quot;row 50% uniform&quot;&gt;
-		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/hackintosh/5a.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
-		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/hackintosh/5b.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img id=&quot;img4&quot; onclick=&quot;imageModel(this.id);&quot; src=&quot;/images/hackintosh/5a.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img id=&quot;img5&quot; onclick=&quot;imageModel(this.id);&quot; src=&quot;/images/hackintosh/5b.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
 	&lt;/div&gt;
 
 	&lt;div class=&quot;row 50% uniform&quot;&gt;
-		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/hackintosh/7a.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
-		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/hackintosh/7b.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img id=&quot;img6&quot; onclick=&quot;imageModel(this.id);&quot; src=&quot;/images/hackintosh/7a.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img id=&quot;img7&quot; onclick=&quot;imageModel(this.id);&quot; src=&quot;/images/hackintosh/7b.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
 	&lt;/div&gt;
 &lt;/div&gt;</content><author><name>zac</name></author><category term="random" /><summary type="html">3D Printed &amp; Laser Cut Custom PC Case</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://www.zenvent.com/images/hackintosh/0.jpg" /></entry><entry><title type="html">Upholstered Dog Beds</title><link href="https://www.zenvent.com/blog/doge-beds/" rel="alternate" type="text/html" title="Upholstered Dog Beds" /><published>2018-07-06T00:00:00-04:00</published><updated>2018-07-06T00:00:00-04:00</updated><id>https://www.zenvent.com/blog/doge-beds</id><content type="html" xml:base="https://www.zenvent.com/blog/doge-beds/">&lt;p&gt;Cheap and easy to build dog beds. They have a modern/contemporary look. Can be built to match any existing furniture textures and colors.&lt;/p&gt;
 
@@ -74,8 +74,8 @@ The ‘screen’ is simply acrylic with metallic spray paint on the back- this g
 
 &lt;div class=&quot;box alt&quot;&gt;
 	&lt;div class=&quot;row 50% uniform&quot;&gt;
-		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/table/smallTable.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
-		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/table/tableSet2.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img id=&quot;img1&quot; onclick=&quot;imageModel(this.id);&quot; src=&quot;/images/table/smallTable.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img id=&quot;img2&quot; onclick=&quot;imageModel(this.id);&quot; src=&quot;/images/table/tableSet2.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
 	&lt;/div&gt;
 &lt;/div&gt;</content><author><name>zac</name></author><category term="tutorial" /><category term="woodworking" /><summary type="html">DIRESTA inspired walnut dining table</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://www.zenvent.com/images/table/tableSet.jpg" /></entry><entry><title type="html">#TeamDiablo</title><link href="https://www.zenvent.com/blog/diablo/" rel="alternate" type="text/html" title="#TeamDiablo" /><published>2017-06-01T00:00:00-04:00</published><updated>2017-06-01T00:00:00-04:00</updated><id>https://www.zenvent.com/blog/diablo</id><content type="html" xml:base="https://www.zenvent.com/blog/diablo/">&lt;p&gt;My current team’s name at work is Diablo. To pretty up the workspace I created a cubicle signs for each of our members. Each completed sign consists of about 5 hours of print time!
 Each sign consists of mutliple parts to make painting and assebmly easy. No supports or sanding required.
@@ -90,18 +90,18 @@ I have uploaded the parts to &lt;a href=&quot;https://www.thingiverse.com/thing:
 
 &lt;div class=&quot;box alt&quot;&gt;
 	&lt;div class=&quot;row 50% uniform&quot;&gt;
-		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/teamdiablo/final.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
-		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/teamdiablo/background.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img id=&quot;img1&quot; onclick=&quot;imageModel(this.id);&quot; src=&quot;/images/teamdiablo/final.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img id=&quot;img2&quot; onclick=&quot;imageModel(this.id);&quot; src=&quot;/images/teamdiablo/background.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
 	&lt;/div&gt;
 	
 	&lt;div class=&quot;row 50% uniform&quot;&gt;
-		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/teamdiablo/shinyjpg.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
-		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/teamdiablo/bunch.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img id=&quot;img3&quot; onclick=&quot;imageModel(this.id);&quot; src=&quot;/images/teamdiablo/shinyjpg.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img id=&quot;img4&quot; onclick=&quot;imageModel(this.id);&quot; src=&quot;/images/teamdiablo/bunch.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
 	&lt;/div&gt;
 	
 	&lt;div class=&quot;row 50% uniform&quot;&gt;
-		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/teamdiablo/letters.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
-		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/teamdiablo/readytoassemble.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img id=&quot;img5&quot; onclick=&quot;imageModel(this.id);&quot; src=&quot;/images/teamdiablo/letters.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
+		&lt;div class=&quot;6u&quot;&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img id=&quot;img6&quot; onclick=&quot;imageModel(this.id);&quot; src=&quot;/images/teamdiablo/readytoassemble.jpg&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/div&gt;
 	&lt;/div&gt;
 &lt;/div&gt;</content><author><name>zac</name></author><category term="random" /><summary type="html">Diablo themed signs for my team at work</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://www.zenvent.com/images/teamdiablo/all.jpg" /></entry><entry><title type="html">Cellular Car Starter</title><link href="https://www.zenvent.com/blog/remote-car-start/" rel="alternate" type="text/html" title="Cellular Car Starter" /><published>2016-01-01T00:00:00-05:00</published><updated>2016-01-01T00:00:00-05:00</updated><id>https://www.zenvent.com/blog/remote-car-start</id><content type="html" xml:base="https://www.zenvent.com/blog/remote-car-start/">&lt;p&gt;I figured out a way to cheaply start my car using a text message. I wanted to be able to do this because my office is quite the distance from where I park, and my current remote starter has a range of only 20 feet or so. Learn how to do this yourself by click the link below or watching my video tutorial.&lt;/p&gt;
 

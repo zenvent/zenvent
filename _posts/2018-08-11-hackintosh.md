@@ -19,21 +19,21 @@ The case is easy to print on a 300x300 printer, flat parts can be printed or las
 
 <div class="box alt">
 	<div class="row 50% uniform">
-		<div class="6u"><span class="image fit"><img src="{{ "/images/hackintosh/1.jpg" | absolute_url }}" alt="" /></span></div>
-		<div class="6u"><span class="image fit"><img src="{{ "/images/hackintosh/2.jpg" | absolute_url }}" alt="" /></span></div>
+		<div class="6u"><span class="image fit"><img id="img1" onclick="imageModel(this.id);" src="{{ "/images/hackintosh/1.jpg" | absolute_url }}" alt="" /></span></div>
+		<div class="6u"><span class="image fit"><img id="img2" onclick="imageModel(this.id);" src="{{ "/images/hackintosh/2.jpg" | absolute_url }}" alt="" /></span></div>
 	</div>
 	
 	<div class="row 100% uniform">
-		<div class="12u"><span class="image fit"><img src="{{ "/images/hackintosh/3.jpg" | absolute_url }}" alt="" /></span></div>
+		<div class="12u"><span class="image fit"><img id="img3" onclick="imageModel(this.id);" src="{{ "/images/hackintosh/3.jpg" | absolute_url }}" alt="" /></span></div>
 	</div>
 	
 	<div class="row 50% uniform">
-		<div class="6u"><span class="image fit"><img src="{{ "/images/hackintosh/5a.jpg" | absolute_url }}" alt="" /></span></div>
-		<div class="6u"><span class="image fit"><img src="{{ "/images/hackintosh/5b.jpg" | absolute_url }}" alt="" /></span></div>
+		<div class="6u"><span class="image fit"><img id="img4" onclick="imageModel(this.id);" src="{{ "/images/hackintosh/5a.jpg" | absolute_url }}" alt="" /></span></div>
+		<div class="6u"><span class="image fit"><img id="img5" onclick="imageModel(this.id);" src="{{ "/images/hackintosh/5b.jpg" | absolute_url }}" alt="" /></span></div>
 	</div>
 
 	<div class="row 50% uniform">
-		<div class="6u"><span class="image fit"><img src="{{ "/images/hackintosh/7a.jpg" | absolute_url }}" alt="" /></span></div>
-		<div class="6u"><span class="image fit"><img src="{{ "/images/hackintosh/7b.jpg" | absolute_url }}" alt="" /></span></div>
+		<div class="6u"><span class="image fit"><img id="img6" onclick="imageModel(this.id);" src="{{ "/images/hackintosh/7a.jpg" | absolute_url }}" alt="" /></span></div>
+		<div class="6u"><span class="image fit"><img id="img7" onclick="imageModel(this.id);" src="{{ "/images/hackintosh/7b.jpg" | absolute_url }}" alt="" /></span></div>
 	</div>
 </div>

@@ -2,8 +2,9 @@
 <html>
 
 <head>
-  <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
 
 <title>Flappy Doom Game</title>
 <meta name="description" content="">
@@ -18,10 +19,99 @@
 <meta name="theme-color" content="#ffffff">
 
 <!-- CSS -->
-<link rel="stylesheet" href="/assets/css/main.css" />
+<link rel="stylesheet" href="/assets/css/main.css">
 <noscript>
-    <link rel="stylesheet" href="/assets/css/noscript.css" />
+    <link rel="stylesheet" href="/assets/css/noscript.css">
 </noscript>
+  <style>
+      body {font-family: Arial, Helvetica, sans-serif;}
+      
+      #myImg {
+          border-radius: 5px;
+          cursor: pointer;
+          transition: 0.3s;
+      }
+      
+      #myImg:hover {opacity: 0.7;}
+      
+      /* The Modal (background) */
+      .modal {
+          display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 10; /* Sit on top */
+          padding-top: 100px; /* Location of the box */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgb(0,0,0); /* Fallback color */
+          background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+      }
+      
+      /* Modal Content (image) */
+      .modal-content {
+          margin: auto;
+          display: block;
+          width: 80%;
+          max-width: 700px;
+      }
+      
+      /* Caption of Modal Image */
+      #caption {
+          margin: auto;
+          display: block;
+          width: 80%;
+          max-width: 700px;
+          text-align: center;
+          color: #ccc;
+          padding: 10px 0;
+          height: 150px;
+      }
+      
+      /* Add Animation */
+      .modal-content, #caption {    
+          -webkit-animation-name: zoom;
+          -webkit-animation-duration: 0.6s;
+          animation-name: zoom;
+          animation-duration: 0.6s;
+      }
+      
+      @-webkit-keyframes zoom {
+          from {-webkit-transform:scale(0)} 
+          to {-webkit-transform:scale(1)}
+      }
+      
+      @keyframes zoom {
+          from {transform:scale(0)} 
+          to {transform:scale(1)}
+      }
+      
+      /* The Close Button */
+      .close {
+          position: absolute;
+          top: 15px;
+          right: 35px;
+          color: #f1f1f1;
+          font-size: 40px;
+          font-weight: bold;
+          transition: 0.3s;
+      }
+      
+      .close:hover,
+      .close:focus {
+          color: #bbb;
+          text-decoration: none;
+          cursor: pointer;
+      }
+      
+      /* 100% Image Width on Smaller Screens */
+      @media only screen and (max-width: 700px){
+          .modal-content {
+              width: 100%;
+          }
+      }
+      </style>
 </head>
 
 <body class="is-loading">
@@ -75,6 +165,13 @@
 </ul>
     </nav>
 
+    <!-- The Modal -->
+  <div id="myModal" class="modal">
+    <span class="close">×</span>
+    <img class="modal-content" id="modalImage">
+    <div id="caption"></div>
+  </div>
+
     <!-- Main -->
     <div id="main" style="padding: 2rem;">
       <section class="post" style="margin-left: 2rem; margin-right: 2rem; margin-top: 2rem;">
@@ -86,14 +183,15 @@
         <div class="image main">
           <img src="/images/flappyDoom.PNG" alt="">
         </div>
-        <p><p>While experimenting with the Unity engine I accidentally made the best game in the universe.</p>
+        <p></p>
+<p>While experimenting with the Unity engine I accidentally made the best game in the universe.</p>
 
 <p>Available on <a href="https://play.google.com/store/apps/details?id=com.ZENVENT.FlappyDoom">Google Play HERE.</a></p>
 
 <div class="videoWrapper">
     &lt;iframe width="560" height="349" src="<iframe width="560" height="315" src="https://www.youtube.com/embed/yIKss9czfHk?rel=0&amp;controls=0&amp;showinfo=0&amp;autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=F1aeoRdCPhc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen&gt;&lt;/iframe&gt;
 </div>
-</p>
+
       <br>
 
       <div class="comments-wrapper">
@@ -111,8 +209,9 @@
           (d.head || d.body).appendChild(s);
           })();
           </script>
-          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        </section>                         
+          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+</noscript>
+                                 
     </div>
     <footer id="footer">
     <div class="followMe">
@@ -126,7 +225,8 @@
     <a href="/">© 2018 ZENVENT</a>
 </div>
 
-  </div>
+  </section>
+</div>
 
   <!-- Scripts -->
   <!-- DYN -->
@@ -145,7 +245,30 @@
   gtag('config', 'UA-122048100-1');
 </script>
 
+  <script>
+      function imageModel(imageId){
+        // Get the modal
+        var modal = document.getElementById('myModal');
+      
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var img = document.getElementById(imageId);
+        var modalImg = document.getElementById("modalImage");
+        var captionText = document.getElementById("caption");
+        modal.style.display = "block";
+        modalImg.src = img.src;
+        captionText.innerHTML = img.alt;
+      
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+      
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() { 
+            modal.style.display = "none";
+        }
+      }
+      </script>
 
+</div>
 </body>
 
 </html>

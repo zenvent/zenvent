@@ -21,7 +21,7 @@ Thanks for watching!
 
 <div class="box alt">
 	<div class="row 50% uniform">
-		<div class="6u"><span class="image fit"><img src="{{ "/images/table/smallTable.jpg" | absolute_url }}" alt="" /></span></div>
-		<div class="6u"><span class="image fit"><img src="{{ "/images/table/tableSet2.jpg" | absolute_url }}" alt="" /></span></div>
+		<div class="6u"><span class="image fit"><img id="img1" onclick="imageModel(this.id);" src="{{ "/images/table/smallTable.jpg" | absolute_url }}" alt="" /></span></div>
+		<div class="6u"><span class="image fit"><img id="img2" onclick="imageModel(this.id);" src="{{ "/images/table/tableSet2.jpg" | absolute_url }}" alt="" /></span></div>
 	</div>
 </div>
