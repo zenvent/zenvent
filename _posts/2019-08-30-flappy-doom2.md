@@ -8,9 +8,9 @@ image: "/images/flappyDoom2/largeBanner.PNG"
 
 I decided to re-write flappy doom as it has over 1,529 installs! I had since forgotten how to use Unity, which has official 2D support now.
 I've added more maps, more characters, new graphics and new music!
-Play it here or download on the [Google Play Store](https://play.google.com/store/apps/details?id=com.zenvent.flappydoom2)
 
-<a href='https://play.google.com/store/apps/details?id=com.zenvent.flappydoom2&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+
+<a href='https://play.google.com/store/apps/details?id=com.zenvent.flappydoom2&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' class="center"/></a>
 
 <div class="box alt">
 	<div class="row 50% uniform">
