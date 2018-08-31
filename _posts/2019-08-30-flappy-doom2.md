@@ -10,7 +10,7 @@ I decided to re-write flappy doom as it has over 1,529 installs! I had since for
 I've added more maps, more characters, new graphics and new music! Play it in your browser or download the app on Google Play!
 
 <center>
-[Play In Browser](https://zenvent.github.io/flappyDoom/index.html)
+<a href="https://zenvent.github.io/flappyDoom/index.html" class="center" >Play In Your Browser</a>
 </center>
 
 <div align="center">
