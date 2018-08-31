@@ -14,7 +14,7 @@ I've added more maps, more characters, new graphics and new music! Play it in yo
 </center>
 
 <div align="center">
-	<a href='https://play.google.com/store/apps/details?id=com.zenvent.flappydoom2&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' class="center"/></a>
+	<a href='https://play.google.com/store/apps/details?id=com.zenvent.flappydoom2'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' class="center" width="50%" height="50%"/></a>
 </div>
 
 
