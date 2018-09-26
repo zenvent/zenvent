@@ -26,9 +26,9 @@ If you follow the tutorial, basic computer and electronics skills. I am assuming
 
 ## Required Materials
 
-* [Arduino Uno $10](http://amzn.to/1RGPjgW)
-* [Relay Module $5](link: http://amzn.to/1OL7vVJ)
-* [GPRS Shield $30](http://amzn.to/1RGQb5j)
+* [Arduino Uno $10](https://amzn.to/2Oe1Q1o)
+* [Relay Module $5](http://amzn.to/1OL7vVJ)
+* [GPRS Shield $10](https://www.ebay.com/sch/i.html?_from=R40&_trksid=m570.l1313&_nkw=Seeed+gprs+Shield+for+Arduino&_sacat=0)
 * [SIM Card: Ting or T-Mobile](https://ting.com/rates)
 * [Breadboard & Wires (or solder)](http://amzn.to/1Nbx2C4)
 * Car Start Remote Control
