@@ -6,14 +6,28 @@ tags: [random]
 image: "/images/buildLight/buildLight.jpg"
 ---
 
-I wanted a CI pipeline build light that was cheap to make and was extendable. In this post I'll describe how I made a 3-Job build light with a Raspberry Pi and an individually addressable LED light strand.
+I wanted a CI pipeline build light that was cheap to make and was extendable. In this post I'll describe how I made a 3x job build light with a Raspberry Pi and an individually addressable LED light strand.
+
+The  WS2812B light strand is similar to a neopixel light strand, but much cheaper. Only $10 USD for a 82 in a 1 meter strip. They are 5 volts, so you can easily power the raspberry pi and the lights off one power source. The reason a raspberry pi was chosen was due to the complexity of connecting to an enterprise network- if you have an easy way to connect to your CI network, an orange pi or arduino can be used to save cost. These LEDS can consume quite a bit of power on full blast, below is a cheap power supply that works well.
 
 ## Materials Used
 
 * [LED Light Strand](https://www.amazon.com/gp/product/B01D1GJ8KC)
-* [Raspberry Pi](https://www.microcenter.com/product/473292/2-model-b)
+* [Raspberry Pi 2B](https://www.microcenter.com/product/473292/2-model-b)
+* [5v 20a Power Supply](https://www.amazon.com/gp/product/B01K0608A0)
 
-## GitHub
+## The Problem
+
+In spirit of keeping everything as cheap as possible, it made it a bit harder to implement. The original plan was to divide the LED strip light into three sections, however the issue is that the raspberry pi can only control one strip. In the code below I have made 'virtual strips' so that one strip can be used as three or more. It will also poll jenkins (or any CI server) every so often for the latest status, without impacting the animations. The setup should be pretty self explanatory, download the rpi_ws281x library and run my code alongside it. You should only need to update the the parameters in the buildObj to get it to work. Connect it to PIN 18 on the raspberry pi and be sure that the pi's ground and led ground are shared. The python script needs to be ran as sudo in order to use the PWM pin.
+
+```sudo python buildLight.py```
+
+## The Code
+
+This is the library I used to control the lights:
+https://github.com/jgarff/rpi_ws281x/tree/master/python
+
+This is the link to my code, which is also shown below:
 https://raw.githubusercontent.com/zenvent/BuildLight/master/buildLight.py
 
 ```python
@@ -134,11 +148,11 @@ def getBuildStatus(url):
         data = requests.get(url).json()
     except requests.exceptions.RequestException as e:
         print ("Unable to connect to Jenkins")
-        return UNKOWN_BUILD_STATUS
+        return UNKNOWN_BUILD_STATUS
         
     if data is None or not data or data['builds'] is None or not data['builds']:
         print ("Unable to parse response from Jenkins")
-        return UNKOWN_BUILD_STATUS
+        return UNKNOWN_BUILD_STATUS
 
     newBuild = data['builds'][NEW_BUILD]['result']
     if newBuild == "SUCCESS":
