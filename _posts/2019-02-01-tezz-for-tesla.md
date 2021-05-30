@@ -19,6 +19,4 @@ Unsatisfied with the Tesla app in terms of convenience, I created a Wear OS app 
 * Sunroof open
 * Climate Status
 
-<div align="center">
-	<a href='https://play.google.com/store/apps/details?id=com.zenvent.tezz.android'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' class="center" width="70%" height="70%"/></a>
-</div>
+[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png">](https://play.google.com/store/apps/details?id=com.zenvent.tezz.android)
