@@ -11,5 +11,5 @@ While experimenting with the Unity engine I accidentally made the best game in t
 Available on [Google Play HERE.](https://play.google.com/store/apps/details?id=com.ZENVENT.FlappyDoom)
 
 <div class="videoWrapper">
-    <iframe width="560" height="349" src="<iframe width="560" height="315" src="https://www.youtube.com/embed/yIKss9czfHk?rel=0&amp;controls=0&amp;showinfo=0&autoplay=1&mute=1&loop=1&playlist=F1aeoRdCPhc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/JmpWZC4I3xE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
