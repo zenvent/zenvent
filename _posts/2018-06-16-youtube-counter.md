@@ -13,7 +13,7 @@ The 'screen' is simply acrylic with metallic spray paint on the back- this gives
 ## Links
 
 * [TV 3D Model](https://www.thingiverse.com/thing:2950299)
-* [ESP8266 $8](https://amzn.to/2M4JqMH)
-* [Display $3](https://amzn.to/2JkQ13S)
+* [ESP8266 3 for $16](https://amzn.to/3V5lQF5)
+* [Display 5 for $13](https://amzn.to/3V8Y6jz)
 * [The Code](https://github.com/zenvent/YouTube-Analytics-Display)
 

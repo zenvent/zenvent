@@ -12,9 +12,9 @@ The  WS2812B light strand is similar to a neopixel light strand, but much cheape
 
 ## Materials Used
 
-* [LED Light Strand](https://www.amazon.com/gp/product/B01D1GJ8KC)
-* [Raspberry Pi 2B](https://www.microcenter.com/product/473292/2-model-b)
-* [5v 20a Power Supply](https://www.amazon.com/gp/product/B01K0608A0)
+* [LED Light Strand](https://amzn.to/3QQPtaA)
+* [Raspberry Pi 2B](https://amzn.to/3wGLPJx)
+* [5v 20a Power Supply](https://amzn.to/3K8375t)
 
 ## The Problem
 
