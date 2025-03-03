@@ -5,13 +5,18 @@ excerpt: "Automated Designs with Fusion 360"
 tags: [random]
 image: "images/automatedpots/fusion_360_bodies.png"
 ---
+![the bodies](../images/automatedpots/fusion_360_bodies.png)
 
-I created a model in fusion 360 that is fully parameterized.
+I built a fully parameterized model in Fusion 360 for a self-watering planter. Originally, I did it to fiddle with different settings easily, but by the end, I saw it as a way to pump out multiple versions to sell. The challenge was generating all the possible size variants without losing my mind. So, I wrote a script that loops through the bodies in the project, exports each one as an STL, updates the parameters, and repeats. It’s clever enough to skip the constant parts—no point in re-exporting what doesn’t change. Want the details? Check out the code below.
 
-I did this mainly for testing different settings easily, but in the end I wanted to generate multiple varients of the 'self-watering' planter to sell. I needed a way to quickly export the all the models, in all possible sizes. In this case I wrote a script that iterates through the existing bodies in a project, exports them as stl, then applys a parameter update and repeats. It even skips parts that are constant. See the code for more details.
+![the parameters](../images/automatedpots/fusion_360_parameters.png)
 
-Once I've generated all the stl files, I loaded them into one Bambu Studio project (or Orca Slicer etc). Now I can easilly check the box of the compoents I want and print, and all settings will carry over to each part as ordered.
+Once I had all the STL files, I loaded them into a single Bambu Studio project (Orca Slicer works too—both are solid options). From there, it’s just checking boxes for the components I want to print. All my settings carry over to each part, no hassle, and I’m ready to hit print.
 
+![Bambu Studio](../images/automatedpots/bambu_planter_project.png)
+
+Fusion 360 script (Python-based, naturally— Autodesk’s got docs on that if you’re new to it). Tweak it for your own projects if you’re into parametric designs:
+![save script here](../images/automatedpots/fusion_360_script.png)
 
 ```python
 import adsk.core, adsk.fusion, traceback
@@ -83,3 +88,7 @@ def run(context):
 def stop(context):
     pass
 ```
+
+- **Fusion 360**: If you’re not already using it, it’s a beast for parametric modeling. Autodesk’s got a free tier for hobbyists—check it out [here](https://www.autodesk.com/products/fusion-360/overview).
+- **Bambu Studio**: My go-to slicer for this. It’s built for Bambu Lab printers but plays nice with others too. Grab it [here](https://bambulab.com/en/download/studio).
+- **Orca Slicer**: A fork of Bambu Studio with extra tweaks—more printer profiles and calibration options. Find it on GitHub [here](https://github.com/SoftFever/OrcaSlicer).
