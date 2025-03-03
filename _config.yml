@@ -31,7 +31,7 @@ sass:
   style:            compressed
 
 # Comments
-disqus_shortname:   zenvent
+disqus_shortname:   
 
 # Social
 analytics-id:       "UA-122048100-1"
