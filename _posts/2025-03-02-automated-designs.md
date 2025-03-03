@@ -5,18 +5,18 @@ excerpt: "Automated Designs with Fusion 360"
 tags: [random]
 image: "images/automatedpots/fusion_360_bodies.png"
 ---
-![the bodies](../images/automatedpots/fusion_360_bodies.png)
+![the bodies](images/automatedpots/fusion_360_bodies.png)
 
 I built a fully parameterized model in Fusion 360 for a self-watering planter. Originally, I did it to fiddle with different settings easily, but by the end, I saw it as a way to pump out multiple versions to sell. The challenge was generating all the possible size variants without losing my mind. So, I wrote a script that loops through the bodies in the project, exports each one as an STL, updates the parameters, and repeats. It’s clever enough to skip the constant parts—no point in re-exporting what doesn’t change. Want the details? Check out the code below.
 
-![the parameters](../images/automatedpots/fusion_360_parameters.png)
+![the parameters](images/automatedpots/fusion_360_parameters.png)
 
 Once I had all the STL files, I loaded them into a single Bambu Studio project (Orca Slicer works too—both are solid options). From there, it’s just checking boxes for the components I want to print. All my settings carry over to each part, no hassle, and I’m ready to hit print.
 
-![Bambu Studio](../images/automatedpots/bambu_planter_project.png)
+![bambu studio](images/automatedpots/bambu_planter_project.png)
 
 Fusion 360 script (Python-based, naturally— Autodesk’s got docs on that if you’re new to it). Tweak it for your own projects if you’re into parametric designs:
-![save script here](../images/automatedpots/fusion_360_script.png)
+![save script here](images/automatedpots/fusion_360_script.png)
 
 ```python
 import adsk.core, adsk.fusion, traceback
