@@ -17,7 +17,7 @@ Once I had all the STL files, I loaded them into a single Bambu Studio project (
 
 Fusion 360 script (Python-based, naturally— Autodesk’s got docs on that if you’re new to it). Tweak it for your own projects if you’re into parametric designs:
 
-![save script here](/images/automatedpots/fusion_360_script.png)
+![save script here](/images/automatedpots/fusion_360_script.png){: width="100%" }
 
 ```python
 import adsk.core, adsk.fusion, traceback
