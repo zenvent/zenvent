@@ -10,7 +10,10 @@ sitemap:
 ## Send an Email
 
 <section>
-    <form method="POST" action="https://formspree.io/{{site.email}}">
+<form
+  action="https://formspree.io/f/zac@zenvent.com"
+  method="POST"
+>
         <div class="field">
         <label for="name">Name</label>
         <input type="text" name="name" id="name" />
