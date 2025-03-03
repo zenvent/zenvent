@@ -3,7 +3,7 @@ layout: post
 title: "Parameteric Automation"
 excerpt: "Automated Designs with Fusion 360"
 tags: [random]
-image: "images/automatedpots/fusion_360_bodies.png"
+image: "images/automatedpots/banner.png"
 ---
 ![the bodies](/images/automatedpots/fusion_360_bodies.png){: width="500" }
 
