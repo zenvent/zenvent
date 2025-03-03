@@ -5,7 +5,7 @@ excerpt: "Automated Designs with Fusion 360"
 tags: [random]
 image: "images/automatedpots/fusion_360_bodies.png"
 ---
-![the bodies](/images/automatedpots/fusion_360_bodies.png)
+![the bodies](/images/automatedpots/fusion_360_bodies.png){: width="50%" }
 
 I built a fully parameterized model in Fusion 360 for a self-watering planter. Originally, I did it to fiddle with different settings easily, but by the end, I saw it as a way to pump out multiple versions to sell. The challenge was generating all the possible size variants without losing my mind. So, I wrote a script that loops through the bodies in the project, exports each one as an STL, updates the parameters, and repeats. It’s clever enough to skip the constant parts—no point in re-exporting what doesn’t change. Want the details? Check out the code below.
 
