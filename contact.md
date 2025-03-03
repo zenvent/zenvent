@@ -11,7 +11,7 @@ sitemap:
 
 <section>
 <form
-  action="https://formspree.io/f/zac@zenvent.com"
+  action="https://formspree.io/f/xzzdnkzz"
   method="POST"
 >
         <div class="field">
