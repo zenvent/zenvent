@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Fleet Control. Mid-slate body so it reads on both light and dark tab bars. -->
+  <path d="M11 9.5V7.4A2.4 2.4 0 0 1 13.4 5h5.2A2.4 2.4 0 0 1 21 7.4v2.1"
+        fill="none" stroke="#6f727b" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M3 17h26v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="#6f727b"/>
+  <rect x="3" y="9.5" width="26" height="7.5" rx="1.6" fill="#3987e5"/>
+  <rect x="12.6" y="15" width="6.8" height="4" rx="1.4" fill="#f4f5f8"/>
+</svg>
