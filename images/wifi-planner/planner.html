@@ -1,0 +1,1999 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wi-Fi Planner · ZENVENT</title>
+<meta name="description" content="Interactive 3D Wi-Fi planner: draw or upload a floor plan, place one to three ceiling access points, mark where people use their phones, and let the optimizer find the best spots.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one-screen survey tool. 3D viewport left (fills), instrument panel right; stacks on phones. */
+:root {
+  --bg: #e9ecee;
+  --surface: #f8f9f9;
+  --ink: #182027;
+  --muted: #5a6670;
+  --line: #c6ced3;
+  --accent: #2f45c0;
+  --ap-b: #b5368a;
+  --wall: #3a4650;
+  --floor: #d6dce0;
+  --beam: #a0662a;
+  --warn: #b23b2e;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11161a; --surface: #182027; --ink: #e3e8eb; --muted: #8c99a3; --line: #2b353d;
+  --accent: #8e9cff; --ap-b: #f07cc6; --wall: #a9b6bf; --floor: #222b33; --beam: #d39a5c; --warn: #ff8a7a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11161a; --surface: #182027; --ink: #e3e8eb; --muted: #8c99a3; --line: #2b353d;
+  --accent: #8e9cff; --ap-b: #f07cc6; --wall: #a9b6bf; --floor: #222b33; --beam: #d39a5c; --warn: #ff8a7a; color-scheme: dark }
+
+[hidden] { display: none !important; }
+html, body { height: 100%; margin: 0; }
+*, *::before, *::after { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 14px; line-height: 1.45; }
+.app { display: grid; grid-template-columns: minmax(0, 1fr) 370px; grid-template-rows: auto minmax(0, 1fr); height: 100%; min-height: 560px; }
+header { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; padding-block: 12px 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); border-bottom: 1px solid var(--line); }
+h1 { margin: 0; font-family: var(--font-display); font-stretch: 112%; font-weight: 750; font-size: 20px; letter-spacing: -0.01em; text-wrap: balance; }
+.sub { color: var(--muted); font-size: 13px; }
+.viewport { position: relative; min-width: 0; min-height: 0; overflow: hidden; }
+#gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.lbl { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; text-align: center; font-size: 11px; font-weight: 600; color: var(--ink); text-shadow: 0 0 3px var(--bg), 0 0 6px var(--bg); line-height: 1.15; }
+.lbl small { display: block; font-family: var(--font-mono); font-weight: 400; font-size: 10px; color: var(--muted); }
+.lbl.ap { font-family: var(--font-mono); font-size: 11px; color: #fff; text-shadow: none; padding: 2px 6px; border-radius: 3px; transform: translate(-50%, -170%); }
+.lbl.edge { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.lbl.beam { font-size: 10px; color: var(--beam); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.toolbar { position: absolute; top: 12px; left: max(12px, env(safe-area-inset-left, 0px)); right: 12px; display: flex; flex-wrap: wrap; gap: 8px; z-index: 2; }
+.seg { display: inline-flex; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.seg button { font: inherit; font-size: 12px; font-weight: 600; color: var(--muted); background: none; border: 0; padding: 6px 10px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { color: var(--surface); background: var(--ink); }
+button:focus-visible, .btn:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.explode { display: inline-flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px; font-size: 12px; color: var(--muted); }
+.explode input { width: 90px; accent-color: var(--accent); }
+.tip { position: absolute; pointer-events: none; z-index: 3; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 4px 8px; font-family: var(--font-mono); font-size: 11px; box-shadow: 0 2px 8px rgb(0 0 0 / 0.12); }
+.hint { position: absolute; bottom: 10px; left: max(12px, env(safe-area-inset-left, 0px)); right: 12px; font-size: 12px; color: var(--muted); pointer-events: none; }
+
+aside { border-left: 1px solid var(--line); background: var(--surface); overflow-y: auto; padding-block: 16px 24px; padding-left: 18px; padding-right: max(18px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+section h2 { margin: 0 0 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.presets { display: grid; gap: 6px; }
+.preset { text-align: left; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; cursor: pointer; display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; }
+.preset strong { font-size: 13px; }
+.preset .score { font-family: var(--font-mono); font-size: 12px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+.preset span { font-size: 12px; color: var(--muted); grid-column: 1 / -1; }
+.preset[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.aps { display: grid; gap: 8px; }
+.apcard { border: 1px solid var(--line); border-radius: 6px; padding: 10px; display: grid; gap: 6px; cursor: pointer; }
+.apcard[data-sel="true"] { border-color: var(--c); box-shadow: inset 3px 0 0 var(--c); }
+.apcard .row { display: flex; align-items: center; gap: 8px; }
+.dot { width: 18px; height: 18px; border-radius: 50%; background: var(--c); color: #fff; font: 700 11px/18px var(--font-mono); text-align: center; flex: none; }
+.apcard .where { font-weight: 600; }
+.apcard .meas { font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.apcard .warn { color: var(--warn); font-size: 12px; font-weight: 600; }
+.btnrow { display: flex; flex-wrap: wrap; gap: 6px; }
+.btn { font: inherit; font-size: 12px; font-weight: 600; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 5px; padding: 5px 9px; cursor: pointer; }
+.btn:disabled { opacity: 0.55; cursor: progress; }
+.beamctl { display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; align-items: center; font-size: 13px; }
+.beamctl input[type=number] { font: 500 13px var(--font-mono); width: 6.5em; padding: 4px 6px; border: 1px solid var(--line); border-radius: 5px; background: var(--bg); color: var(--ink); }
+.beamctl label.chk { grid-column: 1 / -1; display: flex; gap: 8px; align-items: center; }
+.beamctl .unit { color: var(--muted); font-size: 12px; }
+.cov { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.covbox { border: 1px solid var(--line); border-radius: 6px; padding: 10px; min-width: 0; }
+.covbox .k { font-size: 12px; color: var(--muted); }
+.covbox .v { font-family: var(--font-mono); font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.covbox .w { font-size: 11.5px; color: var(--muted); }
+.legend { display: grid; gap: 4px; }
+.ramp { height: 10px; border-radius: 2px; }
+.ticks { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+.legend p { margin: 4px 0 0; font-size: 12px; color: var(--muted); }
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+th { text-align: left; font-weight: 600; color: var(--muted); font-size: 11px; padding: 0 0 4px; }
+td { padding: 3px 0; border-top: 1px solid var(--line); vertical-align: middle; }
+td.n { font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; width: 52px; }
+td.lv { color: var(--muted); width: 26px; font-family: var(--font-mono); font-size: 11px; }
+.chip { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; vertical-align: 0; }
+.lbl.spotlbl { font-size: 11px; background: var(--surface); color: var(--ink); text-shadow: none; border: 1.5px solid var(--ink); border-radius: 10px; padding: 1px 7px; transform: translate(-50%, -135%); }
+.lbl.spotlbl small { display: inline; margin-left: 4px; font-weight: 600; color: var(--ink); }
+.spotintro { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); }
+.spots { display: grid; gap: 6px; margin-bottom: 8px; }
+.spot { border: 1px solid var(--line); border-radius: 6px; padding: 7px 8px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto auto; gap: 2px 6px; align-items: center; }
+.spot[data-sel="true"] { border-color: var(--ink); }
+.sdot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--ink); box-sizing: border-box; font: 700 10px/14px var(--font-mono); text-align: center; }
+.sname, .skind { font: 600 13px var(--font-body); color: var(--ink); background: none; border: 1px solid transparent; border-radius: 4px; padding: 2px 4px; min-width: 0; }
+.sname { width: 100%; }
+.skind { font-weight: 500; font-size: 12px; color: var(--muted); cursor: pointer; }
+.sname:hover, .sname:focus, .skind:hover, .skind:focus { border-color: var(--line); background: var(--bg); }
+.sname:disabled, .skind:disabled { cursor: default; border-color: transparent; background: none; }
+.sval { font-family: var(--font-mono); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sx { font: 600 15px/1 var(--font-body); color: var(--muted); background: none; border: 0; padding: 2px 4px; cursor: pointer; border-radius: 4px; }
+.sx:hover { color: var(--warn); }
+.smeta { grid-column: 2 / -1; font-size: 11.5px; color: var(--muted); padding-left: 5px; }
+.spotempty { font-size: 12.5px; color: var(--muted); border: 1px dashed var(--line); border-radius: 6px; padding: 10px; }
+.btn[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.savenote { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+.savenote.bad { color: var(--warn); }
+.linkbtn { font: inherit; color: var(--accent); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; }
+.notes { font-size: 12.5px; color: var(--muted); display: grid; gap: 8px; }
+.notes p { margin: 0; }
+.notes b { color: var(--ink); font-weight: 600; }
+
+@media (max-width: 820px) {
+  .app { grid-template-columns: 1fr; grid-template-rows: auto 62vh auto; height: auto; }
+  aside { border-left: 0; border-top: 1px solid var(--line); overflow: visible; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+}
+
+/* ---- plan builder ---- */
+#panelRes, #panelDraw { display: contents; }
+:root { --ap-c: #1f8a5b; --edwall: #3a4650; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ap-c: #5fd0a0; --edwall: #c3ced6; } }
+:root[data-theme="dark"] { --ap-c: #5fd0a0; --edwall: #c3ced6; }
+.modes { margin-left: auto; }
+#ed { position: absolute; inset: 0; width: 100%; height: 100%; display: none; touch-action: none; background: var(--bg); }
+body[data-mode="draw"] #ed { display: block; }
+body[data-mode="draw"] #gl, body[data-mode="draw"] #labels, body[data-mode="draw"] #resBar, body[data-mode="draw"] #tip { display: none; }
+body[data-mode="results"] #edBar, body[data-mode="results"] #panelDraw { display: none; }
+body[data-mode="draw"] #panelRes { display: none; }
+#edBar { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 2px; right: 12px; }
+#edBar .seg { flex: none; }
+#edBar .seg button[disabled] { opacity: 0.4; cursor: not-allowed; }
+.empty { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: var(--muted); padding: 24px; pointer-events: none; font-size: 15px; }
+.empty.on { display: flex; }
+.fld { display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; align-items: center; font-size: 13px; margin-bottom: 8px; }
+.fld input[type=number], .fld input[type=text], .fld select, .sel input[type=text], .sel select, #dxfDlg select, #calDlg input {
+  font: 500 13px var(--font-body); padding: 4px 6px; border: 1px solid var(--line); border-radius: 5px; background: var(--bg); color: var(--ink); min-width: 0; }
+.fld input[type=number] { width: 6.5em; font-family: var(--font-mono); }
+.sel { display: grid; gap: 6px; border: 1px dashed var(--line); border-radius: 6px; padding: 8px; font-size: 12.5px; color: var(--muted); }
+.sel .row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.sel input[type=text] { flex: 1; min-width: 8em; }
+.help { font-size: 12.5px; color: var(--muted); margin: 0 0 8px; }
+.warnlist { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--warn); display: grid; gap: 3px; }
+.okmsg { font-size: 12.5px; color: var(--muted); margin: 0; }
+.stat { font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); position: absolute; left: max(12px, env(safe-area-inset-left, 0px)); bottom: 10px; background: color-mix(in srgb, var(--surface) 85%, transparent); padding: 2px 8px; border-radius: 4px; pointer-events: none; }
+body[data-mode="results"] #stat { display: none; }
+.stat { bottom: 34px; }
+.file { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+dialog { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); padding: 18px; max-width: min(520px, 94vw); font: 13px var(--font-body); }
+dialog::backdrop { background: rgba(0,0,0,0.4); }
+dialog h3 { margin: 0 0 8px; font-size: 16px; }
+dialog table td, dialog table th { padding: 4px 6px; }
+dialog .btnrow { margin-top: 12px; justify-content: flex-end; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.apcard .meas b { color: var(--ink); font-weight: 600; }
+.seg.small button { padding: 4px 10px; }
+.cnt { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 13px; color: var(--muted); }
+@media (max-width: 820px) {
+  body[data-mode="draw"] .app { grid-template-rows: auto 70vh auto; }
+  .modes { margin-left: 0; }
+}
+</style>
+</head>
+<body data-mode="results">
+<div class="app">
+  <header>
+    <h1>Wi-Fi Planner</h1>
+    <span class="sub">Draw or upload a floor plan, place one to three ceiling access points, and see the coverage in 3D.</span>
+    <div class="seg modes" role="group" aria-label="Mode">
+      <button id="modeRes" aria-pressed="true">Coverage</button>
+      <button id="modeDraw" aria-pressed="false">Draw plan</button>
+    </div>
+  </header>
+
+  <div class="viewport" id="vp">
+    <canvas id="gl"></canvas>
+    <canvas id="ed"></canvas>
+    <div class="labels" id="labels"></div>
+    <div class="empty" id="emptyMsg">Nothing to show yet. Open <b>&nbsp;Draw plan&nbsp;</b> to draw walls, or reset to the demo house.</div>
+    <div class="toolbar" id="resBar">
+      <div class="seg" role="group" aria-label="View">
+        <button id="v3d" aria-pressed="true">3D</button>
+        <button id="vl1" aria-pressed="false">Floor 1</button>
+        <button id="vl2" aria-pressed="false">Floor 2</button>
+      </div>
+      <div class="seg" role="group" aria-label="Band">
+        <button data-band="2.4" aria-pressed="false">2.4</button>
+        <button data-band="5" aria-pressed="true">5 GHz</button>
+        <button data-band="6" aria-pressed="false">6</button>
+      </div>
+      <label class="explode" id="explodeWrap">Separate floors <input id="explode" type="range" min="0" max="16" step="0.5" value="11"></label>
+    </div>
+    <div class="toolbar" id="edBar">
+      <div class="seg" role="group" aria-label="Floor">
+        <button id="fl1" aria-pressed="true">Floor 1</button>
+        <button id="fl2" aria-pressed="false">Floor 2</button>
+      </div>
+      <div class="seg" role="group" aria-label="Tool" id="tools">
+        <button data-tool="select" aria-pressed="false" title="Select, move, delete (V)">Select</button>
+        <button data-tool="wall" aria-pressed="true" title="Draw walls (W)">Wall</button>
+        <button data-tool="door" aria-pressed="false" title="Cut a door into a wall (D)">Door</button>
+        <button data-tool="label" aria-pressed="false" title="Name a room (R)">Room</button>
+        <button data-tool="open" aria-pressed="false" title="Floor opening or stairs, Floor 2 only (O)">Opening</button>
+        <button data-tool="pan" aria-pressed="false" title="Pan (H or hold Space)">Pan</button>
+      </div>
+      <div class="seg" role="group" aria-label="History">
+        <button id="undoBtn" title="Undo (Ctrl+Z)">Undo</button>
+        <button id="redoBtn" title="Redo (Ctrl+Shift+Z)">Redo</button>
+        <button id="fitBtn" title="Fit the plan in view">Fit</button>
+      </div>
+    </div>
+    <div class="tip" id="tip" hidden></div>
+    <div class="stat" id="stat" hidden></div>
+    <div class="hint" id="hint">Drag to orbit · scroll or pinch to zoom · drag an AP puck or a spot to move it</div>
+  </div>
+
+  <aside>
+    <div id="panelRes">
+    <section>
+      <h2>Placement options</h2>
+      <p class="savenote bad" id="planWarn" hidden></p>
+      <div class="presets" id="presets"></div>
+      <div class="btnrow" style="margin-top:8px"><button class="btn" id="bestBtn">Find the best placement</button></div>
+    </section>
+
+    <section>
+      <h2>Access points</h2>
+      <div class="cnt">How many <div class="seg small" id="apCount" role="group" aria-label="Number of access points"><button data-n="1" aria-pressed="false">1</button><button data-n="2" aria-pressed="true">2</button><button data-n="3" aria-pressed="false">3</button></div></div>
+      <div class="aps" id="aps"></div>
+    </section>
+
+    <section>
+      <h2>Phone spots</h2>
+      <p class="spotintro">The places people actually sit and use their phones. Together they count for half of every score, so the option scores, Find best spot and the button below all favor them.</p>
+      <div class="spots" id="spots"></div>
+      <div class="btnrow"><button class="btn" id="addSpot" aria-pressed="false">Add a spot</button><button class="btn" id="tuneBtn">Place both APs for these spots</button></div>
+      <p class="savenote" id="saveNote"></p>
+    </section>
+
+    <section>
+      <h2 id="covTitle">Coverage at 5 GHz</h2>
+      <div class="cov" id="cov"></div>
+    </section>
+
+    <section>
+      <h2>Ceiling beam (optional)</h2>
+      <div class="beamctl">
+        <label class="chk"><input type="checkbox" id="bOn"> Include a wood beam in the Floor 1 ceiling</label>
+        <span>Distance from top edge</span><span><input id="bY" type="number" min="0" max="300" step="0.5"> <span class="unit">ft</span></span>
+        <span>Runs from</span><span><input id="bX0" type="number" min="0" max="300" step="0.5"> <span class="unit">ft</span></span>
+        <span>to</span><span><input id="bX1" type="number" min="0" max="300" step="0.5"> <span class="unit">ft</span></span>
+        <span>Drops below ceiling</span><span><input id="bD" type="number" min="0" max="24" step="0.25"> <span class="unit">in</span></span>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin:8px 0 0">Off by default. When on, no AP is placed within 6 in of the beam, and signal passing through it loses 3–6 dB. Distances are measured from the top-left corner of everything you've drawn.</p>
+    </section>
+
+    <section class="legend">
+      <h2>Signal at device height (3.5 ft)</h2>
+      <div class="ramp" id="ramp"></div>
+      <div class="ticks"><span>−85</span><span>−75</span><span>−67</span><span>−60</span><span>−50</span><span>−40 dBm</span></div>
+      <p>−67 dBm is the usual floor for smooth video calls and roaming. Above −55 is where Wi-Fi 7's top data rates live.</p>
+    </section>
+
+    <section>
+      <h2>Rooms</h2>
+      <table><thead><tr><th>Room</th><th></th><th style="text-align:right">Weakest</th><th style="text-align:right">Avg</th></tr></thead><tbody id="rooms"></tbody></table>
+    </section>
+
+    <section class="notes">
+      <h2>How the model works</h2>
+      <p><b>Plan.</b> Walls are thick line segments, doors are gaps, and rooms are found by flood-filling between the walls, starting from your room labels. Each room type carries a weight: offices 1.5, living rooms 1.2, kitchens and bedrooms 1, baths 0.4, garages 0.2, closets almost nothing.</p>
+      <p><b>Radio.</b> Log-distance path loss plus a loss for each wall face a straight path crosses: interior about 2 dB per face, bathroom 3, garage 3.5, exterior 5, and the floor between levels 14 dB at 5 GHz. Shallow angles cost up to 2.5 times more. 2.4 GHz loses less, 6 GHz more. These are typical published figures, not measurements of your home, so treat predictions as ±6 dB.</p>
+      <p><b>Antenna shape.</b> A ceiling AP is a donut squashed downward by its metal back plate. It's strongest 30–60° below the ceiling, about 4 dB weaker at the horizon, and 10–14 dB weaker toward the floor above. That is why a ceiling AP barely helps the room right over it.</p>
+      <p><b>Scoring.</b> Every sample point scores from 0 at −72 dBm to 1 at −55 dBm, averaged over 5 and 6 GHz, weighted by room type. The optimizer tries every combination of ceiling spots on a coarse grid, then polishes the winner on a 1 ft grid.</p>
+      <p><b>Phone spots.</b> Each spot is a circle about the size of what you pick (chair, couch, bed or desk), sampled at the height you'd hold a phone there. All spots together carry the same weight as the whole house.</p>
+    </section>
+    </div>
+
+    <div id="panelDraw">
+    <section>
+      <h2>Draw your plan</h2>
+      <p class="help" id="toolHelp"></p>
+      <div id="wallOpts">
+        <div class="fld"><span>Wall type</span>
+          <select id="wallType"><option value="ext">Exterior</option><option value="int" selected>Interior</option><option value="wet">Bathroom</option><option value="garage">Garage</option></select></div>
+      </div>
+      <div id="labelOpts">
+        <div class="fld"><span>Room type</span>
+          <select id="roomType"></select></div>
+      </div>
+      <div id="openOpts">
+        <div class="fld"><span>Opening</span>
+          <select id="openKind"><option value="open">Open to below</option><option value="stair">Stairs</option></select></div>
+      </div>
+      <div class="sel" id="selBox">Nothing selected. Use <b>Select</b> to pick a wall, door, room or opening.</div>
+    </section>
+
+    <section>
+      <h2>Plan check</h2>
+      <div id="warns"></div>
+    </section>
+
+    <section>
+      <h2>Size</h2>
+      <div class="fld"><span>Ceiling height</span><span><input id="ceilIn" type="number" min="72" max="180" step="1"> <span class="unit">in</span></span></div>
+      <div class="fld"><span>Scale the whole plan by</span><span><input id="scaleIn" type="number" min="0.1" max="10" step="0.01" value="1"> <button class="btn" id="scaleBtn">Apply</button></span></div>
+      <p class="help">Everything snaps to a 6 in grid. If a drawing came out too big or small, scale it here (or use an image's two-point calibration below).</p>
+    </section>
+
+    <section>
+      <h2>Trace an image</h2>
+      <p class="help">Upload a PNG or JPG floor plan for the floor you're on, set its scale, then draw over it.</p>
+      <div class="btnrow">
+        <button class="btn" id="imgBtn">Upload image…</button>
+        <button class="btn" id="calBtn" disabled>Set scale</button>
+        <button class="btn" id="imgMoveBtn" aria-pressed="false" disabled>Move image</button>
+        <button class="btn" id="imgDelBtn" disabled>Remove</button>
+      </div>
+      <div class="fld" style="margin-top:8px"><span>Image opacity</span><input id="imgOp" type="range" min="0.1" max="1" step="0.05" value="0.45" disabled></div>
+    </section>
+
+    <section>
+      <h2>Files</h2>
+      <div class="btnrow">
+        <button class="btn" id="dxfBtn">Import DXF…</button>
+        <button class="btn" id="saveBtn">Export JSON</button>
+        <button class="btn" id="loadBtn">Import JSON…</button>
+      </div>
+      <label class="cnt" style="margin-top:8px"><input type="checkbox" id="incImg"> Include traced images in the JSON file</label>
+      <div class="btnrow"><button class="btn" id="demoBtn">Reset to demo house</button><button class="btn" id="blankBtn">Start blank</button></div>
+      <p class="savenote">Your plan is saved automatically in this browser only. Nothing is uploaded anywhere.</p>
+    </section>
+
+    <section>
+      <button class="btn primary" id="doneBtn">See the coverage →</button>
+    </section>
+    </div>
+  </aside>
+</div>
+<input type="file" class="file" id="imgFile" accept="image/png,image/jpeg">
+<input type="file" class="file" id="dxfFile" accept=".dxf,text/plain">
+<input type="file" class="file" id="jsonFile" accept=".json,application/json">
+
+<dialog id="dxfDlg">
+  <h3>Import DXF</h3>
+  <p class="help" id="dxfInfo"></p>
+  <div class="fld"><span>Drawing units</span>
+    <select id="dxfUnit"><option value="1">Inches</option><option value="12">Feet</option><option value="0.0393701">Millimeters</option><option value="0.393701">Centimeters</option><option value="39.3701">Meters</option></select></div>
+  <table><thead><tr><th>Layer</th><th>Lines</th><th>Floor</th><th>Type</th></tr></thead><tbody id="dxfRows"></tbody></table>
+  <p class="help" style="margin-top:8px">Lines are treated as wall centerlines. Choose <b>Door</b> for a layer of door lines, or <b>Skip</b> a floor for furniture, text and dimensions. This replaces your current plan (you can undo).</p>
+  <div class="btnrow"><button class="btn" id="dxfCancel">Cancel</button><button class="btn primary" id="dxfOk">Import</button></div>
+</dialog>
+<dialog id="calDlg">
+  <h3>Set the image scale</h3>
+  <p class="help">The two points you clicked are this far apart in real life:</p>
+  <div class="fld"><span><input id="calFt" type="number" min="0.5" step="0.25" value="10" style="width:6em"> feet</span></div>
+  <div class="btnrow"><button class="btn" id="calCancel">Cancel</button><button class="btn primary" id="calOk">Set scale</button></div>
+</dialog>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script id="core">
+// Core of the Wi-Fi planner: plan model, geometry, RF engine, optimizer, DXF parser, demo plan.
+// Units: inches. Plan x runs left->right, y runs top->bottom (as drawn), z is up. Runs in the browser and in node.
+(function (root) {
+'use strict';
+const FT = 12;
+const mod = (a, b) => ((a % b) + b) % b;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const uid = () => Math.random().toString(36).slice(2, 9);
+
+// ---------- vocabulary ----------
+const WALL = { ext: { label: 'Exterior', t: 6 }, int: { label: 'Interior', t: 4.5 }, wet: { label: 'Bathroom', t: 4.5 }, garage: { label: 'Garage', t: 5 } };
+const ROOM = {
+  office:  { label: 'Office',  w: 1.5,  mount: true },
+  living:  { label: 'Living',  w: 1.2,  mount: true },
+  bedroom: { label: 'Bedroom', w: 1.0,  mount: true },
+  kitchen: { label: 'Kitchen', w: 1.0,  mount: true },
+  bath:    { label: 'Bath',    w: 0.4,  mount: false },
+  garage:  { label: 'Garage',  w: 0.2,  mount: false },
+  closet:  { label: 'Closet',  w: 0.05, mount: false },
+  other:   { label: 'Other',   w: 0.6,  mount: true },
+};
+
+// ---------- RF constants ----------
+const BANDS = { '2.4': { f: 2440, eirp: 20 }, '5': { f: 5500, eirp: 23 }, '6': { f: 6200, eirp: 23 } };
+// dB per wall FACE (a wall has two faces) at normal incidence
+const FACE = {
+  int:    { '2.4': 1.5, '5': 2.0, '6': 2.5 },
+  wet:    { '2.4': 2.0, '5': 3.0, '6': 3.5 },
+  garage: { '2.4': 2.5, '5': 3.5, '6': 4.5 },
+  ext:    { '2.4': 3.5, '5': 5.0, '6': 6.0 },
+};
+const SLAB = { '2.4': 10, '5': 14, '6': 16 };
+const BEAM = { '2.4': 3, '5': 5, '6': 6 };
+const N_EXP = 2.1, CLIENT_LOSS = 3, CAP = 2.5;
+// ceiling-mount AP gain (dB) vs elevation: -90 = straight down, 0 = horizon, +90 = straight up
+const PAT = [[-90, -2], [-60, 0], [-35, 0], [-15, -2], [0, -4], [30, -8], [60, -12], [90, -14]];
+function pattern(el) {
+  for (let i = 1; i < PAT.length; i++) if (el <= PAT[i][0]) {
+    const [a, ga] = PAT[i - 1], [b, gb] = PAT[i]; return ga + (gb - ga) * (el - a) / (b - a);
+  }
+  return PAT[PAT.length - 1][1];
+}
+const score01 = (v) => Math.max(0, Math.min(1, (v + 72) / 17)); // 0 at -72 dBm, 1 at -55 dBm
+
+// ---------- plan model ----------
+const newFloor = () => ({ walls: [], doors: [], labels: [], openings: [] });
+function emptyPlan() {
+  return { v: 2, name: 'My plan', ceil: 96, floors: [newFloor(), newFloor()], beam: { on: false, y: 150, x0: 0, x1: 400, depth: 11.25, width: 5.5 } };
+}
+function heightsOf(plan) { const c = clamp(+plan.ceil || 96, 72, 180); return { L1floor: 0, L1ceil: c, L2floor: c + 12, L2ceil: 2 * c + 12, client: 42 }; }
+function addWall(floor, a, b, t) {
+  if (Math.hypot(b[0] - a[0], b[1] - a[1]) < 3) return null;
+  const w = { x1: a[0], y1: a[1], x2: b[0], y2: b[1], t: WALL[t] ? t : 'int' }; floor.walls.push(w); return w;
+}
+// Cut a door gap into any wall the door segment lies along. Walls are split; the door is remembered so rooms stay separate.
+function addDoor(floor, p, q, force) {
+  let hit = false; const out = [];
+  for (const w of floor.walls) {
+    const dx = w.x2 - w.x1, dy = w.y2 - w.y1, len = Math.hypot(dx, dy);
+    if (len < 1e-6) { out.push(w); continue; }
+    const ux = dx / len, uy = dy / len;
+    const tp = (p[0] - w.x1) * ux + (p[1] - w.y1) * uy, tq = (q[0] - w.x1) * ux + (q[1] - w.y1) * uy;
+    const dp = Math.abs(-(p[0] - w.x1) * uy + (p[1] - w.y1) * ux), dq = Math.abs(-(q[0] - w.x1) * uy + (q[1] - w.y1) * ux);
+    const lo = Math.max(0, Math.min(tp, tq)), hi = Math.min(len, Math.max(tp, tq));
+    if (dp > 4 || dq > 4 || hi - lo < 6) { out.push(w); continue; }
+    hit = true;
+    if (lo >= 3) out.push({ x1: w.x1, y1: w.y1, x2: w.x1 + ux * lo, y2: w.y1 + uy * lo, t: w.t });
+    if (len - hi >= 3) out.push({ x1: w.x1 + ux * hi, y1: w.y1 + uy * hi, x2: w.x2, y2: w.y2, t: w.t });
+    floor.doors.push({ x1: w.x1 + ux * lo, y1: w.y1 + uy * lo, x2: w.x1 + ux * hi, y2: w.y1 + uy * hi, t: w.t });
+  }
+  floor.walls = out;
+  if (!hit && force) { floor.doors.push({ x1: p[0], y1: p[1], x2: q[0], y2: q[1], t: 'int' }); hit = true; }
+  return hit;
+}
+function addLabel(floor, x, y, type, name) {
+  if (!ROOM[type]) type = 'other';
+  if (!name) {
+    const n = floor.labels.filter(l => l.type === type).length;
+    name = ROOM[type].label + (n ? ' ' + (n + 1) : '');
+  }
+  const l = { id: uid(), x, y, type, name: String(name).slice(0, 40) }; floor.labels.push(l); return l;
+}
+function addOpening(floor, pts, kind) {
+  if (pts.length < 3) return null;
+  const o = { id: uid(), kind: kind === 'stair' ? 'stair' : 'open', pts: pts.map(p => [p[0], p[1]]) }; floor.openings.push(o); return o;
+}
+function rescalePlan(plan, k) {
+  const s = (v) => v * k;
+  plan.floors.forEach(f => {
+    f.walls.forEach(w => { w.x1 = s(w.x1); w.y1 = s(w.y1); w.x2 = s(w.x2); w.y2 = s(w.y2); });
+    f.doors.forEach(w => { w.x1 = s(w.x1); w.y1 = s(w.y1); w.x2 = s(w.x2); w.y2 = s(w.y2); });
+    f.labels.forEach(l => { l.x = s(l.x); l.y = s(l.y); });
+    f.openings.forEach(o => o.pts.forEach(p => { p[0] = s(p[0]); p[1] = s(p[1]); }));
+  });
+  const b = plan.beam; b.y = s(b.y); b.x0 = s(b.x0); b.x1 = s(b.x1);
+}
+// Validate and normalise anything that claims to be a plan (imported JSON, localStorage).
+function sanitizePlan(o) {
+  if (!o || typeof o !== 'object' || !Array.isArray(o.floors)) throw new Error('This file does not look like a plan.');
+  const p = emptyPlan(); const num = (v) => { v = +v; if (!isFinite(v)) throw new Error('Bad number in plan.'); return clamp(v, -1e5, 1e5); };
+  p.name = String(o.name || 'My plan').slice(0, 60); p.ceil = clamp(+o.ceil || 96, 72, 180);
+  for (let fi = 0; fi < 2; fi++) {
+    const s = o.floors[fi]; if (!s) continue; const f = p.floors[fi];
+    (s.walls || []).slice(0, 20000).forEach(w => { if (w) f.walls.push({ x1: num(w.x1), y1: num(w.y1), x2: num(w.x2), y2: num(w.y2), t: WALL[w.t] ? w.t : 'int' }); });
+    (s.doors || []).slice(0, 5000).forEach(w => { if (w) f.doors.push({ x1: num(w.x1), y1: num(w.y1), x2: num(w.x2), y2: num(w.y2), t: WALL[w.t] ? w.t : 'int' }); });
+    (s.labels || []).slice(0, 250).forEach(l => { if (l) f.labels.push({ id: String(l.id || uid()).slice(0, 12), x: num(l.x), y: num(l.y), type: ROOM[l.type] ? l.type : 'other', name: String(l.name || '').slice(0, 40) }); });
+    if (fi === 1) (s.openings || []).slice(0, 50).forEach(q => { if (q && Array.isArray(q.pts) && q.pts.length >= 3) f.openings.push({ id: String(q.id || uid()).slice(0, 12), kind: q.kind === 'stair' ? 'stair' : 'open', pts: q.pts.slice(0, 200).map(t => [num(t[0]), num(t[1])]) }); });
+  }
+  if (o.beam) { const b = o.beam; p.beam = { on: !!b.on, y: num(b.y), x0: num(b.x0), x1: num(b.x1), depth: clamp(+b.depth || 11.25, 0, 24), width: clamp(+b.width || 5.5, 1, 24) }; }
+  return p;
+}
+
+// ---------- geometry: plan -> walls, rooms, samples ----------
+function wallFaces(wl) {
+  const dx = wl.x2 - wl.x1, dy = wl.y2 - wl.y1, len = Math.hypot(dx, dy); if (len < 1e-6) return [];
+  const nx = -dy / len, ny = dx / len, h = WALL[wl.t].t / 2;
+  return [[wl.x1 + nx * h, wl.y1 + ny * h, wl.x2 + nx * h, wl.y2 + ny * h, wl.t], [wl.x1 - nx * h, wl.y1 - ny * h, wl.x2 - nx * h, wl.y2 - ny * h, wl.t]];
+}
+function inPoly(x, y, poly) {
+  let c = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
+    if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) c = !c;
+  }
+  return c;
+}
+function nearPoly(x, y, poly, r) {
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const ax = poly[j][0], ay = poly[j][1], bx = poly[i][0], by = poly[i][1];
+    const dx = bx - ax, dy = by - ay, l2 = dx * dx + dy * dy || 1;
+    const t = Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / l2));
+    if (Math.hypot(x - ax - t * dx, y - ay - t * dy) < r) return true;
+  }
+  return false;
+}
+
+// Flood-fill rooms on a raster (3 in cells, coarser for very large plans): walls and door lines are barriers,
+// each room label seeds one room, enclosed areas without a label become "Room n".
+function compile(plan) {
+  const H = heightsOf(plan), warnings = [], fl = plan.floors;
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  const ext = (x, y) => { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; };
+  fl.forEach(f => {
+    f.walls.forEach(w => { ext(w.x1, w.y1); ext(w.x2, w.y2); });
+    f.labels.forEach(l => ext(l.x, l.y)); f.openings.forEach(o => o.pts.forEach(p => ext(p[0], p[1])));
+  });
+  const blank = (lv) => ({ lv, exists: false, faces: [], walls: [], labels: [], points: [], mask: null, slab: null, floorCells: null });
+  if (!isFinite(x0) || !fl.some(f => f.walls.length)) {
+    return { empty: true, heights: H, cell: 3, ox: 0, oy: 0, w: 1, h: 1, bbox: { x0: 0, y0: 0, x1: 480, y1: 360 }, levels: [blank(1), blank(2)], holes: [], beam: Object.assign({}, plan.beam), warnings: ['Nothing drawn yet. Draw some walls, or reset to the demo house.'] };
+  }
+  const pad = 48; let cell = 3, ox, oy, w, h;
+  for (;;) {
+    ox = Math.floor((x0 - pad) / cell) * cell; oy = Math.floor((y0 - pad) / cell) * cell;
+    w = Math.ceil((x1 + pad - ox) / cell) + 1; h = Math.ceil((y1 + pad - oy) / cell) + 1;
+    if (w * h <= 50000) break; cell += 3;
+  }
+  const N = w * h, R = cell * 0.78;
+  const ci = (x, y) => { const i = Math.floor((x - ox) / cell), j = Math.floor((y - oy) / cell); return (i < 0 || j < 0 || i >= w || j >= h) ? -1 : j * w + i; };
+  function stamp(buf, ax, ay, bx, by, r, val, onlyEmpty) {
+    const i0 = Math.max(0, Math.floor((Math.min(ax, bx) - r - ox) / cell)), i1 = Math.min(w - 1, Math.floor((Math.max(ax, bx) + r - ox) / cell));
+    const j0 = Math.max(0, Math.floor((Math.min(ay, by) - r - oy) / cell)), j1 = Math.min(h - 1, Math.floor((Math.max(ay, by) + r - oy) / cell));
+    const dx = bx - ax, dy = by - ay, l2 = dx * dx + dy * dy || 1e-9;
+    for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) {
+      const px = ox + (i + 0.5) * cell, py = oy + (j + 0.5) * cell;
+      const t = clamp(((px - ax) * dx + (py - ay) * dy) / l2, 0, 1);
+      if (Math.hypot(px - ax - t * dx, py - ay - t * dy) <= r) { const k = j * w + i; if (!onlyEmpty || buf[k] === 0) buf[k] = val; }
+    }
+  }
+  const holes = fl[1].openings.map(o => o.pts);
+  const levels = fl.map((f, li) => {
+    const lv = li + 1, L = blank(lv);
+    L.exists = f.walls.length > 0; if (!L.exists) return L;
+    const bar = new Uint8Array(N); // 1 wall, 2 door line, 3 floor opening
+    f.walls.forEach(wl => stamp(bar, wl.x1, wl.y1, wl.x2, wl.y2, Math.max(WALL[wl.t].t / 2, R), 1, false));
+    f.doors.forEach(d => stamp(bar, d.x1, d.y1, d.x2, d.y2, R, 2, true));
+    if (li === 1) holes.forEach(poly => {
+      const px = poly.map(p => p[0]), py = poly.map(p => p[1]);
+      const i0 = Math.max(0, Math.floor((Math.min(...px) - ox) / cell)), i1 = Math.min(w - 1, Math.floor((Math.max(...px) - ox) / cell));
+      const j0 = Math.max(0, Math.floor((Math.min(...py) - oy) / cell)), j1 = Math.min(h - 1, Math.floor((Math.max(...py) - oy) / cell));
+      for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) { const k = j * w + i; if (bar[k] === 0 && inPoly(ox + (i + 0.5) * cell, oy + (j + 0.5) * cell, poly)) bar[k] = 3; }
+    });
+    // outside = reachable from the raster border without crossing a wall or door line
+    const outside = new Uint8Array(N), q = new Int32Array(N); let qh = 0, qt = 0;
+    const pushO = (k) => { if (!outside[k] && (bar[k] === 0 || bar[k] === 3)) { outside[k] = 1; q[qt++] = k; } };
+    for (let i = 0; i < w; i++) { pushO(i); pushO((h - 1) * w + i); } for (let j = 0; j < h; j++) { pushO(j * w); pushO(j * w + w - 1); }
+    while (qh < qt) { const k = q[qh++], i = k % w, j = (k - i) / w; if (i > 0) pushO(k - 1); if (i < w - 1) pushO(k + 1); if (j > 0) pushO(k - w); if (j < h - 1) pushO(k + w); }
+    // wall bounding box (leak clipping)
+    let wx0 = Infinity, wy0 = Infinity, wx1 = -Infinity, wy1 = -Infinity;
+    f.walls.forEach(wl => { wx0 = Math.min(wx0, wl.x1, wl.x2); wx1 = Math.max(wx1, wl.x1, wl.x2); wy0 = Math.min(wy0, wl.y1, wl.y2); wy1 = Math.max(wy1, wl.y1, wl.y2); });
+    // labels -> seeds
+    const labs = f.labels.map(l => ({ id: l.id, name: l.name || ROOM[l.type].label, type: l.type, x: l.x, y: l.y, auto: false }));
+    const mask = new Uint8Array(N).fill(255), leak = [];
+    q.fill(0); qh = qt = 0;
+    labs.forEach((lab, k) => {
+      if (k > 253) return;
+      let s = ci(lab.x, lab.y);
+      if (s >= 0 && bar[s] === 3) return; // label inside a floor opening: ignored
+      if (s < 0 || bar[s] !== 0) { // nudge off a wall
+        let found = -1; const si = s < 0 ? -1 : s % w, sj = s < 0 ? -1 : (s - si) / w;
+        for (let r = 1; r <= 6 && found < 0 && s >= 0; r++) for (let dj = -r; dj <= r && found < 0; dj++) for (let di = -r; di <= r; di++) {
+          const i = si + di, j = sj + dj; if (i < 0 || j < 0 || i >= w || j >= h) continue; const kk = j * w + i; if (bar[kk] === 0) { found = kk; break; }
+        }
+        s = found;
+      }
+      if (s < 0) { warnings.push(`"${lab.name}" on Floor ${lv} is on a wall or outside the plan.`); return; }
+      if (mask[s] !== 255) { warnings.push(`"${lab.name}" on Floor ${lv} is in the same spot as another label.`); return; }
+      mask[s] = k; q[qt++] = s;
+    });
+    while (qh < qt) {
+      const k = q[qh++], o = mask[k], i = k % w, j = (k - i) / w;
+      const tryK = (n, ni, nj) => { if (bar[n] === 0 && mask[n] === 255) { mask[n] = o; q[qt++] = n; if (ni === 0 || nj === 0 || ni === w - 1 || nj === h - 1) leak[o] = true; } };
+      if (i > 0) tryK(k - 1, i - 1, j); if (i < w - 1) tryK(k + 1, i + 1, j); if (j > 0) tryK(k - w, i, j - 1); if (j < h - 1) tryK(k + w, i, j + 1);
+    }
+    leak.forEach((lk, o) => {
+      if (!lk) return; warnings.push(`"${labs[o].name}" on Floor ${lv} is not fully enclosed. Look for a gap in the walls around it.`);
+      for (let k = 0; k < N; k++) if (mask[k] === o) { const i = k % w, j = (k - i) / w, px = ox + (i + 0.5) * cell, py = oy + (j + 0.5) * cell; if (px < wx0 || px > wx1 || py < wy0 || py > wy1) mask[k] = 255; }
+    });
+    // enclosed areas nobody labelled become "Room n"
+    let nAuto = 0; const seen = new Uint8Array(N);
+    for (let k0 = 0; k0 < N; k0++) {
+      if (seen[k0] || mask[k0] !== 255 || bar[k0] !== 0 || outside[k0]) continue;
+      const comp = [k0]; seen[k0] = 1;
+      for (let a = 0; a < comp.length; a++) {
+        const k = comp[a], i = k % w, j = (k - i) / w;
+        const t2 = (n) => { if (!seen[n] && mask[n] === 255 && bar[n] === 0 && !outside[n]) { seen[n] = 1; comp.push(n); } };
+        if (i > 0) t2(k - 1); if (i < w - 1) t2(k + 1); if (j > 0) t2(k - w); if (j < h - 1) t2(k + w);
+      }
+      if (comp.length * cell * cell / 144 < 20 || labs.length > 253) continue;
+      let sx = 0, sy = 0; comp.forEach(k => { sx += k % w; sy += Math.floor(k / w); }); sx /= comp.length; sy /= comp.length;
+      let best = comp[0], bd = Infinity; comp.forEach(k => { const d = Math.hypot(k % w - sx, Math.floor(k / w) - sy); if (d < bd) { bd = d; best = k; } });
+      const idx = labs.length; nAuto++;
+      labs.push({ id: 'auto' + nAuto, name: 'Room ' + nAuto, type: 'other', x: ox + ((best % w) + 0.5) * cell, y: oy + (Math.floor(best / w) + 0.5) * cell, auto: true });
+      comp.forEach(k => { mask[k] = idx; });
+    }
+    const used = new Uint32Array(labs.length); for (let k = 0; k < N; k++) if (mask[k] !== 255) used[mask[k]]++;
+    labs.forEach((lab, k) => { if (!lab.auto && used[k] === 0 && !warnings.some(m => m.startsWith(`"${lab.name}" on Floor ${lv}`)) && !(k <= 253 && ci(lab.x, lab.y) >= 0 && bar[ci(lab.x, lab.y)] === 3)) warnings.push(`"${lab.name}" on Floor ${lv} did not find a room.`); });
+    if (!used.some(n => n > 0)) warnings.push(`Floor ${lv} has walls but no rooms. Close the outline and add a room label.`);
+    L.labels = labs.map(l => { const T = ROOM[l.type]; return { id: l.id, name: l.name, type: l.type, w: T.w, mount: T.mount, x: l.x, y: l.y, auto: l.auto }; });
+    // distance from walls (3-4 chamfer, inches)
+    const dist = new Uint16Array(N).fill(60000);
+    for (let k = 0; k < N; k++) if (bar[k] === 1) dist[k] = 0;
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+      const k = j * w + i; let d = dist[k];
+      if (i > 0) d = Math.min(d, dist[k - 1] + 3); if (j > 0) { d = Math.min(d, dist[k - w] + 3); if (i > 0) d = Math.min(d, dist[k - w - 1] + 4); if (i < w - 1) d = Math.min(d, dist[k - w + 1] + 4); }
+      dist[k] = d;
+    }
+    for (let j = h - 1; j >= 0; j--) for (let i = w - 1; i >= 0; i--) {
+      const k = j * w + i; let d = dist[k];
+      if (i < w - 1) d = Math.min(d, dist[k + 1] + 3); if (j < h - 1) { d = Math.min(d, dist[k + w] + 3); if (i < w - 1) d = Math.min(d, dist[k + w + 1] + 4); if (i > 0) d = Math.min(d, dist[k + w - 1] + 4); }
+      dist[k] = d;
+    }
+    // sample points on a 12 in lattice
+    const kx0 = Math.ceil((ox - 6) / 12), kx1 = Math.floor((ox + w * cell - 6) / 12), ky0 = Math.ceil((oy - 6) / 12), ky1 = Math.floor((oy + h * cell - 6) / 12);
+    for (let ky = ky0; ky <= ky1; ky++) for (let kx = kx0; kx <= kx1; kx++) {
+      const x = 6 + 12 * kx, y = 6 + 12 * ky, k = ci(x, y); if (k < 0 || mask[k] === 255) continue;
+      L.points.push([x, y, mask[k], dist[k] / 3 * cell]);
+    }
+    L.mask = { a: mask, w, h, cell, ox, oy };
+    const fc = new Uint8Array(N), slab = new Uint8Array(N);
+    for (let k = 0; k < N; k++) { fc[k] = (!outside[k] || mask[k] !== 255) ? 1 : 0; slab[k] = (bar[k] !== 3 && (!outside[k] || mask[k] !== 255)) ? 1 : 0; }
+    L.floorCells = fc; L.slab = slab;
+    L.faces = f.walls.flatMap(wallFaces); L.walls = f.walls;
+    return L;
+  });
+  if (levels[1].exists && !levels[0].exists) warnings.push('Floor 2 has walls but Floor 1 is empty.');
+  return { empty: false, heights: H, cell, ox, oy, w, h, bbox: { x0, y0, x1, y1 }, levels, holes, beam: Object.assign({}, plan.beam), warnings };
+}
+
+// ---------- RF engine ----------
+function make(G) {
+  const H = G.heights, SLAB_Z = (H.L1ceil + H.L2floor) / 2, levels = G.levels, two = levels[1].exists;
+  const F = [];
+  function prepFace(f, z0, z1) {
+    const dx = f[2] - f[0], dy = f[3] - f[1], len = Math.hypot(dx, dy);
+    return { ax: f[0], ay: f[1], ex: dx, ey: dy, nx: -dy / len, ny: dx / len, t: f[4], z0, z1,
+             minx: Math.min(f[0], f[2]), maxx: Math.max(f[0], f[2]), miny: Math.min(f[1], f[3]), maxy: Math.max(f[1], f[3]) };
+  }
+  levels.forEach(L => {
+    const z0 = L.lv === 1 ? H.L1floor : H.L2floor;
+    for (const f of L.faces) {
+      if (Math.hypot(f[2] - f[0], f[3] - f[1]) < 1e-6) continue;
+      const z1 = L.lv === 1 ? (f[4] === 'ext' && two ? H.L2floor : H.L1ceil) : H.L2ceil;
+      F.push(prepFace(f, z0, z1));
+    }
+  });
+  const holes = G.holes;
+  const slabL = levels[1].slab;
+  function onSlab(x, y) {
+    if (!two || !slabL) return false;
+    const m = levels[1].mask, i = Math.floor((x - m.ox) / m.cell), j = Math.floor((y - m.oy) / m.cell);
+    return !(i < 0 || j < 0 || i >= m.w || j >= m.h) && slabL[j * m.w + i] === 1;
+  }
+  const beam = Object.assign({ on: false, y: 150, x0: 0, x1: 400, depth: 11.25, width: 5.5 }, G.beam);
+  // path loss for all three bands: {'2.4':dBm,'5':dBm,'6':dBm}
+  function pathLoss(ap, px, py, pz) {
+    const dx = px - ap.x, dy = py - ap.y, dz = pz - ap.z;
+    const d = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1e-9, dm = Math.max(d * 0.0254, 0.5);
+    const acc = { '2.4': 0, '5': 0, '6': 0 };
+    const bx0 = Math.min(ap.x, px), bx1 = Math.max(ap.x, px), by0 = Math.min(ap.y, py), by1 = Math.max(ap.y, py);
+    for (let i = 0; i < F.length; i++) {
+      const w = F[i];
+      if (w.maxx < bx0 || w.minx > bx1 || w.maxy < by0 || w.miny > by1) continue;
+      const den = dx * w.ey - dy * w.ex;
+      if (Math.abs(den) < 1e-9) continue;
+      const qx = w.ax - ap.x, qy = w.ay - ap.y;
+      const t = (qx * w.ey - qy * w.ex) / den;
+      if (t <= 1e-6 || t >= 1 - 1e-6) continue;
+      const u = (qx * dy - qy * dx) / den;
+      if (u < 0 || u > 1) continue;
+      const z = ap.z + t * dz;
+      if (z < w.z0 || z > w.z1) continue;
+      const c = Math.abs((w.nx * dx + w.ny * dy) / d);
+      const k = Math.min(1 / Math.max(c, 1e-3), CAP), L = FACE[w.t];
+      acc['2.4'] += L['2.4'] * k; acc['5'] += L['5'] * k; acc['6'] += L['6'] * k;
+    }
+    if ((ap.z - SLAB_Z) * (pz - SLAB_Z) < 0) {
+      const t = (SLAB_Z - ap.z) / dz, sx = ap.x + t * dx, sy = ap.y + t * dy;
+      if (onSlab(sx, sy)) {
+        const k = Math.min(1 / Math.max(Math.abs(dz / d), 1e-3), CAP);
+        for (const b in SLAB) acc[b] += SLAB[b] * k;
+      }
+    }
+    if (beam.on && (ap.y - beam.y) * (py - beam.y) < 0) {
+      const t = (beam.y - ap.y) / dy, bxp = ap.x + t * dx, bz = ap.z + t * dz;
+      if (bxp >= beam.x0 && bxp <= beam.x1 && bz >= H.L1ceil - beam.depth && bz <= H.L1ceil) {
+        const k = Math.min(1 / Math.max(Math.abs(dy / d), 1e-3), CAP);
+        for (const b in BEAM) acc[b] += BEAM[b] * k;
+      }
+    }
+    const g = pattern(Math.asin(Math.max(-1, Math.min(1, dz / d))) * 180 / Math.PI);
+    const out = {};
+    for (const b in BANDS) {
+      const pl1 = 20 * Math.log10(BANDS[b].f) - 27.55;
+      out[b] = BANDS[b].eirp + g - (pl1 + 10 * N_EXP * Math.log10(dm)) - acc[b] - CLIENT_LOSS;
+    }
+    return out;
+  }
+  // sample points (clients) and ceiling mount candidates
+  const samples = [], cands = [];
+  levels.forEach(L => {
+    if (!L.exists) return;
+    const zf = L.lv === 1 ? H.L1floor : H.L2floor;
+    for (const p of L.points) {
+      const lab = L.labels[p[2]];
+      samples.push({ x: p[0], y: p[1], z: zf + H.client, lv: L.lv, room: lab.name, type: lab.type, w: lab.w, li: p[2] });
+      const underHole = L.lv === 1 && two && holes.some(hh => inPoly(p[0], p[1], hh) || nearPoly(p[0], p[1], hh, 12));
+      if (lab.mount && p[3] >= 10 && !underHole) cands.push({ x: p[0], y: p[1], z: (L.lv === 1 ? H.L1ceil : H.L2ceil) - 2, lv: L.lv, room: lab.name });
+    }
+  });
+  function mountOK(c) {
+    if (c.lv !== 1 || !beam.on) return true;
+    return !(c.x >= beam.x0 - 6 && c.x <= beam.x1 + 6 && Math.abs(c.y - beam.y) < beam.width / 2 + 6);
+  }
+  function roomAt(li, x, y) {
+    const m = levels[li].mask; if (!m) return 255;
+    const i = Math.floor((x - m.ox) / m.cell), j = Math.floor((y - m.oy) / m.cell);
+    return (i < 0 || j < 0 || i >= m.w || j >= m.h) ? 255 : m.a[j * m.w + i];
+  }
+  const zFor = (lv) => (lv === 1 ? H.L1ceil : H.L2ceil) - 2;
+  return { pathLoss, samples, cands, beam, mountOK, inPoly, onSlab, roomAt, zFor, H, BANDS, levels };
+}
+
+// ---------- placement: starting layout and brute-force optimizer ----------
+// Weighted k-means on one level's sample points, snapped to mount candidates.
+function startPlacement(M, n) {
+  const byLv = { 1: [], 2: [] }; M.samples.forEach(s => { if (s.w > 0.1) byLv[s.lv].push(s); });
+  const cand = { 1: M.cands.filter(M.mountOK).filter(c => c.lv === 1), 2: M.cands.filter(M.mountOK).filter(c => c.lv === 2) };
+  const wt = (lv) => byLv[lv].reduce((a, s) => a + s.w, 0) * (cand[lv].length ? 1 : 0);
+  const lvs = [1, 2].filter(lv => wt(lv) > 0).sort((a, b) => wt(b) - wt(a));
+  if (!lvs.length) { const any = M.cands.length ? M.cands : []; return any.slice(0, n).map(c => ({ lv: c.lv, x: c.x, y: c.y })); }
+  const per = {}; lvs.forEach(lv => { per[lv] = 0; });
+  for (let i = 0; i < n; i++) per[lvs[i % lvs.length]]++;
+  const out = [];
+  for (const lv of lvs) {
+    const k = per[lv]; if (!k) continue; const pts = byLv[lv], cs = cand[lv];
+    let cent = [];
+    const wx = pts.reduce((a, s) => a + s.w * s.x, 0), wy = pts.reduce((a, s) => a + s.w * s.y, 0), ww = pts.reduce((a, s) => a + s.w, 0);
+    cent.push([wx / ww, wy / ww]);
+    while (cent.length < k) { let b = null, bd = -1; for (const s of pts) { const d = Math.min(...cent.map(c => Math.hypot(s.x - c[0], s.y - c[1]))) * s.w; if (d > bd) { bd = d; b = s; } } cent.push([b.x, b.y]); }
+    for (let it = 0; it < 8 && k > 1; it++) {
+      const acc = cent.map(() => [0, 0, 0]);
+      for (const s of pts) { let bi = 0, bd = Infinity; cent.forEach((c, i) => { const d = Math.hypot(s.x - c[0], s.y - c[1]); if (d < bd) { bd = d; bi = i; } }); acc[bi][0] += s.w * s.x; acc[bi][1] += s.w * s.y; acc[bi][2] += s.w; }
+      cent = cent.map((c, i) => acc[i][2] ? [acc[i][0] / acc[i][2], acc[i][1] / acc[i][2]] : c);
+    }
+    const used = new Set();
+    for (const c of cent) {
+      let b = null, bd = Infinity;
+      for (const m of cs) { if (used.has(m)) continue; const d = Math.hypot(m.x - c[0], m.y - c[1]); if (d < bd) { bd = d; b = m; } }
+      if (b) { used.add(b); out.push({ lv: b.lv, x: b.x, y: b.y }); }
+    }
+  }
+  return out.sort((a, b) => a.lv - b.lv || a.x - b.x);
+}
+
+// Exhaustive search for n APs (1-3) on a coarse ceiling grid, then a local polish on the 1 ft lattice.
+// samples: [{x,y,z,w}]. Returns {aps:[{lv,x,y}], score} or null. yieldFn lets a browser keep its UI alive.
+async function optimize(M, samples, n, opt) {
+  opt = opt || {};
+  const yieldFn = opt.yieldFn || (() => Promise.resolve()), progress = opt.onProgress || (() => {});
+  const now = () => (typeof performance !== 'undefined' ? performance.now() : Date.now());
+  const S = samples.filter(s => s.w > 0), ns = S.length, all = M.cands.filter(M.mountOK);
+  if (!ns || !all.length) return null;
+  n = clamp(n | 0, 1, 3);
+  const Wsum = S.reduce((a, s) => a + s.w, 0);
+  const budget = n === 1 ? 4e9 : n === 2 ? 3e8 : 4e8; // inner-loop operations we are willing to spend
+  const combos = (c) => n === 1 ? c : n === 2 ? c * (c - 1) / 2 : c * (c - 1) * (c - 2) / 6;
+  let step = 24, coarse = all;
+  for (; step <= 240; step += 12) {
+    coarse = all.filter(c => mod(c.x - 6, step) === 0 && mod(c.y - 6, step) === 0);
+    if (coarse.length >= n && combos(coarse.length) * ns * 2 <= budget) break;
+  }
+  if (coarse.length < n) coarse = all.slice(0, Math.max(n, 1));
+  // tiny bonus for stronger signal breaks ties once everything is above the -55 dBm ceiling of the score
+  const TB = 0.03, tb = (v) => Math.max(0, Math.min(1, (v + 72) / 40));
+  const cache = new Map();
+  const mapOf = (c) => {
+    const key = c.lv + ':' + c.x + ':' + c.y; let m = cache.get(key); if (m) return m;
+    const a5 = new Float32Array(ns), a6 = new Float32Array(ns);
+    for (let k = 0; k < ns; k++) { const r = M.pathLoss(c, S[k].x, S[k].y, S[k].z); a5[k] = 0.5 * S[k].w * (score01(r['5']) + TB * tb(r['5'])); a6[k] = 0.5 * S[k].w * (score01(r['6']) + TB * tb(r['6'])); }
+    m = { a5, a6, c }; cache.set(key, m); return m;
+  };
+  let last = now();
+  const tick = async (frac) => { if (now() - last > 40) { progress(frac); await yieldFn(); last = now(); } };
+  const maps = []; for (let i = 0; i < coarse.length; i++) { maps.push(mapOf(coarse[i])); await tick(0.5 * i / coarse.length); }
+  const C = maps.length; let best = null;
+  if (n === 1) {
+    for (let i = 0; i < C; i++) { let s = 0; const A = maps[i]; for (let k = 0; k < ns; k++) s += A.a5[k] + A.a6[k]; if (!best || s > best.s) best = { s, ix: [i] }; }
+  } else if (n === 2) {
+    for (let i = 0; i < C; i++) {
+      const A = maps[i];
+      for (let j = i + 1; j < C; j++) { const B = maps[j]; let s = 0; for (let k = 0; k < ns; k++) s += (A.a5[k] > B.a5[k] ? A.a5[k] : B.a5[k]) + (A.a6[k] > B.a6[k] ? A.a6[k] : B.a6[k]); if (!best || s > best.s) best = { s, ix: [i, j] }; }
+      await tick(0.5 + 0.35 * i / C);
+    }
+  } else {
+    const m5 = new Float32Array(ns), m6 = new Float32Array(ns);
+    for (let i = 0; i < C; i++) {
+      const A = maps[i];
+      for (let j = i + 1; j < C; j++) {
+        const B = maps[j];
+        for (let k = 0; k < ns; k++) { m5[k] = A.a5[k] > B.a5[k] ? A.a5[k] : B.a5[k]; m6[k] = A.a6[k] > B.a6[k] ? A.a6[k] : B.a6[k]; }
+        for (let l = j + 1; l < C; l++) { const D = maps[l]; let s = 0; for (let k = 0; k < ns; k++) s += (m5[k] > D.a5[k] ? m5[k] : D.a5[k]) + (m6[k] > D.a6[k] ? m6[k] : D.a6[k]); if (!best || s > best.s) best = { s, ix: [i, j, l] }; }
+      }
+      await tick(0.5 + 0.35 * i / C);
+    }
+  }
+  let cur = best.ix.map(i => maps[i].c), curS = best.s;
+  const total = (cs) => { let s = 0; const ms = cs.map(mapOf); for (let k = 0; k < ns; k++) { let b5 = 0, b6 = 0; for (const m of ms) { if (m.a5[k] > b5) b5 = m.a5[k]; if (m.a6[k] > b6) b6 = m.a6[k]; } s += b5 + b6; } return s; };
+  for (let it = 0; it < 4; it++) {
+    let moved = false;
+    for (let w = 0; w < cur.length; w++) {
+      const others = cur.filter((_, i) => i !== w).map(mapOf), mv = cur[w];
+      for (const c of all) {
+        if (c.lv !== mv.lv || Math.abs(c.x - mv.x) > 24 || Math.abs(c.y - mv.y) > 24 || (c.x === mv.x && c.y === mv.y)) continue;
+        const A = mapOf(c); let s = 0;
+        for (let k = 0; k < ns; k++) { let b5 = A.a5[k], b6 = A.a6[k]; for (const m of others) { if (m.a5[k] > b5) b5 = m.a5[k]; if (m.a6[k] > b6) b6 = m.a6[k]; } s += b5 + b6; }
+        if (s > curS + 1e-6) { curS = s; cur = cur.slice(); cur[w] = c; moved = true; }
+      }
+      await tick(0.9 + 0.1 * it / 4);
+    }
+    if (!moved) break;
+  }
+  progress(1);
+  const aps = cur.map(c => ({ lv: c.lv, x: c.x, y: c.y })).sort((a, b) => a.lv - b.lv || a.x - b.x);
+  return { aps, score: scoreAPs(M, aps.map(a => ({ lv: a.lv, x: a.x, y: a.y, z: M.zFor(a.lv) })), S) };
+}
+
+// Score a set of APs over samples: 0..1 (half 5 GHz, half 6 GHz, 0 at -72 dBm, 1 at -55 dBm), weighted.
+function scoreAPs(M, aps, samples) {
+  let s = 0, w = 0;
+  for (const p of samples) {
+    let v5 = -200, v6 = -200;
+    for (const a of aps) { const r = M.pathLoss(a, p.x, p.y, p.z); v5 = Math.max(v5, r['5']); v6 = Math.max(v6, r['6']); }
+    s += p.w * (0.5 * score01(v5) + 0.5 * score01(v6)); w += p.w;
+  }
+  return w ? s / w : 0;
+}
+// Fraction of sample weight at or above a threshold on one band, per level.
+function coverage(M, aps, band, thresh) {
+  const out = { 1: [0, 0], 2: [0, 0] };
+  for (const p of M.samples) {
+    let v = -200; for (const a of aps) v = Math.max(v, M.pathLoss(a, p.x, p.y, p.z)[band]);
+    out[p.lv][0] += p.w; if (v >= thresh) out[p.lv][1] += p.w;
+  }
+  return { 1: out[1][0] ? out[1][1] / out[1][0] : null, 2: out[2][0] ? out[2][1] / out[2][0] : null };
+}
+
+// ---------- DXF (ASCII): LINE, LWPOLYLINE, POLYLINE/VERTEX ----------
+const DXF_UNITS = { 1: 1, 2: 12, 4: 1 / 25.4, 5: 1 / 2.54, 6: 1 / 0.0254 }; // INSUNITS code -> inches per drawing unit
+function parseDXF(text) {
+  const L = String(text).split(/\r\n|\r|\n/), segs = []; let insunits = 0, section = '', ent = null, poly = null;
+  const flush = () => {
+    if (!ent) return;
+    if (ent.type === 'LINE' && ent.v.length === 2) segs.push({ layer: ent.layer, x1: ent.v[0][0], y1: ent.v[0][1], x2: ent.v[1][0], y2: ent.v[1][1] });
+    else if (ent.type === 'LWPOLYLINE') addPoly(ent.layer, ent.v, ent.closed);
+    else if (ent.type === 'VERTEX' && poly) poly.v.push(ent.v[0]);
+    ent = null;
+  };
+  const addPoly = (layer, v, closed) => { for (let i = 0; i + 1 < v.length; i++) segs.push({ layer, x1: v[i][0], y1: v[i][1], x2: v[i + 1][0], y2: v[i + 1][1] }); if (closed && v.length > 2) segs.push({ layer, x1: v[v.length - 1][0], y1: v[v.length - 1][1], x2: v[0][0], y2: v[0][1] }); };
+  for (let i = 0; i + 1 < L.length; i += 2) {
+    const code = parseInt(L[i].trim(), 10), val = L[i + 1].trim();
+    if (isNaN(code)) continue;
+    if (code === 0) {
+      flush();
+      if (val === 'SECTION') continue; if (val === 'ENDSEC') { section = ''; continue; }
+      if (val === 'SEQEND' && poly) { addPoly(poly.layer, poly.v, poly.closed); poly = null; continue; }
+      if (section !== 'ENTITIES') continue;
+      if (val === 'LINE') ent = { type: 'LINE', layer: '0', v: [[0, 0], [0, 0]] };
+      else if (val === 'LWPOLYLINE') ent = { type: 'LWPOLYLINE', layer: '0', v: [], closed: false };
+      else if (val === 'POLYLINE') { poly = { layer: '0', v: [], closed: false }; ent = { type: 'POLYLINE' }; }
+      else if (val === 'VERTEX') ent = { type: 'VERTEX', layer: '0', v: [[0, 0]] };
+      continue;
+    }
+    if (code === 2 && !ent && val && !section) { section = val; continue; }
+    if (code === 9 && val === '$INSUNITS') { const nx = parseInt(L[i + 3], 10); insunits = isNaN(nx) ? 0 : nx; continue; }
+    if (!ent) continue;
+    const f = parseFloat(val);
+    if (code === 8) { if (ent.type === 'POLYLINE') poly.layer = val; else ent.layer = val; }
+    else if (ent.type === 'POLYLINE' && code === 70) poly.closed = (parseInt(val, 10) & 1) === 1;
+    else if (ent.type === 'LINE') { if (code === 10) ent.v[0][0] = f; else if (code === 20) ent.v[0][1] = f; else if (code === 11) ent.v[1][0] = f; else if (code === 21) ent.v[1][1] = f; }
+    else if (ent.type === 'LWPOLYLINE') { if (code === 70) ent.closed = (parseInt(val, 10) & 1) === 1; else if (code === 10) ent.v.push([f, 0]); else if (code === 20 && ent.v.length) ent.v[ent.v.length - 1][1] = f; }
+    else if (ent.type === 'VERTEX') { if (code === 10) ent.v[0][0] = f; else if (code === 20) ent.v[0][1] = f; if (code === 8 && poly) { /* vertex layer ignored */ } }
+  }
+  flush();
+  const good = segs.filter(s => [s.x1, s.y1, s.x2, s.y2].every(isFinite) && Math.hypot(s.x2 - s.x1, s.y2 - s.y1) > 1e-9);
+  const layers = {}; good.forEach(s => { (layers[s.layer] = layers[s.layer] || { count: 0 }).count++; });
+  let ex = 0; good.forEach(s => { ex = Math.max(ex, Math.abs(s.x1), Math.abs(s.x2), Math.abs(s.y1), Math.abs(s.y2)); });
+  return { segs: good, layers, insunits, unitsGuess: DXF_UNITS[insunits] ? insunits : 0, extent: ex };
+}
+// map: { unit: inches per drawing unit, layers: { name: { floor: 0|1|-1 (skip), type: 'int'|'ext'|'wet'|'garage'|'door' } } }
+function dxfToPlan(parsed, map) {
+  const plan = emptyPlan(); plan.name = 'Imported DXF';
+  const k = map.unit || 1, use = parsed.segs.filter(s => { const m = map.layers[s.layer]; return m && m.floor >= 0; });
+  if (!use.length) throw new Error('No lines selected. Pick a floor for at least one layer.');
+  let mx = Infinity, my = Infinity, My = -Infinity;
+  use.forEach(s => { mx = Math.min(mx, s.x1, s.x2) * 1; my = Math.min(my, s.y1, s.y2); My = Math.max(My, s.y1, s.y2); });
+  const r = (v) => Math.round(v * 4) / 4;
+  const X = (x) => r((x - mx) * k + 24), Y = (y) => r((My - y) * k + 24); // DXF y is up; the plan's y is down
+  const seen = new Set();
+  use.forEach(s => {
+    const m = map.layers[s.layer], f = plan.floors[m.floor];
+    const a = [X(s.x1), Y(s.y1)], b = [X(s.x2), Y(s.y2)];
+    if (Math.hypot(b[0] - a[0], b[1] - a[1]) < 2) return;
+    const key = m.floor + m.type + [a, b].sort((p, q) => p[0] - q[0] || p[1] - q[1]).join('|'); if (seen.has(key)) return; seen.add(key);
+    if (m.type === 'door') addDoor(f, a, b, true); else addWall(f, a, b, m.type);
+  });
+  return plan;
+}
+
+// ---------- the demo house: the author's own two-storey house, converted from measured wall faces and built with the same calls the editor uses ----------
+// Inches, x to the right, y down the page (the street, with the garage door, is at the top). Floor 1: living room open to
+// the floor above on the left, garage on the right, dining, kitchen and dinette across the back. Floor 2: bedrooms around
+// the open living room and the stair, and a ceiling beam across floor 1.
+function demoPlan() {
+  const p = emptyPlan(); p.name = 'My house';
+  const [f1, f2] = p.floors;
+  const W = (f, a) => a.forEach(s => addWall(f, [s[0], s[1]], [s[2], s[3]], s[4]));
+  const D = (f, a) => a.forEach(s => addDoor(f, [s[0], s[1]], [s[2], s[3]], true));
+  const Lb = (f, a) => a.forEach(s => addLabel(f, s[0], s[1], s[2], s[3]));
+  W(f1, [
+    [2.75,2.75,166.5,2.75,'ext'], [207.5,2.75,211.25,2.75,'ext'], [215.75,2.75,238,2.75,'ext'], [430,2.75,453.25,2.75,'ext'],
+    [169,189.5,213.25,189.5,'int'], [244,217,321.75,217,'garage'], [360.25,217,368.75,217,'garage'], [373.25,217,453.25,217,'garage'],
+    [161.75,242.75,167.5,242.75,'int'], [371,264,384.25,264,'wet'], [414.25,264,453.25,264,'wet'], [117.5,272.25,152.5,272.25,'int'],
+    [371,295,384.25,295,'int'], [420.25,295,453.25,295,'int'], [2.75,381.5,123.75,381.5,'ext'], [128.25,381.5,282.75,381.5,'ext'],
+    [341.25,381.5,368.75,381.5,'ext'], [373.25,381.5,453.25,381.5,'ext'], [2.75,2.75,2.75,381.25,'ext'], [113,242.5,113,272,'int'],
+    [126,307.25,126,381.25,'int'], [157.25,242.75,157.25,272,'int'], [169,72.25,169,189.25,'int'], [213.5,2.75,213.5,187.25,'garage'],
+    [213.5,191.75,213.5,214.75,'garage'], [371,217,371,263.75,'wet'], [371,295,371,381.25,'int'], [453.5,2.75,453.5,214.75,'ext'],
+    [453.5,219.25,453.5,261.75,'ext'], [453.5,266.25,453.5,292.75,'ext'], [453.5,297.25,453.5,381.25,'ext'], [213.5,217,244,217,'garage'],
+    [213.5,214.75,213.5,244.75,'int'], [241.75,217,241.75,244.75,'int'], [208,242.5,244,242.5,'int'], [283,381.5,294,405,'ext'],
+    [294,405,330,405,'ext'], [330,405,341,381.5,'ext'],
+  ]);
+  D(f1, [
+    [166.5,2.75,207.5,2.75], [238,2.75,430,2.75], [321.75,217,360.25,217], [384.25,264,414.25,264], [384.25,295,420.25,295], [112.9,242.5,157.1,242.5],
+  ]);
+  Lb(f1, [
+    [64.5,327.2,'other','Dining room'], [189,327.2,'kitchen','Kitchen'], [311.5,311.8,'kitchen','Dinette'], [401,338,'other','Laundry'],
+    [407.5,240.5,'bath','Half bath'], [86,122.8,'living','Living room'], [334.5,110,'garage','Garage'], [447,282,'closet','Pantry'],
+    [130.3,258,'closet','Closet'],
+  ]);
+  W(f2, [
+    [2.75,2.75,173.25,2.75,'ext'], [177.75,2.75,268.25,2.75,'ext'], [272.75,2.75,453.25,2.75,'ext'], [175.5,72.5,215.75,72.5,'wet'],
+    [216,104.5,270.25,104.5,'wet'], [256,145,367.25,145,'wet'], [371.75,145,396.25,145,'int'], [426.25,145,453.25,145,'int'],
+    [256,211,305.75,211,'wet'], [333.75,211,367.25,211,'wet'], [371.75,211,453.25,211,'int'], [2.75,217,106.75,217,'int'],
+    [111.25,217,128.25,217,'int'], [132.75,217,175.25,217,'int'], [128.25,218.75,132.75,218.75,'int'], [175.5,251.5,263.75,251.5,'int'],
+    [293.75,251.5,300.25,251.5,'int'], [327.25,251.5,330.75,251.5,'int'], [109,258,130.25,258,'int'], [300,272,330.75,272,'int'],
+    [300,331,330.75,331,'int'], [2.75,381.5,173.25,381.5,'ext'], [177.75,381.5,297.75,381.5,'ext'], [302.25,381.5,328.75,381.5,'ext'],
+    [333.25,381.5,453.25,381.5,'ext'], [2.75,2.75,2.75,214.75,'ext'], [2.75,219.25,2.75,381.25,'ext'], [109,217,109,257.75,'int'],
+    [130.5,217,130.5,222.5,'int'], [130.5,244.5,130.5,257.75,'int'], [175.5,2.75,175.5,70.25,'wet'], [175.5,74.75,175.5,217,'int'],
+    [175.5,250.75,175.5,381.25,'int'], [216,72.5,216,104.25,'wet'], [256,145,256,210.75,'wet'], [270.5,2.75,270.5,30.5,'wet'],
+    [270.5,66.5,270.5,104.25,'wet'], [298.5,249.25,298.5,253.75,'int'], [300,251.5,300,269.75,'int'], [300,274.25,300,328.75,'int'],
+    [300,333.25,300,338.75,'int'], [300,373.25,300,381.25,'int'], [330.25,248.75,330.25,253.75,'int'], [331,251,331,269.75,'int'],
+    [331,274.25,331,284.25,'int'], [331,318.75,331,328.75,'int'], [331,333.25,331,381.25,'int'], [369.5,145,369.5,210.75,'wet'],
+    [453.5,2.75,453.5,142.75,'ext'], [453.5,147.25,453.5,208.75,'ext'], [453.5,213.25,453.5,381.25,'ext'],
+  ]);
+  D(f2, [
+    [396.25,145,426.25,145], [305.75,211,333.75,211], [263.75,251.5,293.75,251.5], [300.25,251.5,327.25,251.5], [130.5,222.5,130.5,244.5],
+    [175.5,217,175.5,250.75], [270.5,30.5,270.5,66.5], [300,338.75,300,373.25], [331,284.25,331,318.75],
+  ]);
+  Lb(f2, [
+    [89.2,299,'office','Bedroom 3'], [237.8,316.2,'bedroom','Bedroom 2'], [392,296,'office','Bedroom 4'], [312.8,178,'bath','Bath 2'],
+    [411.2,178,'closet','Closet'], [361.8,74,'bedroom','Bedroom 1'], [223,37.8,'bath','Bath 1'], [236,222.2,'other','Hall'],
+    [315.5,356,'closet','Closet'], [315.5,301.5,'closet','Closet'], [315.5,261.8,'closet','Closet'],
+  ]);
+  // the living room is open to the floor above, and the stair comes up beside it
+  addOpening(f2, [[5.25,5.25],[173.25,5.25],[173.25,214.75],[5.25,214.75]], 'open');
+  addOpening(f2, [[175.5,74.75],[216,74.75],[216,190.75],[175.5,190.75]], 'stair');
+  p.beam = { on: true, y: 192, x0: 0, x1: 456, depth: 11.25, width: 5.5 };
+  return p;
+}
+function demoSpots() {
+  return [
+    { id: 'ex1', lv: 1, x: 90, y: 135, name: 'Couch, Living room', kind: 'couch', t: 1 },
+    { id: 'ex2', lv: 1, x: 311, y: 322, name: 'Table, Dinette', kind: 'chair', t: 2 },
+    { id: 'ex3', lv: 2, x: 360, y: 55, name: 'Bed, Bedroom 1', kind: 'bed', t: 3 },
+    { id: 'ex4', lv: 2, x: 60, y: 335, name: 'Desk, Bedroom 3', kind: 'desk', t: 4 },
+    { id: 'ex5', lv: 2, x: 410, y: 335, name: 'Desk, Bedroom 4', kind: 'desk', t: 5 },
+  ];
+}
+
+const api = { FT, WALL, ROOM, BANDS, FACE, SLAB, BEAM, PAT, pattern, score01, uid, clamp,
+  newFloor, emptyPlan, heightsOf, addWall, addDoor, addLabel, addOpening, rescalePlan, sanitizePlan,
+  compile, make, startPlacement, optimize, scoreAPs, coverage, inPoly, nearPoly,
+  parseDXF, dxfToPlan, DXF_UNITS, demoPlan, demoSpots };
+if (typeof module !== 'undefined') module.exports = api; else root.WifiCore = api;
+})(this);
+</script>
+<script id="app">
+(function () {
+'use strict';
+const C = WifiCore, FT = C.FT, WALL = C.WALL, ROOM = C.ROOM;
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const ftin = (inch) => { const neg = inch < 0; inch = Math.abs(inch); const f = Math.floor(inch / 12), i = Math.round(inch - f * 12); return (neg ? '-' : '') + (i === 12 ? `${f + 1}'-0"` : `${f}'-${i}"`); };
+const AP_VAR = ['--accent', '--ap-b', '--ap-c'], AP_NAME = ['A', 'B', 'C'];
+const KEY = 'zenvent-wifi-planner-v2';
+
+// ---------- state ----------
+let plan = C.demoPlan(), SPOTS = C.demoSpots();
+let APS = [], nAP = 2, band = '5', sel = 0, presetId = 'start', view = '3d', mode = 'results';
+let G = null, M = null, H = null, LV = null;
+let planVer = 0, builtVer = -1, cache = { ver: -1, G: null };
+let OPTS = {}, scores = null, pendingAPS = null;
+const BG = [null, null]; // traced images per floor (kept out of the plan JSON / undo)
+
+// ---------- persistence ----------
+let saveT = 0;
+function persist() {
+  clearTimeout(saveT);
+  saveT = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify({ plan, spots: SPOTS, aps: APS.map(a => ({ lv: a.lv, x: a.x, y: a.y })), n: nAP })); } catch (e) {} }, 300);
+}
+const cleanSpot = (id, d) => {
+  if (!d || (d.lv !== 1 && d.lv !== 2) || !isFinite(d.x) || !isFinite(d.y)) return null;
+  return { id: String(id), lv: d.lv, x: Math.max(-1e5, Math.min(1e5, +d.x)), y: Math.max(-1e5, Math.min(1e5, +d.y)), name: String(d.name || '').slice(0, 40), kind: d.kind in KINDS ? d.kind : 'couch', t: +d.t || 0 };
+};
+
+// ---------- compile / rebuild ----------
+function getCompiled() { if (cache.ver !== planVer) cache = { ver: planVer, G: C.compile(plan) }; return cache.G; }
+function changed() { planVer++; schedulePreview(); persist(); if (mode === 'draw') { renderSel(); edDraw(); } }
+
+// ---------- heat ramp ----------
+const STOPS = [[-85, [70, 22, 52]], [-75, [196, 60, 72]], [-70, [228, 132, 58]], [-67, [233, 196, 74]], [-60, [128, 190, 102]], [-50, [42, 160, 140]], [-40, [30, 120, 172]]];
+function heat(v) {
+  if (v <= STOPS[0][0]) return STOPS[0][1];
+  for (let i = 1; i < STOPS.length; i++) if (v <= STOPS[i][0]) {
+    const [a, ca] = STOPS[i - 1], [b, cb] = STOPS[i]; const t = (v - a) / (b - a);
+    return [0, 1, 2].map(k => Math.round(ca[k] + (cb[k] - ca[k]) * t));
+  }
+  return STOPS[STOPS.length - 1][1];
+}
+$('#ramp').style.background = 'linear-gradient(90deg,' + STOPS.map(([v, c]) => `rgb(${c}) ${((v + 85) / 45 * 100).toFixed(1)}%`).join(',') + ')';
+const chip = (v) => `rgb(${heat(v)})`;
+
+// ---------- three.js scene ----------
+const canvas = $('#gl'), vp = $('#vp');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(38, 1, 0.5, 800);
+const controls = new THREE.OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.dampingFactor = 0.12;
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8899aa, 0.85));
+const sun = new THREE.DirectionalLight(0xffffff, 0.55); sun.position.set(-30, 60, 40); scene.add(sun);
+const GR = [new THREE.Group(), new THREE.Group()]; GR.forEach(g => scene.add(g));
+const GEO = [new THREE.Group(), new THREE.Group()]; GEO.forEach((g, i) => GR[i].add(g));
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const mats = {};
+function makeMats() {
+  const c = (n) => new THREE.Color(css(n) || '#888');
+  const set = (k, color, op) => { if (!mats[k]) mats[k] = new THREE.MeshLambertMaterial({ transparent: true, side: THREE.DoubleSide }); mats[k].color = color; mats[k].opacity = op; mats[k].depthWrite = op > 0.6; };
+  set('wall', c('--wall'), 0.5); set('floor', c('--floor'), 1); set('beam', c('--beam'), 0.95);
+}
+makeMats();
+// merged boxes from plan-space quads (inches): [[x,y]x4], vertical extent in feet
+function boxesGeometry(quads, y0, y1) {
+  const pos = [];
+  const tri = (a, b, c) => pos.push(a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2]);
+  for (const q of quads) {
+    const lo = q.map(p => [p[0] / FT, y0, p[1] / FT]), hi = q.map(p => [p[0] / FT, y1, p[1] / FT]);
+    tri(hi[0], hi[1], hi[2]); tri(hi[0], hi[2], hi[3]); tri(lo[0], lo[2], lo[1]); tri(lo[0], lo[3], lo[2]);
+    for (let i = 0; i < 4; i++) { const j = (i + 1) % 4; tri(lo[i], lo[j], hi[j]); tri(lo[i], hi[j], hi[i]); }
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.computeVertexNormals(); return g;
+}
+function cellRects(mask, m) { // merge a 0/1 raster into rectangles (plan inches)
+  const rects = [], open = new Map();
+  for (let j = 0; j <= m.h; j++) {
+    const runs = [];
+    if (j < m.h) for (let i = 0; i < m.w;) { if (!mask[j * m.w + i]) { i++; continue; } let e = i; while (e < m.w && mask[j * m.w + e]) e++; runs.push([i, e]); i = e; }
+    const next = new Map();
+    for (const [a, b] of runs) { const k = a + ':' + b, o = open.get(k); if (o) { next.set(k, o); open.delete(k); } else next.set(k, { a, b, j0: j }); }
+    for (const o of open.values()) rects.push([m.ox + o.a * m.cell, m.oy + o.j0 * m.cell, m.ox + o.b * m.cell, m.oy + j * m.cell]);
+    open.clear(); for (const [k, v] of next) open.set(k, v);
+  }
+  return rects;
+}
+const rectQuad = (r) => [[r[0], r[1]], [r[2], r[1]], [r[2], r[3]], [r[0], r[3]]];
+function wallQuad(w) {
+  const dx = w.x2 - w.x1, dy = w.y2 - w.y1, len = Math.hypot(dx, dy) || 1, h = WALL[w.t].t / 2, nx = -dy / len * h, ny = dx / len * h;
+  return [[w.x1 + nx, w.y1 + ny], [w.x2 + nx, w.y2 + ny], [w.x2 - nx, w.y2 - ny], [w.x1 - nx, w.y1 - ny]];
+}
+let beamMesh = null, layers = [null, null];
+function clearGroup(g) { while (g.children.length) { const o = g.children[0]; g.remove(o); if (o.geometry) o.geometry.dispose(); if (o.material && o.material.map) { o.material.map.dispose(); o.material.dispose(); } } }
+function buildBeam() {
+  if (beamMesh) { GEO[0].remove(beamMesh); beamMesh.geometry.dispose(); beamMesh = null; }
+  const b = M.beam; if (!b.on || !LV[0].exists) return;
+  const len = Math.max(1, b.x1 - b.x0) / FT, d = Math.max(b.depth, 0.5) / FT, w = b.width / FT;
+  beamMesh = new THREE.Mesh(new THREE.BoxGeometry(len, d, w), mats.beam);
+  beamMesh.position.set((b.x0 + b.x1) / 2 / FT, H.L1ceil / FT - d / 2, b.y / FT);
+  GEO[0].add(beamMesh);
+}
+const labelsEl = $('#labels'), labelItems = [];
+function addLabel(html, cls, pos, level, ref) {
+  const el = document.createElement('div'); el.className = 'lbl ' + (cls || ''); el.innerHTML = html; labelsEl.appendChild(el);
+  const it = { el, pos: new THREE.Vector3(...pos), level, ref }; labelItems.push(it); return it;
+}
+let roomLabels = [];
+function buildScene() {
+  GEO.forEach(clearGroup); beamMesh = null;
+  layers.forEach(L => { if (L) L.tex.dispose(); }); layers = [null, null];
+  roomLabels.forEach(it => { it.el.remove(); labelItems.splice(labelItems.indexOf(it), 1); }); roomLabels = [];
+  LV.forEach((L, li) => {
+    if (!L.exists) return;
+    const m = L.mask, base = li === 0 ? 0 : H.L2floor / FT;
+    const fm = li === 1 ? L.slab : L.floorCells;
+    GEO[li].add(new THREE.Mesh(boxesGeometry(cellRects(fm, m).map(rectQuad), base - (li === 0 ? 0.3 : 0.4), base), mats.floor));
+    GEO[li].add(Object.assign(new THREE.Mesh(boxesGeometry(L.walls.map(wallQuad), base, base + (li === 0 ? H.L1ceil : H.L2ceil - H.L2floor) / FT), mats.wall), { renderOrder: 2 }));
+    const cv = document.createElement('canvas'); cv.width = m.w; cv.height = m.h;
+    const tex = new THREE.CanvasTexture(cv); tex.magFilter = THREE.LinearFilter; tex.minFilter = THREE.LinearFilter;
+    const W = m.w * m.cell / FT, Hh = m.h * m.cell / FT;
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(W, Hh), new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false }));
+    mesh.rotation.x = -Math.PI / 2; mesh.position.set((m.ox + m.w * m.cell / 2) / FT, base + 0.04, (m.oy + m.h * m.cell / 2) / FT); mesh.renderOrder = 1; GEO[li].add(mesh);
+    layers[li] = { cv, ctx: cv.getContext('2d'), tex, mesh, vals: new Float32Array(m.w * m.h).fill(NaN) };
+    L.labels.forEach((lab, ri) => {
+      if (lab.type === 'closet') return;
+      roomLabels.push(addLabel(esc(lab.name), '', [lab.x / FT, base + 0.3, lab.y / FT], li, { li, ri }));
+    });
+  });
+  buildBeam();
+}
+function paint(coarse) {
+  const step = coarse ? 3 : 1;
+  layers.forEach((L, li) => {
+    if (!L) return;
+    const m = LV[li].mask, w = m.w, h = m.h, img = L.ctx.createImageData(w, h), d = img.data;
+    const z = (li === 0 ? H.L1floor : H.L2floor) + H.client, labs = LV[li].labels;
+    for (let j = 0; j < h; j += step) for (let i = 0; i < w; i += step) {
+      const r = m.a[j * w + i];
+      const v = r === 255 ? NaN : rssiAt(m.ox + (i + 0.5) * m.cell, m.oy + (j + 0.5) * m.cell, z);
+      for (let jj = j; jj < Math.min(j + step, h); jj++) for (let ii = i; ii < Math.min(i + step, w); ii++) {
+        const k = jj * w + ii, p = k * 4, rk = m.a[k];
+        L.vals[k] = rk === 255 ? NaN : v;
+        if (rk === 255 || isNaN(v)) { d[p + 3] = 0; continue; }
+        const c = heat(v); d[p] = c[0]; d[p + 1] = c[1]; d[p + 2] = c[2];
+        d[p + 3] = labs[rk].type === 'garage' ? 120 : 225;
+      }
+    }
+    L.ctx.putImageData(img, 0, 0); L.tex.needsUpdate = true;
+  });
+}
+function rssiAt(x, y, z) { let v = -200; for (const a of APS) v = Math.max(v, M.pathLoss(a, x, y, z)[band]); return v; }
+
+// ---------- AP pucks ----------
+const apObjs = [0, 1, 2].map(i => {
+  const grp = new THREE.Group();
+  const puck = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.85, 0.3, 32), new THREE.MeshLambertMaterial({ color: 0xffffff }));
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.85, 0.12, 8, 40), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+  ring.rotation.x = Math.PI / 2; ring.position.y = -0.12;
+  const drop = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1, 6), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.6 }));
+  grp.add(puck, ring, drop); grp.userData = { i, puck, ring, drop };
+  puck.userData.ap = i; ring.userData.ap = i;
+  return grp;
+});
+const apColor = (i) => new THREE.Color(css(AP_VAR[i]));
+function zFor(lv) { return M.zFor(lv); }
+function setAPs(list) { APS = list.map(a => ({ lv: a.lv, x: a.x, y: a.y, z: zFor(a.lv) })); }
+function placeAPObjs() {
+  apObjs.forEach((o, i) => {
+    const a = APS[i];
+    if (!a) { if (o.parent) o.parent.remove(o); return; }
+    const g = GR[a.lv - 1];
+    if (o.parent !== g) { if (o.parent) o.parent.remove(o); g.add(o); }
+    o.position.set(a.x / FT, a.z / FT, a.y / FT);
+    const hgt = (a.z - ((a.lv === 1 ? H.L1floor : H.L2floor) + H.client)) / FT;
+    o.userData.drop.scale.y = hgt; o.userData.drop.position.y = -hgt / 2;
+    o.userData.ring.material.color = apColor(i); o.userData.drop.material.color = apColor(i);
+    o.userData.puck.material.emissive = i === sel ? apColor(i).multiplyScalar(0.25) : new THREE.Color(0);
+  });
+  [0, 1, 2].forEach(i => { apLabels[i].hidden = i >= APS.length; });
+}
+const apLabels = [0, 1, 2].map(i => addLabel(AP_NAME[i], 'ap', [0, 0, 0], -2, i).el);
+const beamLabel = addLabel('Beam', 'beam', [0, 0, 0], -3);
+
+// ---------- scoring / stats ----------
+let SAMPLES = [], ALLS = [], WBASE = 1;
+function stats() {
+  const per = {}, fl = { 1: [0, 0, 0], 2: [0, 0, 0] };
+  for (const s of SAMPLES) {
+    const v = rssiAt(s.x, s.y, s.z);
+    const k = s.lv + '|' + s.li; const o = per[k] = per[k] || { lv: s.lv, room: s.room, w: s.w, min: 99, sum: 0, n: 0 };
+    o.min = Math.min(o.min, v); o.sum += v; o.n++;
+    fl[s.lv][0] += s.w; if (v >= -67) fl[s.lv][1] += s.w; if (v >= -55) fl[s.lv][2] += s.w;
+  }
+  return { per, fl };
+}
+function renderStats() {
+  const { per, fl } = stats();
+  $('#covTitle').textContent = `Coverage at ${band} GHz`;
+  $('#cov').innerHTML = [1, 2].filter(lv => LV[lv - 1].exists && fl[lv][0] > 0).map(lv => {
+    let rooms = Object.values(per).filter(o => o.lv === lv && o.w >= 0.3); if (!rooms.length) rooms = Object.values(per).filter(o => o.lv === lv);
+    const worst = rooms.reduce((a, b) => (b.min < a.min ? b : a), rooms[0]);
+    return `<div class="covbox"><div class="k">Floor ${lv} at −67 dBm or better</div><div class="v">${(100 * fl[lv][1] / fl[lv][0]).toFixed(0)}%</div>
+      <div class="w">${(100 * fl[lv][2] / fl[lv][0]).toFixed(0)}% above −55 · weakest: ${esc(worst.room)} ${Math.round(worst.min)}</div></div>`;
+  }).join('') || '<div class="spotempty" style="grid-column:1/-1">No rooms to measure yet.</div>';
+  const rows = Object.values(per).filter(o => o.w >= 0.2).sort((a, b) => a.lv - b.lv || a.min - b.min);
+  $('#rooms').innerHTML = rows.map(o => `<tr><td><span class="chip" style="background:${chip(o.min)}"></span>${esc(o.room)}</td><td class="lv">F${o.lv}</td><td class="n">${Math.round(o.min)}</td><td class="n">${Math.round(o.sum / o.n)}</td></tr>`).join('');
+  roomLabels.forEach(it => {
+    const lab = LV[it.ref.li].labels[it.ref.ri]; const o = per[(it.ref.li + 1) + '|' + it.ref.ri];
+    it.el.innerHTML = `${esc(lab.name)}${o ? `<small>avg ${Math.round(o.sum / o.n)}</small>` : ''}`;
+  });
+}
+
+// ---------- phone spots ----------
+const KINDS = { chair: { label: 'Chair', r: 18, h: 40 }, couch: { label: 'Couch', r: 36, h: 40 }, bed: { label: 'Bed', r: 42, h: 32 }, desk: { label: 'Desk', r: 20, h: 44 } };
+let selSpot = null, addMode = false, dragSpot = null, tuning = false;
+const kindOf = (s) => KINDS[s.kind] || KINDS.couch;
+const roomAt = (lv, x, y) => M.roomAt(lv - 1, x, y);
+function spotPoints(s) {
+  const k = kindOf(s), z = (s.lv === 1 ? H.L1floor : H.L2floor) + k.h, pts = [[s.x, s.y]];
+  for (const [rr, n] of [[k.r / 2, 6], [k.r, 10]]) for (let i = 0; i < n; i++) { const t = 2 * Math.PI * i / n; pts.push([s.x + rr * Math.cos(t), s.y + rr * Math.sin(t)]); }
+  return pts.filter(([x, y]) => LV[s.lv - 1].exists && roomAt(s.lv, x, y) !== 255).map(([x, y]) => ({ x, y, z, lv: s.lv }));
+}
+function rebuildSamples() {
+  ALLS = SAMPLES.slice();
+  if (!SPOTS.length) return;
+  const per = WBASE / SPOTS.length; // all spots together weigh as much as the whole house
+  for (const s of SPOTS) { const pts = spotPoints(s); pts.forEach(p => ALLS.push(Object.assign(p, { w: per / pts.length, spot: s.id }))); }
+}
+function spotValues(s) {
+  const pts = spotPoints(s); if (!pts.length || !APS.length) return null;
+  const at = (p) => { let v = -200, who = 0; APS.forEach((a, i) => { const r = M.pathLoss(a, p.x, p.y, p.z)[band]; if (r > v) { v = r; who = i; } }); return [v, who]; };
+  const [c, who] = at(pts[0]); let min = c; for (let i = 1; i < pts.length; i++) min = Math.min(min, at(pts[i])[0]);
+  return { c, min, who };
+}
+const spotObjs = new Map();
+const spotMat = { fill: new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.16, depthWrite: false }), line: new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.95, depthWrite: false }) };
+function tintSpots() { const c = new THREE.Color(css('--ink') || '#182027'); spotMat.fill.color = c; spotMat.line.color = c; }
+tintSpots();
+function dropSpotObj(o) { o.grp.parent && o.grp.parent.remove(o.grp); o.grp.children.forEach(m => m.geometry.dispose()); o.lbl.remove(); }
+function syncSpotObjs() {
+  for (const [id, o] of spotObjs) if (!SPOTS.some(s => s.id === id)) { dropSpotObj(o); spotObjs.delete(id); }
+  SPOTS.forEach((s) => {
+    const k = kindOf(s); let o = spotObjs.get(s.id);
+    if (!o || o.r !== k.r) {
+      if (o) dropSpotObj(o);
+      const grp = new THREE.Group(), R = k.r / FT;
+      const fill = new THREE.Mesh(new THREE.CircleGeometry(R, 40), spotMat.fill);
+      const ring = new THREE.Mesh(new THREE.RingGeometry(R - 0.12, R, 48), spotMat.line);
+      const dot = new THREE.Mesh(new THREE.CircleGeometry(0.28, 20), spotMat.line);
+      [fill, ring, dot].forEach(m => { m.rotation.x = -Math.PI / 2; m.renderOrder = 3; m.userData.spot = s.id; grp.add(m); });
+      const lbl = document.createElement('div'); lbl.className = 'lbl spotlbl'; labelsEl.appendChild(lbl);
+      o = { grp, fill, lbl, r: k.r }; spotObjs.set(s.id, o);
+    }
+    const g = GR[s.lv - 1]; if (o.grp.parent !== g) { o.grp.parent && o.grp.parent.remove(o.grp); g.add(o.grp); }
+    o.grp.position.set(s.x / FT, (s.lv === 1 ? H.L1floor : H.L2floor) / FT + 0.07, s.y / FT);
+  });
+}
+function valHTML(v) { return `<span class="chip" style="background:${chip(v.c)}"></span>${Math.round(v.c)} dBm`; }
+function renderSpots() {
+  const box = $('#spots');
+  const vals = new Map(SPOTS.map(s => [s.id, spotValues(s)]));
+  for (const s of SPOTS) { const o = spotObjs.get(s.id), v = vals.get(s.id); if (o) o.lbl.innerHTML = `${esc(s.name || 'Spot')}<small>${v ? Math.round(v.c) : '—'}</small>`; }
+  $('#tuneBtn').disabled = !SPOTS.length || tuning;
+  $('#tuneBtn').textContent = tuning ? $('#tuneBtn').textContent : (nAP === 1 ? 'Place the AP for these spots' : nAP === 2 ? 'Place both APs for these spots' : 'Place all 3 APs for these spots');
+  const editing = box.contains(document.activeElement) && document.activeElement.matches('input,select');
+  if (editing) { box.querySelectorAll('.spot').forEach(row => { const v = vals.get(row.dataset.id); const e = row.querySelector('.sval'); if (v && e) e.innerHTML = valHTML(v); }); return; }
+  if (!SPOTS.length) { box.innerHTML = '<div class="spotempty">No spots yet. Press <b>Add a spot</b>, then click the floor where you sit: the couch, a desk chair, one side of the bed.</div>'; return; }
+  box.innerHTML = SPOTS.map((s, n) => {
+    const v = vals.get(s.id), r = roomAt(s.lv, s.x, s.y), room = r === 255 || !LV[s.lv - 1].exists ? '' : ' · ' + esc(LV[s.lv - 1].labels[r].name);
+    return `<div class="spot" data-id="${esc(s.id)}" data-sel="${s.id === selSpot}">
+      <span class="sdot">${n + 1}</span>
+      <input class="sname" value="${esc(s.name || '')}" maxlength="40" aria-label="Spot name">
+      <select class="skind" aria-label="Spot size">${Object.entries(KINDS).map(([k, o]) => `<option value="${k}" ${k === s.kind ? 'selected' : ''}>${o.label}</option>`).join('')}</select>
+      <span class="sval">${v ? valHTML(v) : '—'}</span>
+      <button class="sx" aria-label="Remove spot" title="Remove">×</button>
+      <div class="smeta">Floor ${s.lv}${room}${v ? ` · weakest ${Math.round(v.min)} · from ${AP_NAME[v.who]}` : ''}</div>
+    </div>`;
+  }).join('');
+}
+function note(t, bad) { const e = $('#saveNote'); e.innerHTML = t; e.classList.toggle('bad', !!bad); }
+function spotsChanged(full) {
+  SPOTS.sort((a, b) => a.t - b.t || (a.id < b.id ? -1 : 1));
+  rebuildSamples(); syncSpotObjs(); scores = null;
+  if (full !== false) { if (presetId === 'tuned') presetId = 'custom'; delete OPTS.tuned; }
+  persist(); update(false);
+}
+function addSpotAt(lv, x, y) {
+  x = Math.round(x); y = Math.round(y);
+  const r = roomAt(lv, x, y); if (r === 255) return;
+  const lab = LV[lv - 1].labels[r], room = lab.name;
+  const kind = { bedroom: 'bed', office: 'desk', kitchen: 'chair' }[lab.type] || 'couch';
+  const id = 's' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  const n = SPOTS.filter(s => s.name.startsWith(room)).length;
+  const s = { id, lv, x, y, name: n ? `${room} ${n + 1}` : room, kind, t: Date.now() };
+  SPOTS.push(s); selSpot = id; setAddMode(false); spotsChanged();
+  const inp = document.querySelector(`.spot[data-id="${CSS.escape(id)}"] .sname`); if (inp) { inp.focus(); inp.select(); }
+}
+const HINT = 'Drag to orbit · scroll or pinch to zoom · drag an AP puck or a spot to move it';
+function setAddMode(on) {
+  addMode = on; $('#addSpot').setAttribute('aria-pressed', addMode);
+  $('#addSpot').textContent = addMode ? 'Click the floor… (Esc to cancel)' : 'Add a spot';
+  $('#hint').textContent = addMode ? 'Click the floor where you sit to drop a spot. The Floor 1 / Floor 2 views make this easiest.' : HINT;
+  canvas.style.cursor = addMode ? 'crosshair' : '';
+}
+$('#addSpot').addEventListener('click', () => { setAddMode(!addMode); if (addMode && view === '3d') setView(LV[0].exists ? 'l1' : 'l2'); });
+addEventListener('keydown', e => { if (e.key === 'Escape' && addMode) setAddMode(false); });
+$('#spots').addEventListener('change', e => {
+  const row = e.target.closest('.spot'); if (!row) return; const s = SPOTS.find(x => x.id === row.dataset.id); if (!s) return;
+  if (e.target.matches('.sname')) { const v = e.target.value.trim().slice(0, 40); if (v === s.name) return; s.name = v; persist(); renderSpots(); }
+  if (e.target.matches('.skind')) { if (!(e.target.value in KINDS) || e.target.value === s.kind) return; s.kind = e.target.value; spotsChanged(); }
+});
+$('#spots').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('.sname')) e.target.blur(); });
+$('#spots').addEventListener('click', e => {
+  const row = e.target.closest('.spot'); if (!row) return; const id = row.dataset.id;
+  if (e.target.closest('.sx')) { SPOTS = SPOTS.filter(s => s.id !== id); if (selSpot === id) selSpot = null; spotsChanged(); return; }
+  if (e.target.matches('input,select')) return;
+  const s = SPOTS.find(x => x.id === id); if (!s) return; selSpot = id;
+  if (view !== '3d') setView(s.lv === 1 ? 'l1' : 'l2'); renderSpots();
+});
+
+// ---------- options, optimizer ----------
+const apsOf = (list) => list.map(a => ({ lv: a.lv, x: a.x, y: a.y, z: zFor(a.lv) }));
+function allOptions() { return ['tuned', 'best', 'start'].map(k => OPTS[k]).filter(Boolean); }
+function renderPresets() {
+  const list = allOptions();
+  if (!scores) scores = Object.fromEntries(list.map(p => [p.id, C.scoreAPs(M, apsOf(p.aps), ALLS)]));
+  const top = Math.max(1e-9, ...Object.values(scores));
+  $('#presets').innerHTML = list.map(p => `<button class="preset" data-id="${p.id}" aria-pressed="${p.id === presetId}"><strong>${esc(p.name)}</strong><b class="score" title="Weighted coverage score${SPOTS.length ? ' including your phone spots' : ''}, best option = 100">${Math.round(100 * scores[p.id] / top)}</b><span>${esc(p.desc)}</span></button>`).join('')
+    + (presetId === 'custom' ? '<button class="preset" aria-pressed="true"><strong>Custom</strong><span>Your own placement. Pick an option to reset.</span></button>' : '');
+}
+async function runOptimize(useSpots, btn) {
+  if (tuning || !APS.length && !M.cands.length) return;
+  tuning = true; const label = btn.textContent; btn.disabled = true; btn.textContent = 'Working… 0%';
+  let res = null;
+  try { res = await C.optimize(M, useSpots ? ALLS : SAMPLES, nAP, { yieldFn: () => new Promise(r => setTimeout(r, 0)), onProgress: f => { btn.textContent = `Working… ${Math.round(f * 100)}%`; } }); } catch (e) { console.error(e); }
+  tuning = false; btn.disabled = false; btn.textContent = label;
+  if (!res) { note('No ceiling spots to try yet. Add rooms (not just baths or closets) in Draw plan.', true); renderSpots(); return; }
+  const id = useSpots ? 'tuned' : 'best';
+  OPTS[id] = useSpots
+    ? { id, name: 'Best for your phone spots', desc: `Worked out here for your ${SPOTS.length} spot${SPOTS.length > 1 ? 's' : ''}${M.beam.on ? ' and the beam as set' : ''}. Rerun after you change them.`, aps: res.aps }
+    : { id, name: 'Best for the whole house', desc: `The ${nAP === 1 ? 'spot' : nAP + ' spots'} that cover your rooms best, weighted by room type${M.beam.on ? ', with the beam as set' : ''}.`, aps: res.aps };
+  presetId = id; setAPs(res.aps); scores = null; if (view !== '3d') setView('3d'); update(false);
+}
+$('#tuneBtn').addEventListener('click', (e) => runOptimize(true, e.currentTarget));
+$('#bestBtn').addEventListener('click', (e) => runOptimize(false, e.currentTarget));
+function setStartOption() {
+  const aps = C.startPlacement(M, nAP);
+  OPTS.start = { id: 'start', name: 'Starting layout', desc: `${nAP} AP${nAP > 1 ? 's' : ''} spread over the rooms that matter most. Drag them, or use Find the best placement.`, aps };
+  return aps;
+}
+function setCount(n) {
+  nAP = n; OPTS = {}; scores = null; presetId = 'start'; setAPs(setStartOption());
+  document.querySelectorAll('#apCount [data-n]').forEach(b => b.setAttribute('aria-pressed', +b.dataset.n === n)); sel = 0; persist(); update(false);
+}
+$('#apCount').addEventListener('click', e => { const b = e.target.closest('[data-n]'); if (b && !tuning) setCount(+b.dataset.n); });
+function validAP(a) { if (!LV[a.lv - 1] || !LV[a.lv - 1].exists) return false; const r = roomAt(a.lv, a.x, a.y); return r !== 255 && LV[a.lv - 1].labels[r].type !== 'garage'; }
+function validSpot(lv, x, y) { if (!LV[lv - 1].exists) return false; const r = roomAt(lv, x, y); return r !== 255 && LV[lv - 1].labels[r].type !== 'garage'; }
+const onBeam = (a) => a.lv === 1 && M.beam.on && !M.mountOK({ lv: 1, x: a.x, y: a.y });
+function renderAPCards() {
+  const bb = G.bbox, both = LV[0].exists && LV[1].exists;
+  if (!APS.length) { $('#aps').innerHTML = '<div class="spotempty">Add rooms in Draw plan, then access points appear here.</div>'; return; }
+  $('#aps').innerHTML = APS.map((a, i) => {
+    const r = roomAt(a.lv, a.x, a.y), room = r === 255 ? '—' : esc(LV[a.lv - 1].labels[r].name);
+    return `<div class="apcard" data-i="${i}" data-sel="${i === sel}" style="--c:var(${AP_VAR[i]})" tabindex="0">
+      <div class="row"><span class="dot">${AP_NAME[i]}</span><span class="where">Floor ${a.lv} ceiling · ${room}</span></div>
+      <div class="meas">${ftin(a.x - bb.x0)} from the left edge<br>${ftin(a.y - bb.y0)} from the top edge</div>
+      ${onBeam(a) ? '<div class="warn">This spot is on the beam. Move it at least 6 in off.</div>' : ''}
+      <div class="btnrow">${both ? `<button class="btn" data-act="level">Move to Floor ${a.lv === 1 ? 2 : 1}</button>` : ''}<button class="btn" data-act="best">Find best spot</button></div>
+    </div>`;
+  }).join('');
+}
+function update(coarse) { if (!M) return; placeAPObjs(); paint(coarse); renderSpots(); if (!coarse) { renderStats(); renderAPCards(); renderPresets(); renderPlanWarn(); } }
+function renderPlanWarn() {
+  const w = G.warnings, el = $('#planWarn');
+  el.hidden = !w.length; el.innerHTML = w.length ? `${w.length} thing${w.length > 1 ? 's' : ''} to check in your plan: ${esc(w[0])}${w.length > 1 ? ' <button class="linkbtn" id="planWarnGo">See all</button>' : ''}` : '';
+}
+
+// ---------- results: beam controls ----------
+const bY = $('#bY'), bD = $('#bD'), bX0 = $('#bX0'), bX1 = $('#bX1'), bOn = $('#bOn');
+function syncBeamUI() {
+  const b = plan.beam, bb = G.bbox;
+  bOn.checked = !!b.on; bY.value = ((b.y - bb.y0) / 12).toFixed(1); bX0.value = ((b.x0 - bb.x0) / 12).toFixed(1); bX1.value = ((b.x1 - bb.x0) / 12).toFixed(1); bD.value = b.depth;
+}
+function beamChanged() {
+  const b = plan.beam, bb = G.bbox, was = b.on; b.on = bOn.checked;
+  if (b.on && !was && (b.x1 <= b.x0 || b.y < bb.y0 || b.y > bb.y1 || b.x1 < bb.x0 || b.x0 > bb.x1)) { b.y = (bb.y0 + bb.y1) / 2; b.x0 = bb.x0; b.x1 = bb.x1; }
+  const y = +bY.value, x0 = +bX0.value, x1 = +bX1.value, d = +bD.value;
+  if (isFinite(y) && bY.value !== '') b.y = bb.y0 + y * 12;
+  if (isFinite(x0) && bX0.value !== '') b.x0 = bb.x0 + x0 * 12;
+  if (isFinite(x1) && bX1.value !== '') b.x1 = bb.x0 + x1 * 12;
+  if (isFinite(d) && d >= 0 && d <= 24) b.depth = d;
+  Object.assign(M.beam, b); syncBeamUI();
+  planVer++; cache.ver = -1; builtVer = planVer; // the beam doesn't change rooms; keep the built model
+  scores = null; buildBeam(); persist(); update(false);
+}
+[bY, bD, bX0, bX1, bOn].forEach(el => el.addEventListener('change', beamChanged));
+
+// ---------- results: views, camera ----------
+const explodeEl = $('#explode');
+function applyExplode() { GR[1].position.y = view === '3d' ? +explodeEl.value : 0; }
+function setView(v) {
+  if (v === 'l1' && !LV[0].exists) v = LV[1].exists ? 'l2' : '3d'; if (v === 'l2' && !LV[1].exists) v = 'l1';
+  view = v; ['3d', 'l1', 'l2'].forEach(k => $('#v' + k).setAttribute('aria-pressed', k === v));
+  GR[0].visible = v !== 'l2'; GR[1].visible = v !== 'l1';
+  $('#explodeWrap').hidden = v !== '3d' || !(LV[0].exists && LV[1].exists); applyExplode();
+  const bb = G.bbox, bw = Math.max(8, (bb.x1 - bb.x0) / FT), bd = Math.max(8, (bb.y1 - bb.y0) / FT), cx = (bb.x0 + bb.x1) / 2 / FT, cz = (bb.y0 + bb.y1) / 2 / FT;
+  const asp = vp.clientWidth / Math.max(1, vp.clientHeight);
+  if (v === '3d') {
+    controls.enableRotate = true; const k = Math.max(1, 1.3 / asp) * Math.max(bw, bd) / 38, ty = 7;
+    camera.position.set(cx - 33 * k, ty + 39 * k, cz + 55 * k); controls.target.set(cx, ty, cz);
+  } else {
+    controls.enableRotate = false;
+    const y = v === 'l1' ? 0 : H.L2floor / FT, k = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)), dist = Math.max(bd * 1.18 / k, bw * 1.18 / (k * asp)) + 9;
+    camera.position.set(cx, y + dist, cz + 0.02); controls.target.set(cx, y, cz);
+  }
+  controls.update();
+}
+$('#v3d').onclick = () => setView('3d'); $('#vl1').onclick = () => setView('l1'); $('#vl2').onclick = () => setView('l2');
+document.querySelectorAll('[data-band]').forEach(b => b.onclick = () => { band = b.dataset.band; document.querySelectorAll('[data-band]').forEach(x => x.setAttribute('aria-pressed', x === b)); update(false); });
+explodeEl.oninput = applyExplode;
+$('#presets').addEventListener('click', (e) => { const b = e.target.closest('[data-id]'); if (!b) return; const p = allOptions().find(p => p.id === b.dataset.id); if (!p) return; presetId = p.id; setAPs(p.aps); persist(); update(false); });
+$('#aps').addEventListener('click', (e) => {
+  const card = e.target.closest('.apcard'); if (!card) return; const i = +card.dataset.i; const btn = e.target.closest('button');
+  if (!btn) { sel = i; update(false); return; }
+  if (btn.dataset.act === 'level') {
+    const a = APS[i], nl = a.lv === 1 ? 2 : 1;
+    let x = a.x, y = a.y;
+    if (!validSpot(nl, x, y)) { const c = M.cands.filter(c => c.lv === nl && M.mountOK(c)).sort((p, q) => Math.hypot(p.x - a.x, p.y - a.y) - Math.hypot(q.x - a.x, q.y - a.y))[0]; if (c) { x = c.x; y = c.y; } }
+    if (!validSpot(nl, x, y)) return;
+    Object.assign(a, { lv: nl, x, y, z: zFor(nl) }); sel = i; presetId = 'custom'; persist();
+    if (view !== '3d') setView(nl === 1 ? 'l1' : 'l2'); update(false);
+  } else findBest(i, btn);
+});
+// best spot for one AP with the other(s) fixed
+function findBest(i, btn) {
+  btn.disabled = true; btn.textContent = 'Searching…';
+  const others = APS.filter((_, k) => k !== i), SS = ALLS, f5 = new Float32Array(SS.length).fill(-200), f6 = new Float32Array(SS.length).fill(-200);
+  SS.forEach((s, k) => others.forEach(o => { const r = M.pathLoss(o, s.x, s.y, s.z); f5[k] = Math.max(f5[k], r['5']); f6[k] = Math.max(f6[k], r['6']); }));
+  const sc = C.score01, Wsum = SS.reduce((a, s) => a + s.w, 0);
+  const evalC = (c) => { let s = 0; for (let k = 0; k < SS.length; k++) { const p = SS[k], r = M.pathLoss(c, p.x, p.y, p.z); s += p.w * (0.5 * sc(Math.max(f5[k], r['5'])) + 0.5 * sc(Math.max(f6[k], r['6']))); } return s / Wsum; };
+  const all = M.cands.filter(M.mountOK), coarse = all.filter(c => (c.x - 6) % 24 === 0 && (c.y - 6) % 24 === 0);
+  let best = null, idx = 0;
+  (function chunk() {
+    const end = Math.min(coarse.length, idx + 8);
+    for (; idx < end; idx++) { const s = evalC(coarse[idx]); if (!best || s > best.s) best = { s, c: coarse[idx] }; }
+    if (idx < coarse.length) return setTimeout(chunk, 0);
+    if (!best) { update(false); return; }
+    all.filter(c => c.lv === best.c.lv && Math.abs(c.x - best.c.x) <= 24 && Math.abs(c.y - best.c.y) <= 24).forEach(c => { const s = evalC(c); if (s > best.s) best = { s, c }; });
+    Object.assign(APS[i], { lv: best.c.lv, x: best.c.x, y: best.c.y, z: zFor(best.c.lv) }); sel = i; presetId = 'custom'; persist();
+    if (view !== '3d') setView(best.c.lv === 1 ? 'l1' : 'l2'); update(false);
+  })();
+}
+
+// ---------- results: pointer interaction ----------
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(); let dragging = -1; const dragPlane = new THREE.Plane(), hit = new THREE.Vector3();
+function toNDC(e) { const r = canvas.getBoundingClientRect(); ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); ray.setFromCamera(ndc, camera); }
+function floorHit() {
+  const vis = layers.filter((L, i) => L && GR[i].visible).map(L => L.mesh);
+  for (const h of ray.intersectObjects(vis)) {
+    const li = layers.findIndex(L => L && L.mesh === h.object), m = LV[li].mask;
+    const x = m.ox + h.uv.x * m.w * m.cell, y = m.oy + (1 - h.uv.y) * m.h * m.cell;
+    if (roomAt(li + 1, x, y) !== 255) return { lv: li + 1, x, y };
+  }
+  return null;
+}
+let raf = 0;
+canvas.addEventListener('pointerdown', (e) => {
+  if (!M) return; toNDC(e);
+  const pucks = apObjs.filter(o => o.parent && o.parent.visible).flatMap(o => [o.userData.puck, o.userData.ring]);
+  const h = ray.intersectObjects(pucks)[0];
+  if (!h) {
+    if (addMode) { const f = floorHit(); if (f) { addSpotAt(f.lv, f.x, f.y); e.preventDefault(); e.stopImmediatePropagation(); } return; }
+    const fills = [...spotObjs.values()].filter(o => o.grp.parent && o.grp.parent.visible).map(o => o.fill);
+    const hs = ray.intersectObjects(fills)[0]; if (!hs) return;
+    dragSpot = hs.object.userData.spot; selSpot = dragSpot;
+    const wp = new THREE.Vector3(); hs.object.getWorldPosition(wp); dragPlane.set(new THREE.Vector3(0, 1, 0), -wp.y);
+    controls.enabled = false; canvas.setPointerCapture(e.pointerId); e.preventDefault(); e.stopImmediatePropagation(); renderSpots(); return;
+  }
+  dragging = h.object.userData.ap; sel = dragging; presetId = 'custom';
+  const wp = new THREE.Vector3(); apObjs[dragging].getWorldPosition(wp); dragPlane.set(new THREE.Vector3(0, 1, 0), -wp.y);
+  controls.enabled = false; canvas.setPointerCapture(e.pointerId); e.preventDefault(); e.stopImmediatePropagation(); update(true);
+}, { capture: true });
+canvas.addEventListener('pointermove', (e) => {
+  if (!M) return; toNDC(e);
+  if (dragSpot) {
+    if (!ray.ray.intersectPlane(dragPlane, hit)) return;
+    const s = SPOTS.find(q => q.id === dragSpot), x = Math.round(hit.x * FT), y = Math.round(hit.z * FT);
+    if (s && roomAt(s.lv, x, y) !== 255) { s.x = x; s.y = y; syncSpotObjs(); if (!raf) raf = requestAnimationFrame(() => { raf = 0; renderSpots(); }); }
+    $('#tip').hidden = true; return;
+  }
+  if (dragging >= 0) {
+    if (!ray.ray.intersectPlane(dragPlane, hit)) return;
+    const a = APS[dragging], x = Math.round(hit.x * FT), y = Math.round(hit.z * FT);
+    if (validSpot(a.lv, x, y)) { a.x = x; a.y = y; if (!raf) raf = requestAnimationFrame(() => { raf = 0; update(true); }); }
+    $('#tip').hidden = true; return;
+  }
+  const vis = layers.filter((L, i) => L && GR[i].visible).map(L => L.mesh);
+  const h = ray.intersectObjects(vis)[0], tip = $('#tip');
+  if (!h) { tip.hidden = true; return; }
+  const li = layers.findIndex(L => L && L.mesh === h.object), m = LV[li].mask;
+  const i = Math.floor(h.uv.x * m.w), j = Math.floor((1 - h.uv.y) * m.h), k = j * m.w + i;
+  const r = m.a[k], v = layers[li].vals[k];
+  if (r === 255 || isNaN(v)) { tip.hidden = true; return; }
+  const rr = vp.getBoundingClientRect();
+  tip.hidden = false; tip.style.left = (e.clientX - rr.left + 14) + 'px'; tip.style.top = (e.clientY - rr.top + 10) + 'px';
+  tip.textContent = `${LV[li].labels[r].name} · ${Math.round(v)} dBm`;
+});
+function endDrag() {
+  if (dragSpot) { dragSpot = null; controls.enabled = true; spotsChanged(); return; }
+  if (dragging < 0) return; dragging = -1; controls.enabled = true; persist(); update(false);
+}
+canvas.addEventListener('pointerup', endDrag); canvas.addEventListener('pointercancel', endDrag);
+canvas.addEventListener('pointerleave', () => { $('#tip').hidden = true; });
+
+// ---------- render loop ----------
+function resize() { const w = vp.clientWidth, h = vp.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); edResize(); }
+new ResizeObserver(resize).observe(vp);
+const v3 = new THREE.Vector3();
+function frame() {
+  requestAnimationFrame(frame);
+  if (mode !== 'results' || !M) return;
+  controls.update(); renderer.render(scene, camera);
+  const w = vp.clientWidth, h = vp.clientHeight;
+  for (const it of labelItems) {
+    let visible = true;
+    if (it.level === -2) { const a = APS[it.ref]; if (!a) { it.el.hidden = true; continue; } v3.set(a.x / FT, a.z / FT + GR[a.lv - 1].position.y, a.y / FT); visible = GR[a.lv - 1].visible; it.el.style.background = `var(${AP_VAR[it.ref]})`; }
+    else if (it.level === -3) { const b = M.beam; visible = b.on && GR[0].visible && LV[0].exists; v3.set(b.x1 / FT + 1.2, H.L1ceil / FT, b.y / FT); }
+    else { v3.set(it.pos.x, it.pos.y + GR[it.level].position.y, it.pos.z); visible = GR[it.level].visible; }
+    v3.project(camera);
+    if (!visible || v3.z > 1) { it.el.hidden = true; continue; }
+    it.el.hidden = false; it.el.style.left = ((v3.x + 1) / 2 * w) + 'px'; it.el.style.top = ((1 - v3.y) / 2 * h) + 'px';
+  }
+  for (const s of SPOTS) {
+    const o = spotObjs.get(s.id); if (!o) continue;
+    o.grp.getWorldPosition(v3); v3.project(camera);
+    if (!o.grp.parent || !o.grp.parent.visible || v3.z > 1) { o.lbl.hidden = true; continue; }
+    o.lbl.hidden = false; o.lbl.style.left = ((v3.x + 1) / 2 * w) + 'px'; o.lbl.style.top = ((1 - v3.y) / 2 * h) + 'px';
+  }
+}
+function onTheme() { makeMats(); tintSpots(); if (M) placeAPObjs(); edDraw(); }
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', onTheme);
+new MutationObserver(onTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+// ---------- build the results model from the plan ----------
+function rebuild() {
+  G = getCompiled(); M = C.make(G); H = G.heights; LV = G.levels; builtVer = planVer;
+  SAMPLES = M.samples.filter(s => s.w > 0); WBASE = SAMPLES.reduce((a, s) => a + s.w, 0) || 1;
+  buildScene(); rebuildSamples(); syncSpotObjs();
+  OPTS = {}; scores = null; tuned = null;
+  const saved = pendingAPS; pendingAPS = null;
+  const cand = saved ? saved.map(a => ({ lv: a.lv, x: a.x, y: a.y })).slice(0, 3) : APS.map(a => ({ lv: a.lv, x: a.x, y: a.y }));
+  if (cand.length === nAP && cand.every(a => LV[a.lv - 1] && validAP(a)) && cand.length) { const st = setStartOption(); setAPs(cand); presetId = cand.every((a, i) => st[i] && st[i].lv === a.lv && st[i].x === a.x && st[i].y === a.y) ? 'start' : 'custom'; }
+  else { setAPs(setStartOption()); presetId = 'start'; }
+  document.querySelectorAll('#apCount [data-n]').forEach(b => b.setAttribute('aria-pressed', +b.dataset.n === nAP));
+  sel = Math.min(sel, Math.max(0, APS.length - 1));
+  syncBeamUI(); buildBeam();
+  $('#vl1').hidden = !LV[0].exists; $('#vl2').hidden = !LV[1].exists;
+  $('#emptyMsg').classList.toggle('on', G.empty);
+  setView(view); update(false); persist();
+}
+let tuned = null;
+
+// ======================================================================
+// Plan editor
+// ======================================================================
+const ed = $('#ed'), ectx = ed.getContext('2d');
+const ED = { floor: 0, tool: 'wall', view: { x: -60, y: -60, s: 1.2 }, sel: null, draft: null, chain: null, poly: null, doorDraft: null, hover: null,
+  undo: [], redo: [], space: false, ptrs: new Map(), pinch: null, pan: null, move: null, cal: null, imgMove: false, showRooms: true, dirty: true, down: null };
+const WCOL = { ext: '--edwall', int: '--muted', wet: null, garage: '--beam' };
+const wallColor = (t) => t === 'wet' ? '#2a8f8f' : css(WCOL[t]) || '#888';
+const F = () => plan.floors[ED.floor];
+const toPlan = (sx, sy) => [ED.view.x + sx / ED.view.s, ED.view.y + sy / ED.view.s];
+const toScr = (px, py) => [(px - ED.view.x) * ED.view.s, (py - ED.view.y) * ED.view.s];
+let edW = 0, edH = 0, dpr = 1;
+function edResize() { dpr = Math.min(devicePixelRatio || 1, 2); edW = ed.clientWidth; edH = ed.clientHeight; if (!edW) return; ed.width = Math.round(edW * dpr); ed.height = Math.round(edH * dpr); edDraw(); }
+let edRaf = 0; function edDraw() { if (mode !== 'draw' || edRaf) return; edRaf = requestAnimationFrame(() => { edRaf = 0; edRender(); }); }
+
+// undo / redo (snapshots of the plan JSON)
+const snapshot = () => JSON.stringify(plan);
+function pushUndo() { ED.undo.push(snapshot()); if (ED.undo.length > 100) ED.undo.shift(); ED.redo = []; updHist(); }
+function restore(s) { plan = JSON.parse(s); ED.sel = null; ED.draft = ED.chain = ED.poly = ED.doorDraft = null; changed(); updHist(); }
+function undo() { if (!ED.undo.length) return; ED.redo.push(snapshot()); restore(ED.undo.pop()); }
+function redo() { if (!ED.redo.length) return; ED.undo.push(snapshot()); restore(ED.redo.pop()); }
+function updHist() { $('#undoBtn').disabled = !ED.undo.length; $('#redoBtn').disabled = !ED.redo.length; }
+function mutate(fn) { pushUndo(); fn(); changed(); }
+
+// preview compile (room tint + warnings), debounced
+let prevT = 0, PREV = null, prevImgs = [null, null];
+function schedulePreview() { clearTimeout(prevT); if (mode !== 'draw') return; prevT = setTimeout(runPreview, 120); }
+function runPreview() {
+  PREV = getCompiled();
+  prevImgs = PREV.levels.map((L, li) => {
+    if (!L.exists || !L.mask) return null; const m = L.mask, cv = document.createElement('canvas'); cv.width = m.w; cv.height = m.h;
+    const c = cv.getContext('2d'), img = c.createImageData(m.w, m.h), d = img.data;
+    for (let k = 0; k < m.a.length; k++) { const r = m.a[k]; if (r === 255) continue; const t = L.labels[r].type; const hue = (r * 137.5) % 360; const o = k * 4; const rgb = hsl(hue, t === 'garage' ? 0.1 : 0.55, 0.55); d[o] = rgb[0]; d[o + 1] = rgb[1]; d[o + 2] = rgb[2]; d[o + 3] = 70; }
+    c.putImageData(img, 0, 0); return { cv, m };
+  });
+  const w = PREV.warnings;
+  $('#warns').innerHTML = w.length ? `<ul class="warnlist">${w.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : `<p class="okmsg">${PREV.empty ? 'Draw some walls to begin.' : 'Looks good. Every labelled room is enclosed. Tinted areas on the plan are the rooms the planner found.'}</p>`;
+  edDraw();
+}
+function hsl(h, s, l) { const a = s * Math.min(l, 1 - l), f = (n) => { const k = (n + h / 30) % 12; return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)); }; return [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)]; }
+
+// snapping
+function snap(p, free) {
+  const r = 11 / ED.view.s; let best = null, bd = r;
+  const consider = (x, y) => { const d = Math.hypot(x - p[0], y - p[1]); if (d < bd) { bd = d; best = [x, y]; } };
+  F().walls.forEach(w => { consider(w.x1, w.y1); consider(w.x2, w.y2); });
+  if (ED.chain) consider(ED.chain.first[0], ED.chain.first[1]);
+  if (ED.poly && ED.poly.length) consider(ED.poly[0][0], ED.poly[0][1]);
+  if (best) return best;
+  if (free) return [Math.round(p[0]), Math.round(p[1])];
+  return [Math.round(p[0] / 6) * 6, Math.round(p[1] / 6) * 6];
+}
+const ortho = (a, b) => Math.abs(b[0] - a[0]) >= Math.abs(b[1] - a[1]) ? [b[0], a[1]] : [a[0], b[1]];
+function nearestWall(p) { // nearest wall of this floor within reach: {i, t, d, w}
+  let best = null; const reach = 16 / ED.view.s;
+  F().walls.forEach((w, i) => {
+    const dx = w.x2 - w.x1, dy = w.y2 - w.y1, len = Math.hypot(dx, dy); if (len < 1e-6) return;
+    const t = ((p[0] - w.x1) * dx + (p[1] - w.y1) * dy) / len, tc = Math.max(0, Math.min(len, t));
+    const d = Math.hypot(p[0] - (w.x1 + dx / len * tc), p[1] - (w.y1 + dy / len * tc));
+    if (d < reach && (!best || d < best.d)) best = { i, t: tc, d, w, len };
+  });
+  return best;
+}
+function hitTest(p) {
+  const s = ED.view.s, f = F();
+  for (let i = f.labels.length - 1; i >= 0; i--) { const l = f.labels[i]; const [sx, sy] = toScr(l.x, l.y), [px, py] = toScr(p[0], p[1]); const w = labelWidth(l) / 2; if (Math.abs(px - sx) < w && Math.abs(py - sy) < 11) return { k: 'label', i }; }
+  let best = null, bd = 9 / s;
+  f.doors.forEach((d, i) => { const dd = segDist(p, d.x1, d.y1, d.x2, d.y2); if (dd < bd) { bd = dd; best = { k: 'door', i }; } });
+  f.walls.forEach((w, i) => { const dd = segDist(p, w.x1, w.y1, w.x2, w.y2) - WALL[w.t].t / 2; if (dd < bd) { bd = dd; best = { k: 'wall', i }; } });
+  if (best) return best;
+  if (ED.floor === 1) for (let i = f.openings.length - 1; i >= 0; i--) if (C.inPoly(p[0], p[1], f.openings[i].pts) || C.nearPoly(p[0], p[1], f.openings[i].pts, 8 / s)) return { k: 'open', i };
+  return null;
+}
+function segDist(p, x1, y1, x2, y2) { const dx = x2 - x1, dy = y2 - y1, l2 = dx * dx + dy * dy || 1e-9, t = Math.max(0, Math.min(1, ((p[0] - x1) * dx + (p[1] - y1) * dy) / l2)); return Math.hypot(p[0] - x1 - t * dx, p[1] - y1 - t * dy); }
+function labelWidth(l) { ectx.font = '600 12px sans-serif'; return ectx.measureText(l.name || ROOM[l.type].label).width + 22; }
+
+// ---- drawing ----
+function edRender() {
+  const c = ectx, V = ED.view; c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, edW, edH);
+  const ink = css('--ink'), muted = css('--muted'), line = css('--line'), accent = css('--accent');
+  c.fillStyle = css('--bg'); c.fillRect(0, 0, edW, edH);
+  const bg = BG[ED.floor];
+  if (bg) { const [sx, sy] = toScr(bg.x, bg.y); c.globalAlpha = bg.op; c.drawImage(bg.img, sx, sy, bg.img.width * bg.s * V.s, bg.img.height * bg.s * V.s); c.globalAlpha = 1; }
+  // grid
+  const [px0, py0] = toPlan(0, 0), [px1, py1] = toPlan(edW, edH);
+  const step = 6 * V.s >= 12 ? 6 : 12 * V.s >= 12 ? 12 : 60;
+  c.lineWidth = 1;
+  for (let x = Math.floor(px0 / step) * step; x <= px1; x += step) { const sx = Math.round((x - V.x) * V.s) + 0.5; c.strokeStyle = x % 12 === 0 ? line : 'rgba(128,140,150,0.18)'; c.beginPath(); c.moveTo(sx, 0); c.lineTo(sx, edH); c.stroke(); }
+  for (let y = Math.floor(py0 / step) * step; y <= py1; y += step) { const sy = Math.round((y - V.y) * V.s) + 0.5; c.strokeStyle = y % 12 === 0 ? line : 'rgba(128,140,150,0.18)'; c.beginPath(); c.moveTo(0, sy); c.lineTo(edW, sy); c.stroke(); }
+  // room tint
+  const pi = prevImgs[ED.floor];
+  if (ED.showRooms && pi) { const [sx, sy] = toScr(pi.m.ox, pi.m.oy); c.imageSmoothingEnabled = false; c.drawImage(pi.cv, sx, sy, pi.m.w * pi.m.cell * V.s, pi.m.h * pi.m.cell * V.s); }
+  // other floor, faint
+  const other = plan.floors[1 - ED.floor]; c.globalAlpha = 0.2; c.strokeStyle = ink;
+  other.walls.forEach(w => { const a = toScr(w.x1, w.y1), b = toScr(w.x2, w.y2); c.lineWidth = Math.max(1.5, WALL[w.t].t * V.s); c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke(); });
+  c.globalAlpha = 1;
+  // openings
+  if (ED.floor === 1) F().openings.forEach((o, i) => {
+    c.beginPath(); o.pts.forEach((p, k) => { const s = toScr(p[0], p[1]); k ? c.lineTo(s[0], s[1]) : c.moveTo(s[0], s[1]); }); c.closePath();
+    c.fillStyle = 'rgba(120,130,140,0.28)'; c.fill(); c.setLineDash([6, 4]); c.strokeStyle = isSel('open', i) ? accent : muted; c.lineWidth = isSel('open', i) ? 2.5 : 1.5; c.stroke(); c.setLineDash([]);
+    const cx = o.pts.reduce((a, p) => a + p[0], 0) / o.pts.length, cy = o.pts.reduce((a, p) => a + p[1], 0) / o.pts.length, s = toScr(cx, cy);
+    c.fillStyle = muted; c.font = '600 11px sans-serif'; c.textAlign = 'center'; c.fillText(o.kind === 'stair' ? 'Stairs' : 'Open to below', s[0], s[1]);
+  });
+  // walls
+  F().walls.forEach((w, i) => {
+    const a = toScr(w.x1, w.y1), b = toScr(w.x2, w.y2), sl = isSel('wall', i);
+    c.lineCap = 'butt'; c.lineWidth = Math.max(2.5, WALL[w.t].t * V.s); c.strokeStyle = wallColor(w.t);
+    c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke();
+    if (sl) { c.lineWidth = Math.max(2.5, WALL[w.t].t * V.s) + 5; c.strokeStyle = accent; c.globalAlpha = 0.35; c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke(); c.globalAlpha = 1;
+      [a, b].forEach(q => { c.fillStyle = css('--surface'); c.strokeStyle = accent; c.lineWidth = 2; c.beginPath(); c.arc(q[0], q[1], 5, 0, 7); c.fill(); c.stroke(); }); }
+  });
+  // doors
+  F().doors.forEach((d, i) => {
+    const a = toScr(d.x1, d.y1), b = toScr(d.x2, d.y2), sl = isSel('door', i);
+    c.setLineDash([5, 4]); c.lineWidth = sl ? 3 : 2; c.strokeStyle = sl ? accent : css('--ap-b'); c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke(); c.setLineDash([]);
+    // swing arc
+    const len = Math.hypot(b[0] - a[0], b[1] - a[1]), ang = Math.atan2(b[1] - a[1], b[0] - a[0]); c.lineWidth = 1; c.beginPath(); c.arc(a[0], a[1], len, ang, ang + Math.PI / 2); c.stroke();
+  });
+  // labels
+  F().labels.forEach((l, i) => {
+    const [sx, sy] = toScr(l.x, l.y), t = l.name || ROOM[l.type].label, w = labelWidth(l), sl = isSel('label', i);
+    c.fillStyle = css('--surface'); c.strokeStyle = sl ? accent : line; c.lineWidth = sl ? 2.5 : 1;
+    roundRect(c, sx - w / 2, sy - 11, w, 22, 11); c.fill(); c.stroke();
+    c.fillStyle = ink; c.font = '600 12px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(t, sx + 5, sy + 0.5);
+    c.fillStyle = muted; c.beginPath(); c.arc(sx - w / 2 + 9, sy, 3.5, 0, 7); c.fill();
+  });
+  c.textBaseline = 'alphabetic';
+  // drafts
+  c.strokeStyle = accent; c.fillStyle = accent; c.lineWidth = 2;
+  const dr = ED.draft; if (dr) {
+    const a = toScr(dr.a[0], dr.a[1]), b = toScr(dr.b[0], dr.b[1]); c.globalAlpha = 0.8; c.lineWidth = Math.max(2.5, WALL[$('#wallType').value].t * V.s); c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke(); c.globalAlpha = 1;
+    const len = Math.hypot(dr.b[0] - dr.a[0], dr.b[1] - dr.a[1]); if (len > 1) { c.fillStyle = css('--surface'); c.strokeStyle = accent; c.lineWidth = 1; const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2 - 14; roundRect(c, mx - 28, my - 10, 56, 20, 5); c.fill(); c.stroke(); c.fillStyle = ink; c.font = '600 11px monospace'; c.textAlign = 'center'; c.fillText(ftin(len), mx, my + 4); }
+  }
+  if (ED.poly) { c.lineWidth = 2; c.beginPath(); ED.poly.forEach((p, k) => { const s = toScr(p[0], p[1]); k ? c.lineTo(s[0], s[1]) : c.moveTo(s[0], s[1]); }); if (ED.hover) { const s = toScr(ED.hover[0], ED.hover[1]); c.lineTo(s[0], s[1]); } c.setLineDash([6, 4]); c.stroke(); c.setLineDash([]); ED.poly.forEach(p => { const s = toScr(p[0], p[1]); c.beginPath(); c.arc(s[0], s[1], 4, 0, 7); c.fill(); }); }
+  if (ED.doorDraft) { const d = ED.doorDraft, w = d.w, dx = (w.x2 - w.x1) / d.len, dy = (w.y2 - w.y1) / d.len, lo = Math.min(d.t0, d.t1), hi = Math.max(d.t0, d.t1), a = toScr(w.x1 + dx * lo, w.y1 + dy * lo), b = toScr(w.x1 + dx * hi, w.y1 + dy * hi); c.lineWidth = 5; c.globalAlpha = 0.7; c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke(); c.globalAlpha = 1; }
+  if (ED.cal) { c.fillStyle = '#e0457b'; c.strokeStyle = '#e0457b'; ED.cal.pts.forEach(p => { const s = toScr(p[0], p[1]); c.beginPath(); c.arc(s[0], s[1], 5, 0, 7); c.fill(); }); if (ED.cal.pts.length === 2) { const a = toScr(...ED.cal.pts[0]), b = toScr(...ED.cal.pts[1]); c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke(); } }
+  // snap marker
+  if (ED.hover && ['wall', 'open', 'label'].includes(ED.tool) && ED.ptrs.size < 2) { const s = toScr(ED.hover[0], ED.hover[1]); c.strokeStyle = accent; c.lineWidth = 1.5; c.beginPath(); c.arc(s[0], s[1], 6, 0, 7); c.moveTo(s[0] - 9, s[1]); c.lineTo(s[0] + 9, s[1]); c.moveTo(s[0], s[1] - 9); c.lineTo(s[0], s[1] + 9); c.stroke(); }
+}
+function roundRect(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+const isSel = (k, i) => ED.sel && ED.sel.k === k && ED.sel.i === i && ED.sel.f === ED.floor;
+const setSel = (k, i) => { ED.sel = k ? { k, i, f: ED.floor } : null; renderSel(); edDraw(); };
+
+// ---- tools / panel ----
+const HELP = {
+  select: 'Click a wall, door, room label or opening. Drag a label or a wall (or its end points) to move it. Delete removes it.',
+  wall: 'Drag to draw a wall, or tap points to chain walls (double-tap or Esc to finish). Snaps to a 6 in grid and to existing end points; hold Shift for straight lines.',
+  door: 'Click a wall for a 3 ft door, or drag along a wall for a wider opening. The wall is cut so Wi-Fi passes and rooms stay separate.',
+  label: 'Tap inside a room to name it. The room type sets how much its signal counts in the score.',
+  open: 'Floor 2 only. Tap the corners of a stairwell or an open-to-below area; tap the first point (or press Enter) to close it.',
+  pan: 'Drag to move the view. Scroll or pinch to zoom. (Holding Space also pans.)',
+  calib: 'Click two points on the image whose real distance you know.',
+};
+function setTool(t) {
+  if (t === 'open' && ED.floor !== 1) setFloor(1);
+  ED.tool = t; ED.draft = ED.chain = ED.poly = ED.doorDraft = null; ED.imgMove = false; $('#imgMoveBtn').setAttribute('aria-pressed', false);
+  document.querySelectorAll('#tools [data-tool]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === t));
+  $('#toolHelp').textContent = HELP[t] || ''; $('#wallOpts').hidden = !(t === 'wall'); $('#labelOpts').hidden = t !== 'label'; $('#openOpts').hidden = t !== 'open';
+  ed.style.cursor = t === 'pan' ? 'grab' : t === 'select' ? 'default' : 'crosshair'; edDraw();
+}
+function setFloor(f) {
+  ED.floor = f; ED.sel = null; ED.draft = ED.chain = ED.poly = ED.doorDraft = null;
+  $('#fl1').setAttribute('aria-pressed', f === 0); $('#fl2').setAttribute('aria-pressed', f === 1);
+  document.querySelector('#tools [data-tool="open"]').disabled = false; updImgBtns(); renderSel(); edDraw();
+}
+$('#fl1').onclick = () => setFloor(0); $('#fl2').onclick = () => setFloor(1);
+document.querySelectorAll('#tools [data-tool]').forEach(b => b.onclick = () => setTool(b.dataset.tool));
+$('#roomType').innerHTML = Object.entries(ROOM).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('');
+$('#roomType').value = 'bedroom';
+$('#undoBtn').onclick = undo; $('#redoBtn').onclick = redo; $('#fitBtn').onclick = () => fitView();
+$('#wallType').addEventListener('change', () => { if (ED.sel && ED.sel.k === 'wall' && ED.sel.f === ED.floor) { mutate(() => { F().walls[ED.sel.i].t = $('#wallType').value; }); } edDraw(); });
+
+function renderSel() {
+  const box = $('#selBox'), s = ED.sel; if (!s || s.f !== ED.floor) { box.className = 'sel'; box.innerHTML = '<div>Nothing selected. Use <b>Select</b> to pick a wall, door, room or opening.</div>'; return; }
+  const f = F(); let html = '';
+  if (s.k === 'wall') { const w = f.walls[s.i]; if (!w) { ED.sel = null; return renderSel(); } html = `<div><b>Wall</b> · ${ftin(Math.hypot(w.x2 - w.x1, w.y2 - w.y1))} long</div><div class="row"><select id="selType">${Object.entries(WALL).map(([k, v]) => `<option value="${k}" ${k === w.t ? 'selected' : ''}>${v.label}</option>`).join('')}</select><button class="btn" id="selDel">Delete</button></div>`; }
+  else if (s.k === 'door') { const d = f.doors[s.i]; if (!d) { ED.sel = null; return renderSel(); } html = `<div><b>Door</b> · ${ftin(Math.hypot(d.x2 - d.x1, d.y2 - d.y1))} wide</div><div class="row"><button class="btn" id="selDel">Delete (closes the gap)</button></div>`; }
+  else if (s.k === 'label') { const l = f.labels[s.i]; if (!l) { ED.sel = null; return renderSel(); } html = `<div><b>Room</b></div><div class="row"><input type="text" id="selName" value="${esc(l.name)}" maxlength="40" aria-label="Room name"><select id="selType">${Object.entries(ROOM).map(([k, v]) => `<option value="${k}" ${k === l.type ? 'selected' : ''}>${v.label}</option>`).join('')}</select></div><div class="row"><span>Weight ${ROOM[l.type].w}${ROOM[l.type].mount ? '' : ' · no AP here'}</span><button class="btn" id="selDel">Delete</button></div>`; }
+  else if (s.k === 'open') { const o = f.openings[s.i]; if (!o) { ED.sel = null; return renderSel(); } html = `<div><b>Floor opening</b></div><div class="row"><select id="selType"><option value="open" ${o.kind === 'open' ? 'selected' : ''}>Open to below</option><option value="stair" ${o.kind === 'stair' ? 'selected' : ''}>Stairs</option></select><button class="btn" id="selDel">Delete</button></div>`; }
+  box.className = 'sel'; box.innerHTML = html;
+}
+$('#selBox').addEventListener('click', e => { if (e.target.id === 'selDel') deleteSel(); });
+$('#selBox').addEventListener('change', e => {
+  const s = ED.sel; if (!s) return; const f = F();
+  if (e.target.id === 'selType') { const v = e.target.value; mutate(() => { if (s.k === 'wall') f.walls[s.i].t = v; else if (s.k === 'label') f.labels[s.i].type = v; else if (s.k === 'open') f.openings[s.i].kind = v; }); renderSel(); }
+  if (e.target.id === 'selName') { const v = e.target.value.trim().slice(0, 40); mutate(() => { f.labels[s.i].name = v; }); }
+});
+$('#selBox').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.id === 'selName') e.target.blur(); });
+function deleteSel() {
+  const s = ED.sel; if (!s || s.f !== ED.floor) return; const f = F();
+  mutate(() => {
+    if (s.k === 'wall') f.walls.splice(s.i, 1);
+    else if (s.k === 'door') { const d = f.doors.splice(s.i, 1)[0]; if (d) C.addWall(f, [d.x1, d.y1], [d.x2, d.y2], WALL[d.t] ? d.t : 'int'); }
+    else if (s.k === 'label') f.labels.splice(s.i, 1);
+    else if (s.k === 'open') f.openings.splice(s.i, 1);
+  });
+  ED.sel = null; renderSel();
+}
+function fitView() {
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; const ext = (x, y) => { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); };
+  plan.floors.forEach(f => { f.walls.forEach(w => { ext(w.x1, w.y1); ext(w.x2, w.y2); }); f.labels.forEach(l => ext(l.x, l.y)); });
+  const bg = BG[ED.floor]; if (bg) { ext(bg.x, bg.y); ext(bg.x + bg.img.width * bg.s, bg.y + bg.img.height * bg.s); }
+  if (!isFinite(x0)) { x0 = 0; y0 = 0; x1 = 480; y1 = 360; }
+  const w = Math.max(60, x1 - x0), h = Math.max(60, y1 - y0), s = Math.min((edW - 60) / w, (edH - 110) / h);
+  ED.view.s = Math.max(0.15, Math.min(6, s || 1)); ED.view.x = (x0 + x1) / 2 - edW / 2 / ED.view.s; ED.view.y = (y0 + y1) / 2 - (edH / 2 + 20) / ED.view.s; edDraw();
+}
+
+// ---- pointer handling ----
+const evPos = (e) => { const r = ed.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+function zoomAt(sx, sy, k) { const V = ED.view, p = toPlan(sx, sy); V.s = Math.max(0.12, Math.min(10, V.s * k)); V.x = p[0] - sx / V.s; V.y = p[1] - sy / V.s; edDraw(); }
+ed.addEventListener('wheel', e => { e.preventDefault(); const [sx, sy] = evPos(e); zoomAt(sx, sy, Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.0015))); }, { passive: false });
+ed.addEventListener('contextmenu', e => { e.preventDefault(); if (ED.chain || ED.draft || ED.poly) { ED.chain = ED.draft = ED.poly = null; edDraw(); } });
+ed.addEventListener('pointerdown', e => {
+  ed.setPointerCapture(e.pointerId); const sp = evPos(e); ED.ptrs.set(e.pointerId, sp);
+  if (ED.ptrs.size === 2) { // two fingers: pan + pinch, cancel whatever was being drawn
+    ED.draft = ED.doorDraft = ED.move = ED.down = null; const [a, b] = [...ED.ptrs.values()]; ED.pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; edDraw(); return;
+  }
+  if (ED.ptrs.size > 2) return;
+  const panning = ED.tool === 'pan' || ED.space || e.button === 1 || (e.button === 2);
+  if (e.button === 2) return;
+  if (panning) { ED.pan = { sx: sp[0], sy: sp[1], vx: ED.view.x, vy: ED.view.y }; ed.style.cursor = 'grabbing'; return; }
+  const raw = toPlan(sp[0], sp[1]); ED.down = { sp, moved: false };
+  if (ED.imgMove && BG[ED.floor]) { ED.move = { k: 'img', start: raw, bx: BG[ED.floor].x, by: BG[ED.floor].y }; return; }
+  const t = ED.tool;
+  if (t === 'wall') {
+    const p = snap(raw);
+    if (ED.chain) { addWallSeg(ED.chain.last, p); const closed = ED.chain.first[0] === p[0] && ED.chain.first[1] === p[1]; ED.chain.last = p; if (closed) ED.chain = ED.draft = null; else ED.draft = { a: p, b: p }; }
+    else ED.draft = { a: p, b: p, drag: true };
+  } else if (t === 'door') {
+    const nw = nearestWall(raw); if (!nw) { flash('Click on a wall to put a door in it.'); return; }
+    ED.doorDraft = { w: nw.w, len: nw.len, t0: nw.t, t1: nw.t };
+  } else if (t === 'select') {
+    const h = hitTest(raw);
+    if (h) {
+      setSel(h.k, h.i);
+      if (h.k === 'label') ED.move = { k: 'label', i: h.i, start: raw, ox: F().labels[h.i].x, oy: F().labels[h.i].y, pushed: false };
+      if (h.k === 'wall') { const w = F().walls[h.i], rs = 10 / ED.view.s; ED.move = Math.hypot(raw[0] - w.x1, raw[1] - w.y1) < rs ? { k: 'end', i: h.i, which: 1, pushed: false } : Math.hypot(raw[0] - w.x2, raw[1] - w.y2) < rs ? { k: 'end', i: h.i, which: 2, pushed: false } : { k: 'wall', i: h.i, start: snap(raw), w0: { ...w }, pushed: false }; }
+    } else setSel(null);
+  } else if (t === 'label') { /* placed on pointer up */ }
+  else if (t === 'open') { /* vertices on pointer up */ }
+  else if (t === 'calib') { /* points on pointer up */ }
+  edDraw();
+});
+ed.addEventListener('pointermove', e => {
+  const sp = evPos(e); const had = ED.ptrs.has(e.pointerId); if (had) ED.ptrs.set(e.pointerId, sp);
+  if (ED.pinch && ED.ptrs.size === 2) {
+    const [a, b] = [...ED.ptrs.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+    ED.view.x -= (m[0] - ED.pinch.m[0]) / ED.view.s; ED.view.y -= (m[1] - ED.pinch.m[1]) / ED.view.s; zoomAt(m[0], m[1], d / (ED.pinch.d || d)); ED.pinch = { d, m }; return;
+  }
+  if (ED.pan) { ED.view.x = ED.pan.vx - (sp[0] - ED.pan.sx) / ED.view.s; ED.view.y = ED.pan.vy - (sp[1] - ED.pan.sy) / ED.view.s; edDraw(); return; }
+  const raw = toPlan(sp[0], sp[1]); if (ED.down && Math.hypot(sp[0] - ED.down.sp[0], sp[1] - ED.down.sp[1]) > 6) ED.down.moved = true;
+  let p = ED.tool === 'label' || ED.tool === 'calib' ? snap(raw, true) : snap(raw);
+  if (ED.draft && e.shiftKey) p = ortho(ED.draft.a, p);
+  ED.hover = p;
+  $('#stat').hidden = false; $('#stat').textContent = `x ${ftin(p[0])} · y ${ftin(p[1])}${ED.draft ? ' · ' + ftin(Math.hypot(p[0] - ED.draft.a[0], p[1] - ED.draft.a[1])) : ''}`;
+  if (ED.draft) ED.draft.b = p;
+  if (ED.doorDraft) { const d = ED.doorDraft, w = d.w, ux = (w.x2 - w.x1) / d.len, uy = (w.y2 - w.y1) / d.len; d.t1 = Math.max(0, Math.min(d.len, (raw[0] - w.x1) * ux + (raw[1] - w.y1) * uy)); }
+  const mv = ED.move;
+  if (mv && ED.down) {
+    const f = F();
+    if (mv.k === 'label') { if (!mv.pushed) { pushUndo(); mv.pushed = true; } const l = f.labels[mv.i]; if (l) { l.x = Math.round(mv.ox + raw[0] - mv.start[0]); l.y = Math.round(mv.oy + raw[1] - mv.start[1]); planVer++; schedulePreview(); } }
+    else if (mv.k === 'end') { if (ED.down.moved) { if (!mv.pushed) { pushUndo(); mv.pushed = true; } const w = f.walls[mv.i]; if (w) { if (mv.which === 1) { w.x1 = p[0]; w.y1 = p[1]; } else { w.x2 = p[0]; w.y2 = p[1]; } planVer++; schedulePreview(); } } }
+    else if (mv.k === 'wall') { if (ED.down.moved) { if (!mv.pushed) { pushUndo(); mv.pushed = true; } const w = f.walls[mv.i], dx = p[0] - mv.start[0], dy = p[1] - mv.start[1]; if (w) { w.x1 = mv.w0.x1 + dx; w.y1 = mv.w0.y1 + dy; w.x2 = mv.w0.x2 + dx; w.y2 = mv.w0.y2 + dy; planVer++; schedulePreview(); } } }
+    else if (mv.k === 'img') { const bg = BG[ED.floor]; if (bg) { bg.x = mv.bx + raw[0] - mv.start[0]; bg.y = mv.by + raw[1] - mv.start[1]; } }
+  }
+  edDraw();
+});
+function endPtr(e) {
+  const had = ED.ptrs.has(e.pointerId); ED.ptrs.delete(e.pointerId);
+  if (ED.pinch) { if (ED.ptrs.size < 2) ED.pinch = null; if (!ED.ptrs.size) ED.down = null; return; }
+  if (ED.pan) { ED.pan = null; ed.style.cursor = ED.tool === 'pan' ? 'grab' : ED.tool === 'select' ? 'default' : 'crosshair'; return; }
+  if (!had || !ED.down) return;
+  const raw = toPlan(...ED.down.sp), moved = ED.down.moved, t = ED.tool, up = toPlan(...evPos(e)); ED.down = null;
+  if (ED.move) { const was = ED.move; ED.move = null; if (was.pushed) changed(); if (was.k === 'img') persistNoop(); return; }
+  if (t === 'wall') {
+    if (ED.draft && ED.draft.drag) {
+      if (moved) { let b = snap(up); if (e.shiftKey) b = ortho(ED.draft.a, b); addWallSeg(ED.draft.a, b); ED.draft = null; }
+      else { ED.chain = { first: ED.draft.a, last: ED.draft.a }; ED.draft = { a: ED.draft.a, b: ED.draft.a }; }
+    }
+  } else if (t === 'door' && ED.doorDraft) {
+    const d = ED.doorDraft; ED.doorDraft = null; const w = d.w, ux = (w.x2 - w.x1) / d.len, uy = (w.y2 - w.y1) / d.len;
+    let lo = Math.min(d.t0, d.t1), hi = Math.max(d.t0, d.t1);
+    if (hi - lo < 12) { lo = d.t0 - 18; hi = d.t0 + 18; if (lo < 0) { hi -= lo; lo = 0; } if (hi > d.len) { lo = Math.max(0, lo - (hi - d.len)); hi = d.len; } }
+    lo = Math.round(lo / 3) * 3; hi = Math.round(hi / 3) * 3;
+    const P = [w.x1 + ux * lo, w.y1 + uy * lo], Q = [w.x1 + ux * hi, w.y1 + uy * hi];
+    ED.sel = null; renderSel(); mutate(() => { C.addDoor(F(), P, Q); });
+  } else if (t === 'label' && !moved) {
+    const p = snap(raw, true);
+    mutate(() => { const l = C.addLabel(F(), p[0], p[1], $('#roomType').value); ED.sel = { k: 'label', i: F().labels.length - 1, f: ED.floor }; }); renderSel();
+    const nm = $('#selName'); if (nm) { nm.focus(); nm.select(); }
+  } else if (t === 'open' && !moved) {
+    const p = snap(raw);
+    if (ED.poly && ED.poly.length >= 3 && Math.hypot(p[0] - ED.poly[0][0], p[1] - ED.poly[0][1]) < 1) closePoly();
+    else (ED.poly = ED.poly || []).push(p);
+  } else if (t === 'calib' && !moved) {
+    ED.cal.pts.push(snap(raw, true)); if (ED.cal.pts.length === 2) { $('#calDlg').showModal(); }
+  }
+  edDraw();
+}
+ed.addEventListener('pointerup', endPtr); ed.addEventListener('pointercancel', e => { ED.ptrs.delete(e.pointerId); ED.pinch = ED.pan = ED.move = ED.down = null; });
+ed.addEventListener('pointerleave', () => { ED.hover = null; $('#stat').hidden = true; edDraw(); });
+ed.addEventListener('dblclick', () => { if (ED.tool === 'wall') { ED.chain = ED.draft = null; } else if (ED.tool === 'open' && ED.poly && ED.poly.length >= 3) closePoly(); edDraw(); });
+const persistNoop = () => {};
+function addWallSeg(a, b) {
+  if (Math.hypot(b[0] - a[0], b[1] - a[1]) < 3) return;
+  mutate(() => { C.addWall(F(), a, b, $('#wallType').value); });
+}
+function closePoly() { const pts = ED.poly; ED.poly = null; if (pts && pts.length >= 3) mutate(() => { C.addOpening(F(), pts, $('#openKind').value); }); }
+let flashT = 0; function flash(t) { const h = $('#hint'); h.textContent = t; clearTimeout(flashT); flashT = setTimeout(() => { h.textContent = mode === 'draw' ? DRAWHINT : HINT; }, 2500); }
+const DRAWHINT = 'Scroll or pinch to zoom · two fingers or Space+drag to pan · Undo with Ctrl+Z';
+addEventListener('keydown', e => {
+  if (mode !== 'draw') return; const tag = (e.target.tagName || '').toLowerCase(); const typing = tag === 'input' || tag === 'select' || tag === 'textarea';
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z' && !typing) { e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y' && !typing) { e.preventDefault(); redo(); return; }
+  if (typing) return;
+  if (e.key === ' ') { ED.space = true; e.preventDefault(); return; }
+  if (e.key === 'Escape') { ED.draft = ED.chain = ED.poly = ED.doorDraft = null; if (ED.tool === 'calib') { ED.cal = null; setTool('wall'); } edDraw(); return; }
+  if (e.key === 'Enter') { if (ED.tool === 'open' && ED.poly && ED.poly.length >= 3) closePoly(); ED.chain = ED.draft = null; edDraw(); return; }
+  if (e.key === 'Delete' || e.key === 'Backspace') { deleteSel(); e.preventDefault(); return; }
+  const k = { v: 'select', w: 'wall', d: 'door', r: 'label', o: 'open', h: 'pan' }[e.key.toLowerCase()]; if (k && !e.ctrlKey && !e.metaKey) setTool(k);
+});
+addEventListener('keyup', e => { if (e.key === ' ') ED.space = false; });
+
+// ---- plan settings ----
+$('#ceilIn').addEventListener('change', e => { const v = +e.target.value; if (v >= 72 && v <= 180) mutate(() => { plan.ceil = v; }); else e.target.value = plan.ceil; });
+$('#scaleBtn').addEventListener('click', () => { const k = +$('#scaleIn').value; if (!(k > 0.1 && k < 10) || Math.abs(k - 1) < 1e-6) return; mutate(() => C.rescalePlan(plan, k)); $('#scaleIn').value = 1; fitView(); });
+
+// ---- traced images ----
+function updImgBtns() { const has = !!BG[ED.floor]; ['#calBtn', '#imgMoveBtn', '#imgDelBtn', '#imgOp'].forEach(s => { $(s).disabled = !has; }); if (has) $('#imgOp').value = BG[ED.floor].op; }
+$('#imgBtn').onclick = () => $('#imgFile').click();
+function loadImage(src, floor, cb) {
+  const img = new Image(); img.onload = () => {
+    let im = img;
+    if (Math.max(img.width, img.height) > 2000) { const k = 2000 / Math.max(img.width, img.height), cv = document.createElement('canvas'); cv.width = Math.round(img.width * k); cv.height = Math.round(img.height * k); const c = cv.getContext('2d'); c.fillStyle = '#fff'; c.fillRect(0, 0, cv.width, cv.height); c.drawImage(img, 0, 0, cv.width, cv.height); im = new Image(); im.onload = () => cb(im, cv.toDataURL('image/jpeg', 0.85)); im.src = cv.toDataURL('image/jpeg', 0.85); return; }
+    cb(im, src);
+  }; img.onerror = () => flash('That image could not be read.'); img.src = src;
+}
+$('#imgFile').addEventListener('change', e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  const rd = new FileReader(); rd.onload = () => loadImage(rd.result, ED.floor, (im, src) => {
+    const [x, y] = toPlan(40, 90); BG[ED.floor] = { img: im, src, x, y, s: Math.max(0.05, 480 / im.width), op: 0.45 };
+    updImgBtns(); edDraw(); flash('Now set the scale: press Set scale and click two points a known distance apart.');
+  }); rd.readAsDataURL(f);
+});
+$('#imgOp').addEventListener('input', e => { if (BG[ED.floor]) { BG[ED.floor].op = +e.target.value; edDraw(); } });
+$('#imgDelBtn').onclick = () => { BG[ED.floor] = null; ED.imgMove = false; updImgBtns(); edDraw(); };
+$('#imgMoveBtn').onclick = () => { ED.imgMove = !ED.imgMove; $('#imgMoveBtn').setAttribute('aria-pressed', ED.imgMove); if (ED.imgMove) flash('Drag on the plan to slide the image.'); };
+$('#calBtn').onclick = () => { ED.tool = 'calib'; ED.cal = { pts: [] }; ED.imgMove = false; document.querySelectorAll('#tools [data-tool]').forEach(b => b.setAttribute('aria-pressed', false)); $('#toolHelp').textContent = HELP.calib; ed.style.cursor = 'crosshair'; flash(HELP.calib); edDraw(); };
+$('#calCancel').onclick = () => { $('#calDlg').close(); ED.cal = null; setTool('wall'); };
+$('#calOk').onclick = () => {
+  const ft = +$('#calFt').value, bg = BG[ED.floor], cal = ED.cal; $('#calDlg').close();
+  if (!(ft > 0) || !bg || !cal || cal.pts.length < 2) { ED.cal = null; setTool('wall'); return; }
+  const [a, b] = cal.pts, d = Math.hypot(b[0] - a[0], b[1] - a[1]); if (d < 1) { ED.cal = null; setTool('wall'); return; }
+  const k = ft * 12 / d; bg.s *= k; bg.x = a[0] - (a[0] - bg.x) * k; bg.y = a[1] - (a[1] - bg.y) * k; ED.cal = null; setTool('wall'); fitView();
+};
+
+// ---- files: JSON, DXF, reset ----
+function download(name, text, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+$('#saveBtn').onclick = () => {
+  const out = { app: 'zenvent-wifi-planner', v: 2, plan, spots: SPOTS, aps: APS.map(a => ({ lv: a.lv, x: a.x, y: a.y })), n: nAP };
+  if ($('#incImg').checked) out.images = BG.map(b => b ? { src: b.src, x: b.x, y: b.y, s: b.s, op: b.op } : null);
+  download((plan.name || 'wifi-plan').replace(/[^\w-]+/g, '-').toLowerCase() + '.json', JSON.stringify(out), 'application/json');
+};
+$('#loadBtn').onclick = () => $('#jsonFile').click();
+$('#jsonFile').addEventListener('change', e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  const rd = new FileReader(); rd.onload = () => { try { loadState(JSON.parse(rd.result), true); } catch (err) { alert('Could not import: ' + err.message); } }; rd.readAsText(f);
+});
+function loadState(o, undoable) {
+  const p = C.sanitizePlan(o.plan || o);
+  if (undoable) pushUndo(); else { ED.undo = []; ED.redo = []; updHist(); }
+  plan = p; SPOTS = (Array.isArray(o.spots) ? o.spots : []).slice(0, 50).map(d => cleanSpot(d && d.id || 's' + Math.random().toString(36).slice(2, 7), d)).filter(Boolean);
+  nAP = [1, 2, 3].includes(+o.n) ? +o.n : 2; pendingAPS = Array.isArray(o.aps) ? o.aps.filter(a => a && (a.lv === 1 || a.lv === 2) && isFinite(a.x) && isFinite(a.y)).map(a => ({ lv: a.lv, x: +a.x, y: +a.y })) : null;
+  BG[0] = BG[1] = null; ED.sel = null; selSpot = null;
+  const imgs = Array.isArray(o.images) ? o.images : [];
+  imgs.slice(0, 2).forEach((b, i) => { if (b && typeof b.src === 'string' && b.src.startsWith('data:image/')) loadImage(b.src, i, (im, src) => { BG[i] = { img: im, src, x: +b.x || 0, y: +b.y || 0, s: +b.s > 0 ? +b.s : 1, op: +b.op || 0.45 }; updImgBtns(); edDraw(); }); });
+  $('#ceilIn').value = plan.ceil; changed(); builtVer = -1; if (mode === 'results') { rebuild(); } else { runPreview(); fitView(); }
+}
+$('#demoBtn').onclick = () => { if (!confirm('Replace your plan with the demo house?')) return; loadState({ plan: C.demoPlan(), spots: C.demoSpots(), n: 2 }, true); };
+$('#blankBtn').onclick = () => { if (!confirm('Start a blank plan? (You can undo.)')) return; loadState({ plan: C.emptyPlan(), spots: [], n: 2 }, true); };
+$('#dxfBtn').onclick = () => $('#dxfFile').click();
+let dxf = null;
+$('#dxfFile').addEventListener('change', e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  const rd = new FileReader(); rd.onload = () => {
+    try {
+      dxf = C.parseDXF(rd.result); const names = Object.keys(dxf.layers);
+      if (!names.length) throw new Error('No LINE or LWPOLYLINE entities were found. Only ASCII DXF files are supported.');
+      $('#dxfInfo').textContent = `${dxf.segs.length} line segments on ${names.length} layer${names.length > 1 ? 's' : ''}.`;
+      $('#dxfUnit').value = ({ 1: '1', 2: '12', 4: '0.0393701', 5: '0.393701', 6: '39.3701' })[dxf.unitsGuess] || (dxf.extent > 5000 ? '0.0393701' : dxf.extent < 400 ? '12' : '1');
+      $('#dxfRows').innerHTML = names.map((n, i) => `<tr data-l="${esc(n)}"><td>${esc(n)}</td><td>${dxf.layers[n].count}</td>
+        <td><select class="dFloor"><option value="0" selected>Floor 1</option><option value="1">Floor 2</option><option value="-1">Skip</option></select></td>
+        <td><select class="dType"><option value="int" selected>Interior</option><option value="ext">Exterior</option><option value="wet">Bathroom</option><option value="garage">Garage</option><option value="door">Door</option></select></td></tr>`).join('');
+      $('#dxfDlg').showModal();
+    } catch (err) { alert('Could not read that DXF: ' + err.message); }
+  }; rd.readAsText(f);
+});
+$('#dxfCancel').onclick = () => $('#dxfDlg').close();
+$('#dxfOk').onclick = () => {
+  const layers = {}; document.querySelectorAll('#dxfRows tr').forEach(tr => { layers[tr.dataset.l] = { floor: +tr.querySelector('.dFloor').value, type: tr.querySelector('.dType').value }; });
+  try {
+    const p = C.dxfToPlan(dxf, { unit: +$('#dxfUnit').value, layers }); $('#dxfDlg').close();
+    loadState({ plan: p, spots: [], n: nAP }, true); setMode('draw'); fitView();
+  } catch (err) { alert(err.message); }
+};
+$('#dxfDlg').addEventListener('click', e => { if (e.target === $('#dxfDlg')) $('#dxfDlg').close(); });
+
+// ---- mode switch ----
+function setMode(m) {
+  mode = m; document.body.dataset.mode = m;
+  $('#modeRes').setAttribute('aria-pressed', m === 'results'); $('#modeDraw').setAttribute('aria-pressed', m === 'draw');
+  if (m === 'results') { $('#hint').textContent = addMode ? $('#hint').textContent : HINT; if (builtVer !== planVer || !M) rebuild(); else { setView(view); update(false); } resize(); }
+  else { setAddMode(false); $('#hint').textContent = DRAWHINT; $('#ceilIn').value = plan.ceil; runPreview(); resize(); fitView(); setTool(ED.tool === 'calib' ? 'wall' : ED.tool); updImgBtns(); renderSel(); updHist(); $('#stat').hidden = true; }
+}
+$('#modeRes').onclick = () => setMode('results'); $('#modeDraw').onclick = () => setMode('draw'); $('#doneBtn').onclick = () => setMode('results');
+document.addEventListener('click', e => { if (e.target.id === 'planWarnGo') setMode('draw'); });
+
+// ---------- boot ----------
+(function load() {
+  let st = null;
+  try { const raw = localStorage.getItem(KEY); if (raw) st = JSON.parse(raw); } catch (e) {}
+  try { if (st && st.plan) { loadStateBoot(st); return; } } catch (e) { console.warn('Saved plan ignored:', e); }
+  loadStateBoot({ plan: C.demoPlan(), spots: C.demoSpots(), n: 2 });
+  function loadStateBoot(o) {
+    plan = C.sanitizePlan(o.plan); SPOTS = (Array.isArray(o.spots) ? o.spots : []).map(d => cleanSpot(d && d.id || 's' + Math.random().toString(36).slice(2, 7), d)).filter(Boolean);
+    nAP = [1, 2, 3].includes(+o.n) ? +o.n : 2; pendingAPS = Array.isArray(o.aps) ? o.aps.filter(a => a && isFinite(a.x) && isFinite(a.y) && (a.lv === 1 || a.lv === 2)) : null;
+  }
+})();
+note('Spots are saved in this browser, together with your plan.');
+document.body.dataset.mode = 'results';
+resize(); rebuild(); frame();
+window.__planner = { C, get plan() { return plan; }, get M() { return M; }, get APS() { return APS; }, setMode, rebuild };
+})();
+</script>
+</body>
+</html>
