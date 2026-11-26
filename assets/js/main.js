@@ -90,6 +90,9 @@
 				$window.trigger('scroll');
 			});
 
+		if (document.readyState === 'complete')
+			$window.trigger('scroll');
+
 		return $(this);
 
 	};
@@ -105,11 +108,14 @@
 			$navPanelToggle, $navPanel, $navPanelInner;
 
 		// Disable animations/transitions until the page has loaded.
-			$window.on('load', function() {
+			// jQuery 3: ready can fire after load, so check readyState too.
+			var removeLoading = function() {
 				window.setTimeout(function() {
 					$body.removeClass('is-loading');
 				}, 100);
-			});
+			};
+			if (document.readyState === 'complete') removeLoading();
+			else $window.on('load', removeLoading);
 
 		// Prioritize "important" elements on medium.
 			skel.on('+medium -medium', function() {
