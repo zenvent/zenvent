@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<script>if(new URLSearchParams(location.search).has('hero'))document.documentElement.classList.add('hero')</script>
+<script>{const q=new URLSearchParams(location.search);if(q.has('hero')||q.has('preview'))document.documentElement.classList.add('hero')}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Wi-Fi Planner · ZENVENT</title>
 <meta name="description" content="Interactive 3D Wi-Fi planner: draw or upload a floor plan, place one to three ceiling access points, mark where people use their phones, and let the optimizer find the best spots.">
@@ -169,6 +169,7 @@ dialog .btnrow { margin-top: 12px; justify-content: flex-end; }
   .modes { margin-left: 0; }
 }
 html.hero, html.hero body { background: transparent !important; overflow: hidden; }
+html.hero #vp { touch-action: none; }
 html.hero .app > *:not(#vp), html.hero body > *:not(.app) { display: none !important; }
 html.hero .app { display: block !important; height: 100vh; padding: 0 !important; }
 html.hero #vp { position: fixed !important; inset: 0 !important; border: 0 !important; }

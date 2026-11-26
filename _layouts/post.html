@@ -6,6 +6,7 @@ Front matter options:
   topics: [Software, Hardware, ...]   filter tabs on the home page
   hero: app                           no banner; the embedded app leads the post
   app: /images/<slug>/app.html        page embedded when hero: app
+  app_embed: /images/<slug>/app.html?preview   lighter view used inline (default: app)
   app_caption: "..."                  text after the full-screen button
   feature_live: /images/<slug>/x?hero animated page shown on the home featured card
 {%- endcomment -%}
@@ -16,7 +17,7 @@ Front matter options:
   {%- if page.excerpt %}<p class="sub">{{ page.excerpt | strip_html }}</p>{% endif %}
   <div class="by">Zac · {{ page.date | date: '%b %-d, %Y' }}</div>
   {%- if page.hero == 'app' and page.app %}
-  <div class="appembed"><iframe src="{{ page.app | relative_url }}" title="{{ page.title | escape }}" allow="fullscreen"></iframe></div>
+  <div class="appembed"><iframe src="{{ page.app_embed | default: page.app | relative_url }}" title="{{ page.title | escape }}" allow="fullscreen"></iframe></div>
   <p class="appcap"><a href="{{ page.app | relative_url }}" target="_blank" rel="noopener">Open full screen ↗</a>{% if page.app_caption %}<span>{{ page.app_caption }}</span>{% endif %}</p>
   {%- elsif page.image %}
   <div class="hero"><img src="{{ page.image | relative_url }}" alt="{{ page.title | escape }}"></div>
