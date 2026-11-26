@@ -49,12 +49,13 @@ main.wrap{width:100%;max-width:1100px;margin:0 auto;padding:22px 20px 70px;flex:
 /* list */
 .secbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:34px 0 12px;flex-wrap:wrap}
 .secbar h3{font-size:24px}
-.tabs{display:flex;gap:4px;background:var(--surface2);padding:4px;border-radius:999px;overflow-x:auto;scrollbar-width:none;max-width:100%}
-.tabs::-webkit-scrollbar{display:none}
-.tabs button{border:0;background:none;color:var(--muted);font:500 13.5px var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.secbar .tabs{flex:1 1 auto;justify-content:flex-end}
+@media(max-width:860px){.secbar .tabs{justify-content:flex-start;flex-basis:100%}}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;max-width:100%}
+.tabs button{border:1px solid var(--line);background:var(--surface);color:var(--muted);font:500 14px var(--f-body);padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;min-height:36px}
 .tabs button span{font:11px var(--f-mono);opacity:.7;margin-left:5px}
 .tabs button:hover{color:var(--fg)}
-.tabs button.on{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.tabs button.on{background:var(--accent);border-color:var(--accent);color:var(--accentFg)}
 .yr{font:12px var(--f-mono);color:var(--muted);letter-spacing:.1em;margin:20px 0 8px;display:flex;align-items:center;gap:10px}
 .yr:after{content:"";flex:1;height:1px;background:var(--line)}
 .list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -149,7 +150,6 @@ main.wrap{width:100%;max-width:1100px;margin:0 auto;padding:22px 20px 70px;flex:
   main.wrap{padding:14px 12px 50px}
   .feat .b{padding:16px 16px 18px;gap:8px}.feat h2{font-size:30px}.feat p{font-size:16px}
   .secbar{margin:24px 0 6px}.secbar h3{font-size:21px}
-  .tabs{-webkit-mask:linear-gradient(90deg,#000 85%,transparent);mask:linear-gradient(90deg,#000 85%,transparent)}
   .row{grid-template-columns:148px 1fr;gap:12px;padding:8px}.row h4{font-size:17.5px}.row p{font-size:13.5px}.row .m{margin-top:4px;font-size:10.5px;letter-spacing:.02em}
   .zpost .sub{font-size:18px}.prose{font-size:17px}
   .hero{margin:0 -12px 22px;border-radius:0}
