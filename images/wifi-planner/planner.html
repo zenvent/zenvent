@@ -1067,8 +1067,8 @@ const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n
 const mats = {};
 function makeMats() {
   const c = (n) => new THREE.Color(css(n) || '#888');
-  const set = (k, color, op) => { if (!mats[k]) mats[k] = new THREE.MeshLambertMaterial({ transparent: true, side: THREE.DoubleSide }); mats[k].color = color; mats[k].opacity = op; mats[k].depthWrite = op > 0.6; };
-  set('wall', c('--wall'), 0.5); set('floor', c('--floor'), 1); set('beam', c('--beam'), 0.95);
+  const set = (k, color, op, side) => { if (!mats[k]) mats[k] = new THREE.MeshLambertMaterial({ transparent: true, side: side || THREE.DoubleSide }); mats[k].color = color; mats[k].opacity = op; mats[k].depthWrite = op > 0.6; };
+  set('wall', c('--wall'), 0.26, THREE.FrontSide); set('floor', c('--floor'), 1); set('beam', c('--beam'), 0.95);
 }
 makeMats();
 // merged boxes from plan-space quads (inches): [[x,y]x4], vertical extent in feet
@@ -1146,7 +1146,7 @@ function buildScene() {
     const m = L.mask, base = li === 0 ? 0 : H.L2floor / FT;
     const fm = li === 1 ? L.slab : L.floorCells;
     GEO[li].add(new THREE.Mesh(boxesGeometry(cellRects(fm, m).map(rectQuad), base - (li === 0 ? 0.3 : 0.4), base), mats.floor));
-    GEO[li].add(Object.assign(new THREE.Mesh(boxesGeometry(L.walls.map(wallQuad), base, base + (li === 0 ? H.L1ceil : H.L2ceil - H.L2floor) / FT), mats.wall), { renderOrder: 2 }));
+    GEO[li].add(Object.assign(new THREE.Mesh(boxesGeometry(L.walls.map(wallQuad), base + 0.06, base + (li === 0 ? H.L1ceil : H.L2ceil - H.L2floor) / FT), mats.wall), { renderOrder: 2 }));
     const cv = document.createElement('canvas'); cv.width = m.w; cv.height = m.h;
     const tex = new THREE.CanvasTexture(cv); tex.magFilter = THREE.LinearFilter; tex.minFilter = THREE.LinearFilter;
     const W = m.w * m.cell / FT, Hh = m.h * m.cell / FT;
