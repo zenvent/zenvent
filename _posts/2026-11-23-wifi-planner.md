@@ -8,7 +8,6 @@ topics: [Software, Home]
 hero: app
 app: /images/wifi-planner/planner.html
 app_caption: "Drag to orbit, scroll to zoom. Your plans stay in your own browser."
-feature_live: /images/wifi-planner/planner.html?hero
 ---
 
 I'm upgrading my network to two ceiling-mounted Wi-Fi 7 access points, one per floor, so I wanted to plot where they should go before cutting any drywall. My first idea was to use AI to pull my house's layout from government sites, but the detail wasn't good enough. So instead I used the map data from my two robot vacuums, which have been LiDAR-mapping the house for years. A tape measure fixed the few distances that were off, and I approximated the wall thicknesses.
