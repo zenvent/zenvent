@@ -27,13 +27,12 @@
 <link rel="alternate" type="application/atom+xml" title="ZENVENT" href="{{ '/feed.xml' | relative_url }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap">
 <link rel="stylesheet" href="{{ '/assets/css/zv.css' | relative_url }}">
 </head>
 <body>
 <header class="top">
-  <a class="logo" href="{{ '/' | relative_url }}">zenvent<em>.</em></a>
-  <span class="tagline">{{ site.bio }}</span>
+  <a class="logo" href="{{ '/' | relative_url }}">ZENVENT</a>
   <nav>
     <a href="{{ '/' | relative_url }}"{% if page.url == '/' or page.layout == 'post' %} class="on"{% endif %}>Builds</a>
     <a href="{{ '/about/' | relative_url }}"{% if page.url contains '/about' %} class="on"{% endif %}>About</a>

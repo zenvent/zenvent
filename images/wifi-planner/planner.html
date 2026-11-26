@@ -8,7 +8,7 @@
 <meta name="description" content="Interactive 3D Wi-Fi planner: draw or upload a floor plan, place one to three ceiling access points, mark where people use their phones, and let the optimizer find the best spots.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
 /* Layout: one-screen survey tool. 3D viewport left (fills), instrument panel right; stacks on phones. */
 :root {
@@ -26,7 +26,7 @@
   --beam: #e0a35e;
   --warn: #ff8a7a;
   color-scheme: dark;
-  --font-display: "Fraunces", Georgia, serif;
+  --font-display: "Inter Tight", "Inter", system-ui, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
@@ -1055,7 +1055,7 @@ const camera = new THREE.PerspectiveCamera(38, 1, 0.5, 800);
 const controls = new THREE.OrbitControls(camera, canvas);
 controls.enableDamping = true; controls.dampingFactor = 0.12;
 controls.autoRotateSpeed = 0.45;
-let idleT = 0; const IDLE_MS = 5000;
+let idleT = 0; const IDLE_MS = 3000;
 function stopSpin() { controls.autoRotate = false; clearTimeout(idleT); }
 function armSpin() { clearTimeout(idleT); idleT = setTimeout(() => { if (controls.enableRotate && !matchMedia('(prefers-reduced-motion: reduce)').matches) controls.autoRotate = true; }, IDLE_MS); }
 ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach(ev => addEventListener(ev, () => { stopSpin(); armSpin(); }, { passive: true, capture: true }));
@@ -1117,8 +1117,8 @@ function addLabel(html, cls, pos, level, ref) {
 // Text painted flat on the floor (instead of HTML labels floating over the walls)
 function makeDecal(hFt) {
   const cv = document.createElement('canvas'), ctx = cv.getContext('2d'), tex = new THREE.CanvasTexture(cv);
-  tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter;
-  const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false });
+  tex.minFilter = THREE.LinearMipmapLinearFilter; tex.magFilter = THREE.LinearFilter; tex.generateMipmaps = true; tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -8 });
   const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mat); mesh.rotation.x = -Math.PI / 2; mesh.renderOrder = 4;
   let last = '';
   mesh.userData.set = (name, sub) => {
@@ -1156,7 +1156,7 @@ function buildScene() {
     L.labels.forEach((lab, ri) => {
       if (lab.type === 'closet') return;
       roomLabels.push(addLabel(esc(lab.name), 'room', [lab.x / FT, base + 0.3, lab.y / FT], li, { li, ri }));
-      const dc = makeDecal(1.0); dc.position.set(lab.x / FT, base + 0.08, lab.y / FT); dc.userData.set(lab.name, ''); dc.userData.ref = { li, ri }; GEO[li].add(dc); roomDecals.push(dc);
+      const dc = makeDecal(1.0); dc.position.set(lab.x / FT, base + 0.2, lab.y / FT); dc.userData.set(lab.name, ''); dc.userData.ref = { li, ri }; GEO[li].add(dc); roomDecals.push(dc);
     });
   });
   buildBeam();
@@ -1283,7 +1283,7 @@ function syncSpotObjs() {
       const dot = new THREE.Mesh(new THREE.CircleGeometry(0.28, 20), spotMat.line);
       [fill, ring, dot].forEach(m => { m.rotation.x = -Math.PI / 2; m.renderOrder = 3; m.userData.spot = s.id; grp.add(m); });
       const lbl = document.createElement('div'); lbl.className = 'lbl spotlbl'; labelsEl.appendChild(lbl);
-      const dec = makeDecal(0.8); dec.position.set(0, 0.03, R + 0.75); grp.add(dec);
+      const dec = makeDecal(0.8); dec.position.set(0, 0.15, R + 0.75); grp.add(dec);
       o = { grp, fill, lbl, dec, r: k.r }; spotObjs.set(s.id, o);
     }
     const g = GR[s.lv - 1]; if (o.grp.parent !== g) { o.grp.parent && o.grp.parent.remove(o.grp); g.add(o.grp); }
@@ -2026,7 +2026,8 @@ const HERO = new URLSearchParams(location.search).has('hero');
 })();
 note('Spots are saved in this browser, together with your plan.');
 document.body.dataset.mode = 'results';
-resize(); rebuild(); frame(); armSpin();
+resize(); rebuild(); frame();
+if (controls.enableRotate && !matchMedia('(prefers-reduced-motion: reduce)').matches) controls.autoRotate = true;
 if (HERO) { controls.autoRotate = true; controls.autoRotateSpeed = 0.55; controls.enabled = false; requestAnimationFrame(() => requestAnimationFrame(() => { try { parent.postMessage('zv-hero-ready', '*'); } catch (e) {} })); }
 window.__planner = { C, get plan() { return plan; }, get M() { return M; }, get APS() { return APS; }, setMode, rebuild };
 })();
