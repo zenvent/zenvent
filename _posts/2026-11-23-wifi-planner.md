@@ -6,8 +6,8 @@ tags: [networking, home, simulation]
 image: "/images/wifi-planner/banner-v2.jpg"
 topics: [Software, Home]
 hero: app
-app: /images/wifi-planner/planner.html?v=2
-app_embed: /images/wifi-planner/planner.html?preview&v=2
+app: /images/wifi-planner/planner.html?v=3
+app_embed: /images/wifi-planner/planner.html?preview&v=3
 app_caption: "Drag to orbit. Open it full screen to move access points, add spots and edit the house."
 ---
 
