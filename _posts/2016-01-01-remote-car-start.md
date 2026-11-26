@@ -4,6 +4,7 @@ title: "Cellular Car Starter"
 excerpt: "How to start your car with a cellphone"
 tags: [tutorial, electronics]
 image: "/images/remoteStart.jpg"
+topics: [Hardware]
 ---
 
 I figured out a way to cheaply start my car using a text message. I wanted to be able to do this because my office is quite the distance from where I park, and my current remote starter has a range of only 20 feet or so. Learn how to do this yourself by click the link below or watching my video tutorial.

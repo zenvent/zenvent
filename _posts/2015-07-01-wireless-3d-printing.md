@@ -4,6 +4,7 @@ title: "3D Print Wirelessly"
 excerpt: "How to use your 3D printer wirelessly"
 tags: [tutorial, software]
 image: "/images/octoprint-600x400.png"
+topics: [3D Printing, Software]
 ---
 
 

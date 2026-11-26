@@ -1,97 +1,58 @@
 ---
-layout: null
+layout: zv
 title: ZENVENT
-description: Home
+description: "Think. Build. Create. Software by day, hardware by night: CAD, fabrication, electronics, firmware and home automation."
 sitemap:
     priority: 1.0
-    lastmod: 2018-7-08
     changefreq: weekly
 ---
-<!DOCTYPE HTML>
-<html>
-	<head>
-    {% include head.html %}
-	</head>
-	<body class="is-loading">
+{%- assign f = site.posts.first -%}
+{%- assign rest = site.posts | slice: 1, site.posts.size -%}
+<a class="feat" href="{{ f.url | relative_url }}">
+  {%- if f.feature_live %}
+  <div class="live" style="background-image:url('{{ f.image | relative_url }}')" data-src="{{ f.feature_live | relative_url }}"></div>
+  {%- else %}
+  <div class="thumb"><div class="bl" style="background-image:url('{{ f.image | relative_url }}')"></div><img src="{{ f.image | relative_url }}" alt="" onload="window.zvFit&&zvFit(this)"></div>
+  {%- endif %}
+  <div class="b">
+    <span class="kick">Latest build · {{ f.date | date: '%b %Y' }}</span>
+    <h2>{{ f.title }}</h2>
+    <p>{{ f.excerpt | strip_html }}</p>
+    <span class="go">Read the build →</span>
+  </div>
+</a>
 
-		<!-- Wrapper -->
-		<div id="wrapper" class="fade-in">
-	
-			<!-- Header -->
-			<header id="header">
-				<a href="{{ "/" | absolute_url }}" class="logo">{{site.title}}</a>
-			</header>
-	
-	
-			<!-- Nav -->
-			<nav id="nav">
-				{% include nav.html %}
-			</nav>
-	
-			<!-- Main -->
-			<div id="main">
-	
-				<!-- Featured Post -->
-				<article class="post featured">
-					<div class="postCard" onclick="location.href='{{ post.url | absolute_url }}';" style="cursor: pointer; margin: 2rem;">
-						{% assign post = site.posts.first %}
-					
-					<a href="{{ post.url | absolute_url }}" class="image fit">
-						<img src="{{ post.image | absolute_url }}" alt="" />
-					</a>
-					<header>
-						<h2>
-							<a href="{{ post.url | absolute_url }}">{{ post.title }}</a>
-						</h2>
-					</header>
-					<a href="{{ post.url | absolute_url }}">{{ post.excerpt }}</a>
-					</div>
-				</article>
+{%- assign order = "Software|Hardware|3D Printing|CAD|Woodworking|Games|Home" | split: "|" %}
+<div class="secbar">
+  <h3 id="sectitle">More builds</h3>
+  <div class="tabs" role="toolbar" aria-label="Filter builds">
+    <button class="on" data-t="All">All<span>{{ rest.size }}</span></button>
+    {%- for t in order -%}
+      {%- assign n = 0 -%}
+      {%- for p in rest -%}{%- if p.topics contains t -%}{%- assign n = n | plus: 1 -%}{%- endif -%}{%- endfor -%}
+      {%- if n > 0 %}
+    <button data-t="{{ t }}">{{ t }}<span>{{ n }}</span></button>
+      {%- endif -%}
+    {%- endfor %}
+  </div>
+</div>
 
-				<section class="posts">
-					{% for post in site.posts offset:1 %}
-					<article>
-						<div class="postCard" onclick="location.href='{{ post.url | absolute_url }}';" style="cursor: pointer;">
-						<a href="{{ post.url | absolute_url }}" class="image fit">
-							<img src="{{ post.image | absolute_url }}" alt="" />
-						</a>
-						<header>
-								<h2>
-									<a href="{{ post.url | absolute_url }}">{{ post.title }}</a>
-								</h2>
-							</header>
-						<a href="{{ post.url | absolute_url }}">{{ post.excerpt }}</a>
-					</div>
-					</article>
-					{% endfor %}
-
-					{% if site.posts%2 != 0 %}
-					<article>
-						<div class="postCard" onclick="location.href='{{ post.url | absolute_url }}';" style="cursor: pointer;">
-						<a href="{{ post.url | absolute_url }}" class="image fit">
-							<img src="{{ post.image | absolute_url }}" alt="" />
-						</a>
-						<header>
-								<h2>
-									<a href="{{ post.url | absolute_url }}">{{ post.title }}</a>
-								</h2>
-							</header>
-						<a href="{{ post.url | absolute_url }}">{{ post.excerpt }}</a>
-					</div>
-					</article>
-					{% endif %}
-
-				</section>
-			
-			</div>
-	
-			<!-- Footer -->
-			{% include foot.html %}
-	
-		</div>
-	
-		<!-- Scripts -->
-		{% include scripts-main.html %} {% include tracking.html %}
-	
-	</body>
-</html>
+{%- assign groups = rest | group_by_exp: "p", "p.date | date: '%Y'" %}
+{%- for g in groups %}
+<section class="yrgroup">
+  <div class="yr">{{ g.name }}</div>
+  <div class="list">
+    {%- for p in g.items %}
+    <a class="row" href="{{ p.url | relative_url }}" data-topics="{{ p.topics | join: '|' }}">
+      <div class="thumb"><div class="bl" style="background-image:url('{{ p.image | relative_url }}')"></div><img loading="lazy" src="{{ p.image | relative_url }}" alt="" onload="window.zvFit&&zvFit(this)"></div>
+      <div>
+        <h4>{{ p.title }}</h4>
+        <p>{{ p.excerpt | strip_html }}</p>
+        <div class="m">{{ p.date | date: '%b %Y' }}{% if p.topics %} · {{ p.topics | join: ', ' }}{% endif %}</div>
+      </div>
+    </a>
+    {%- endfor %}
+  </div>
+</section>
+{%- endfor %}
+<p class="empty" id="nothing" hidden>Nothing else here yet.</p>

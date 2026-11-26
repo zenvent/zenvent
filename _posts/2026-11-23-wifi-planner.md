@@ -4,6 +4,11 @@ title: "Smart WiFi Placement"
 excerpt: "I modeled my house in 3D to figure it out"
 tags: [networking, home, simulation]
 image: "/images/wifi-planner/banner.jpg"
+topics: [Software, Home]
+hero: app
+app: /images/wifi-planner/planner.html
+app_caption: "Drag to orbit, scroll to zoom. Your plans stay in your own browser."
+feature_live: /images/wifi-planner/planner.html?hero
 ---
 
 I'm upgrading my network to two ceiling-mounted Wi-Fi 7 access points, one per floor, so I wanted to plot where they should go before cutting any drywall. My first idea was to use AI to pull my house's layout from government sites, but the detail wasn't good enough. So instead I used the map data from my two robot vacuums, which have been LiDAR-mapping the house for years. A tape measure fixed the few distances that were off, and I approximated the wall thicknesses.
@@ -14,12 +19,8 @@ From there I accounted for the wave shape of the AP's signal, walls, floors, bea
 
 The model tries every pair of ceiling spots and scores how well each covers the house. The winner was one AP per floor, roughly stacked near the middle of the house, which is also an easy cable run. I'll check it against real readings once the APs are up.
 
-Below you can use the app for yourself, or use this page to guide your AI to do the same.
+Above you can use the app for yourself, or use this page to guide your AI to do the same.
 
-<div style="margin: 1.5rem 0 0.5rem;">
-  <iframe src="/images/wifi-planner/planner.html" title="Interactive two-floor Wi-Fi planner" loading="lazy" style="width: 100%; height: 780px; border: 1px solid #c6ced3; border-radius: 6px;"></iframe>
-</div>
-<p style="font-size: 0.9rem;"><a href="/images/wifi-planner/planner.html" target="_blank" rel="noopener">Open the planner full screen</a> · Drag to orbit, scroll to zoom. Your plans stay in your own browser.</p>
 
 ## How the model works
 

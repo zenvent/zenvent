@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{%- assign t = page.title | default: site.title -%}
+{%- if page.layout == 'post' -%}{%- assign t = page.title | append: ' · ZENVENT' -%}{%- endif -%}
+<title>{{ t }}</title>
+{%- assign desc = page.excerpt | default: page.description | default: site.bio | strip_html | strip_newlines | truncate: 160 %}
+<meta name="description" content="{{ desc | escape }}">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<meta property="og:site_name" content="ZENVENT">
+<meta property="og:title" content="{{ page.title | default: site.title | escape }}">
+<meta property="og:description" content="{{ desc | escape }}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+<meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+{%- if page.image %}
+<meta property="og:image" content="{{ page.image | relative_url | prepend: site.url }}">
+<meta name="twitter:card" content="summary_large_image">
+{%- endif %}
+<meta name="theme-color" content="#121212">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/icon/apple-touch-icon.png' | relative_url }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/icon/favicon-32x32.png' | relative_url }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/icon/favicon-16x16.png' | relative_url }}">
+<link rel="manifest" href="{{ '/assets/icon/manifest.json' | relative_url }}">
+<link rel="shortcut icon" href="{{ '/assets/icon/favicon.ico' | relative_url }}">
+<link rel="alternate" type="application/atom+xml" title="ZENVENT" href="{{ '/feed.xml' | relative_url }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="{{ '/assets/css/zv.css' | relative_url }}">
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="{{ '/' | relative_url }}">zenvent<em>.</em></a>
+  <span class="tagline">{{ site.bio }}</span>
+  <nav>
+    <a href="{{ '/' | relative_url }}"{% if page.url == '/' or page.layout == 'post' %} class="on"{% endif %}>Builds</a>
+    <a href="{{ '/about/' | relative_url }}"{% if page.url contains '/about' %} class="on"{% endif %}>About</a>
+    <a href="{{ '/contact/' | relative_url }}"{% if page.url contains '/contact' %} class="on"{% endif %}>Contact</a>
+  </nav>
+</header>
+<main class="wrap">
+{{ content }}
+</main>
+<footer class="foot">
+  <span>© {{ site.time | date: '%Y' }} Zac · ZENVENT</span>
+  <nav><a href="{{ site.youtube }}" rel="me noopener">YouTube</a><a href="{{ site.github }}" rel="me noopener">GitHub</a><a href="{{ site.linkedin }}" rel="me noopener">LinkedIn</a><a href="{{ '/feed.xml' | relative_url }}">RSS</a></nav>
+</footer>
+<script src="{{ '/assets/js/zv.js' | relative_url }}" defer></script>
+</body>
+</html>

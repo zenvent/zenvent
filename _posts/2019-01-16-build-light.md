@@ -4,6 +4,7 @@ title: "CI Build Light"
 excerpt: "Animated lights for CI build status."
 tags: [random]
 image: "/images/buildLight/buildLight.jpg"
+topics: [Hardware, Software]
 ---
 
 I wanted a CI pipeline build light that was cheap to make and was extendable. In this post I'll describe how I made a 3x job build light with a Raspberry Pi and an individually addressable LED light strand.

@@ -1,42 +1,6 @@
-<!DOCTYPE HTML>
-<html>
-
-<head>
-	{% include head.html %}
-</head>
-
-<body class="is-loading">
-
-	<!-- Wrapper -->
-	<div id="wrapper" class="fade-in">
-
-		<!-- Header -->
-		<header id="header">
-			<a href="{{ "/" | absolute_url }}" class="logo">{{site.title}}</a>
-		</header>
-
-		<!-- Nav -->
-		<nav id="nav">
-			{% include nav.html %}
-		</nav>
-
-		<!-- Main -->
-		<div id="main" style="padding: 2rem;">
-
-			<!-- Post -->
-			<section class="post">
-				{{content}}
-			</section>
-		</div>
-
-		<!-- Footer -->
-		{% include foot.html %}
-
-	</div>
-
-	<!-- Scripts -->
-	{% include scripts-main.html %} {% include tracking.html %}
-
-</body>
-
-</html>
+---
+layout: zv
+---
+<article class="zpage prose">
+{{ content }}
+</article>

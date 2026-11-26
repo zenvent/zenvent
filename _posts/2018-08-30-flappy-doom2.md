@@ -4,6 +4,7 @@ title: "Flappy Doom 2"
 excerpt: "Fly through heck. Dodge pillars. Die a lot."
 tags: [random]
 image: "/images/flappyDoom2/largeBanner.PNG"
+topics: [Games, Software]
 ---
 
 I decided to re-write flappy doom as it has over 1,529 installs! I had since forgotten how to use Unity, which has official 2D support now.

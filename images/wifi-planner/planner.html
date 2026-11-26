@@ -2,36 +2,34 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>if(new URLSearchParams(location.search).has('hero'))document.documentElement.classList.add('hero')</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Wi-Fi Planner · ZENVENT</title>
 <meta name="description" content="Interactive 3D Wi-Fi planner: draw or upload a floor plan, place one to three ceiling access points, mark where people use their phones, and let the optimizer find the best spots.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
 /* Layout: one-screen survey tool. 3D viewport left (fills), instrument panel right; stacks on phones. */
 :root {
-  --bg: #e9ecee;
-  --surface: #f8f9f9;
-  --ink: #182027;
-  --muted: #5a6670;
-  --line: #c6ced3;
-  --accent: #2f45c0;
-  --ap-b: #b5368a;
-  --wall: #3a4650;
-  --floor: #d6dce0;
-  --beam: #a0662a;
-  --warn: #b23b2e;
-  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --font-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  /* zenvent.com Graphite theme (single theme, matches the site) */
+  --bg: #121212;
+  --surface: #1b1b1b;
+  --ink: #ededed;
+  --muted: #9a9a9a;
+  --line: #2b2b2b;
+  --accent: #c6f432;
+  --accent-fg: #121212;
+  --ap-b: #f07cc6;
+  --wall: #b9bcbf;
+  --floor: #262626;
+  --beam: #e0a35e;
+  --warn: #ff8a7a;
+  color-scheme: dark;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #11161a; --surface: #182027; --ink: #e3e8eb; --muted: #8c99a3; --line: #2b353d;
-  --accent: #8e9cff; --ap-b: #f07cc6; --wall: #a9b6bf; --floor: #222b33; --beam: #d39a5c; --warn: #ff8a7a; color-scheme: dark } }
-:root[data-theme="dark"] {
-  --bg: #11161a; --surface: #182027; --ink: #e3e8eb; --muted: #8c99a3; --line: #2b353d;
-  --accent: #8e9cff; --ap-b: #f07cc6; --wall: #a9b6bf; --floor: #222b33; --beam: #d39a5c; --warn: #ff8a7a; color-scheme: dark }
 
 [hidden] { display: none !important; }
 html, body { height: 100%; margin: 0; }
@@ -39,14 +37,14 @@ html, body { height: 100%; margin: 0; }
 body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 14px; line-height: 1.45; }
 .app { display: grid; grid-template-columns: minmax(0, 1fr) 370px; grid-template-rows: auto minmax(0, 1fr); height: 100%; min-height: 560px; }
 header { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; padding-block: 12px 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); border-bottom: 1px solid var(--line); }
-h1 { margin: 0; font-family: var(--font-display); font-stretch: 112%; font-weight: 750; font-size: 20px; letter-spacing: -0.01em; text-wrap: balance; }
+h1 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 22px; letter-spacing: -0.015em; text-wrap: balance; }
 .sub { color: var(--muted); font-size: 13px; }
 .viewport { position: relative; min-width: 0; min-height: 0; overflow: hidden; }
 #gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
 .labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 .lbl { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; text-align: center; font-size: 11px; font-weight: 600; color: var(--ink); text-shadow: 0 0 3px var(--bg), 0 0 6px var(--bg); line-height: 1.15; }
 .lbl small { display: block; font-family: var(--font-mono); font-weight: 400; font-size: 10px; color: var(--muted); }
-.lbl.ap { font-family: var(--font-mono); font-size: 11px; color: #fff; text-shadow: none; padding: 2px 6px; border-radius: 3px; transform: translate(-50%, -170%); }
+.lbl.ap { font-family: var(--font-mono); font-size: 11px; color: #121212; font-weight: 700; text-shadow: none; padding: 2px 6px; border-radius: 3px; transform: translate(-50%, -170%); }
 .lbl.edge { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
 .lbl.beam { font-size: 10px; color: var(--beam); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .toolbar { position: absolute; top: 12px; left: max(12px, env(safe-area-inset-left, 0px)); right: 12px; display: flex; flex-wrap: wrap; gap: 8px; z-index: 2; }
@@ -72,7 +70,7 @@ section h2 { margin: 0 0 8px; font-size: 11px; font-weight: 700; letter-spacing:
 .apcard { border: 1px solid var(--line); border-radius: 6px; padding: 10px; display: grid; gap: 6px; cursor: pointer; }
 .apcard[data-sel="true"] { border-color: var(--c); box-shadow: inset 3px 0 0 var(--c); }
 .apcard .row { display: flex; align-items: center; gap: 8px; }
-.dot { width: 18px; height: 18px; border-radius: 50%; background: var(--c); color: #fff; font: 700 11px/18px var(--font-mono); text-align: center; flex: none; }
+.dot { width: 18px; height: 18px; border-radius: 50%; background: var(--c); color: #121212; font: 700 11px/18px var(--font-mono); text-align: center; flex: none; }
 .apcard .where { font-weight: 600; }
 .apcard .meas { font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .apcard .warn { color: var(--warn); font-size: 12px; font-weight: 600; }
@@ -98,6 +96,7 @@ td { padding: 3px 0; border-top: 1px solid var(--line); vertical-align: middle; 
 td.n { font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; width: 52px; }
 td.lv { color: var(--muted); width: 26px; font-family: var(--font-mono); font-size: 11px; }
 .chip { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; vertical-align: 0; }
+.lbl.room, .lbl.spotlbl { display: none !important; }
 .lbl.spotlbl { font-size: 11px; background: var(--surface); color: var(--ink); text-shadow: none; border: 1.5px solid var(--ink); border-radius: 10px; padding: 1px 7px; transform: translate(-50%, -135%); }
 .lbl.spotlbl small { display: inline; margin-left: 4px; font-weight: 600; color: var(--ink); }
 .spotintro { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); }
@@ -130,9 +129,7 @@ td.lv { color: var(--muted); width: 26px; font-family: var(--font-mono); font-si
 
 /* ---- plan builder ---- */
 #panelRes, #panelDraw { display: contents; }
-:root { --ap-c: #1f8a5b; --edwall: #3a4650; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ap-c: #5fd0a0; --edwall: #c3ced6; } }
-:root[data-theme="dark"] { --ap-c: #5fd0a0; --edwall: #c3ced6; }
+:root { --ap-c: #5fd0ff; --edwall: #c9cccf; }
 .modes { margin-left: auto; }
 #ed { position: absolute; inset: 0; width: 100%; height: 100%; display: none; touch-action: none; background: var(--bg); }
 body[data-mode="draw"] #ed { display: block; }
@@ -163,7 +160,7 @@ dialog::backdrop { background: rgba(0,0,0,0.4); }
 dialog h3 { margin: 0 0 8px; font-size: 16px; }
 dialog table td, dialog table th { padding: 4px 6px; }
 dialog .btnrow { margin-top: 12px; justify-content: flex-end; }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); border-radius: 999px; }
 .apcard .meas b { color: var(--ink); font-weight: 600; }
 .seg.small button { padding: 4px 10px; }
 .cnt { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 13px; color: var(--muted); }
@@ -171,6 +168,12 @@ dialog .btnrow { margin-top: 12px; justify-content: flex-end; }
   body[data-mode="draw"] .app { grid-template-rows: auto 70vh auto; }
   .modes { margin-left: 0; }
 }
+html.hero, html.hero body { background: transparent !important; overflow: hidden; }
+html.hero .app > *:not(#vp), html.hero body > *:not(.app) { display: none !important; }
+html.hero .app { display: block !important; height: 100vh; padding: 0 !important; }
+html.hero #vp { position: fixed !important; inset: 0 !important; border: 0 !important; }
+html.hero #vp > *:not(#gl) { display: none !important; }
+html.hero dialog, html.hero .stat { display: none !important; }
 </style>
 </head>
 <body data-mode="results">
@@ -1050,6 +1053,11 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(38, 1, 0.5, 800);
 const controls = new THREE.OrbitControls(camera, canvas);
 controls.enableDamping = true; controls.dampingFactor = 0.12;
+controls.autoRotateSpeed = 0.45;
+let idleT = 0; const IDLE_MS = 5000;
+function stopSpin() { controls.autoRotate = false; clearTimeout(idleT); }
+function armSpin() { clearTimeout(idleT); idleT = setTimeout(() => { if (controls.enableRotate && !matchMedia('(prefers-reduced-motion: reduce)').matches) controls.autoRotate = true; }, IDLE_MS); }
+['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach(ev => addEventListener(ev, () => { stopSpin(); armSpin(); }, { passive: true, capture: true }));
 scene.add(new THREE.HemisphereLight(0xffffff, 0x8899aa, 0.85));
 const sun = new THREE.DirectionalLight(0xffffff, 0.55); sun.position.set(-30, 60, 40); scene.add(sun);
 const GR = [new THREE.Group(), new THREE.Group()]; GR.forEach(g => scene.add(g));
@@ -1105,11 +1113,33 @@ function addLabel(html, cls, pos, level, ref) {
   const el = document.createElement('div'); el.className = 'lbl ' + (cls || ''); el.innerHTML = html; labelsEl.appendChild(el);
   const it = { el, pos: new THREE.Vector3(...pos), level, ref }; labelItems.push(it); return it;
 }
-let roomLabels = [];
+// Text painted flat on the floor (instead of HTML labels floating over the walls)
+function makeDecal(hFt) {
+  const cv = document.createElement('canvas'), ctx = cv.getContext('2d'), tex = new THREE.CanvasTexture(cv);
+  tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter;
+  const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mat); mesh.rotation.x = -Math.PI / 2; mesh.renderOrder = 4;
+  let last = '';
+  mesh.userData.set = (name, sub) => {
+    const key = name + '|' + sub; if (key === last) return; last = key;
+    const NP = 64, SP = 44, pad = 14, fb = css('--font-body') || 'sans-serif', fm = css('--font-mono') || 'monospace';
+    ctx.font = `600 ${NP}px ${fb}`; let w = ctx.measureText(name).width;
+    if (sub) { ctx.font = `500 ${SP}px ${fm}`; w = Math.max(w, ctx.measureText(sub).width); }
+    cv.width = Math.ceil(w + pad * 2); cv.height = Math.ceil(NP * 1.15 + (sub ? SP * 1.2 : 0) + pad * 2);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.lineJoin = 'round';
+    const line = (t, font, y, fill) => { ctx.font = font; ctx.lineWidth = 12; ctx.strokeStyle = 'rgba(12,12,12,.82)'; ctx.strokeText(t, cv.width / 2, y); ctx.fillStyle = fill; ctx.fillText(t, cv.width / 2, y); };
+    line(name, `600 ${NP}px ${fb}`, pad, '#f2f2f2');
+    if (sub) line(sub, `500 ${SP}px ${fm}`, pad + NP * 1.15, '#d6d6d6');
+    tex.needsUpdate = true;
+    const k = hFt / NP; mesh.scale.set(cv.width * k, cv.height * k, 1);
+  };
+  return mesh;
+}
+let roomLabels = [], roomDecals = [];
 function buildScene() {
   GEO.forEach(clearGroup); beamMesh = null;
   layers.forEach(L => { if (L) L.tex.dispose(); }); layers = [null, null];
-  roomLabels.forEach(it => { it.el.remove(); labelItems.splice(labelItems.indexOf(it), 1); }); roomLabels = [];
+  roomLabels.forEach(it => { it.el.remove(); labelItems.splice(labelItems.indexOf(it), 1); }); roomLabels = []; roomDecals = [];
   LV.forEach((L, li) => {
     if (!L.exists) return;
     const m = L.mask, base = li === 0 ? 0 : H.L2floor / FT;
@@ -1124,7 +1154,8 @@ function buildScene() {
     layers[li] = { cv, ctx: cv.getContext('2d'), tex, mesh, vals: new Float32Array(m.w * m.h).fill(NaN) };
     L.labels.forEach((lab, ri) => {
       if (lab.type === 'closet') return;
-      roomLabels.push(addLabel(esc(lab.name), '', [lab.x / FT, base + 0.3, lab.y / FT], li, { li, ri }));
+      roomLabels.push(addLabel(esc(lab.name), 'room', [lab.x / FT, base + 0.3, lab.y / FT], li, { li, ri }));
+      const dc = makeDecal(1.0); dc.position.set(lab.x / FT, base + 0.08, lab.y / FT); dc.userData.set(lab.name, ''); dc.userData.ref = { li, ri }; GEO[li].add(dc); roomDecals.push(dc);
     });
   });
   buildBeam();
@@ -1209,6 +1240,7 @@ function renderStats() {
     const lab = LV[it.ref.li].labels[it.ref.ri]; const o = per[(it.ref.li + 1) + '|' + it.ref.ri];
     it.el.innerHTML = `${esc(lab.name)}${o ? `<small>avg ${Math.round(o.sum / o.n)}</small>` : ''}`;
   });
+  roomDecals.forEach(dc => { const r = dc.userData.ref, lab = LV[r.li].labels[r.ri], o = per[(r.li + 1) + '|' + r.ri]; dc.userData.set(lab.name, ''); });
 }
 
 // ---------- phone spots ----------
@@ -1237,7 +1269,7 @@ const spotObjs = new Map();
 const spotMat = { fill: new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.16, depthWrite: false }), line: new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.95, depthWrite: false }) };
 function tintSpots() { const c = new THREE.Color(css('--ink') || '#182027'); spotMat.fill.color = c; spotMat.line.color = c; }
 tintSpots();
-function dropSpotObj(o) { o.grp.parent && o.grp.parent.remove(o.grp); o.grp.children.forEach(m => m.geometry.dispose()); o.lbl.remove(); }
+function dropSpotObj(o) { o.grp.parent && o.grp.parent.remove(o.grp); o.grp.children.forEach(m => { m.geometry.dispose(); if (m.material && m.material.map) { m.material.map.dispose(); m.material.dispose(); } }); o.lbl.remove(); }
 function syncSpotObjs() {
   for (const [id, o] of spotObjs) if (!SPOTS.some(s => s.id === id)) { dropSpotObj(o); spotObjs.delete(id); }
   SPOTS.forEach((s) => {
@@ -1250,7 +1282,8 @@ function syncSpotObjs() {
       const dot = new THREE.Mesh(new THREE.CircleGeometry(0.28, 20), spotMat.line);
       [fill, ring, dot].forEach(m => { m.rotation.x = -Math.PI / 2; m.renderOrder = 3; m.userData.spot = s.id; grp.add(m); });
       const lbl = document.createElement('div'); lbl.className = 'lbl spotlbl'; labelsEl.appendChild(lbl);
-      o = { grp, fill, lbl, r: k.r }; spotObjs.set(s.id, o);
+      const dec = makeDecal(0.8); dec.position.set(0, 0.03, R + 0.75); grp.add(dec);
+      o = { grp, fill, lbl, dec, r: k.r }; spotObjs.set(s.id, o);
     }
     const g = GR[s.lv - 1]; if (o.grp.parent !== g) { o.grp.parent && o.grp.parent.remove(o.grp); g.add(o.grp); }
     o.grp.position.set(s.x / FT, (s.lv === 1 ? H.L1floor : H.L2floor) / FT + 0.07, s.y / FT);
@@ -1260,7 +1293,7 @@ function valHTML(v) { return `<span class="chip" style="background:${chip(v.c)}"
 function renderSpots() {
   const box = $('#spots');
   const vals = new Map(SPOTS.map(s => [s.id, spotValues(s)]));
-  for (const s of SPOTS) { const o = spotObjs.get(s.id), v = vals.get(s.id); if (o) o.lbl.innerHTML = `${esc(s.name || 'Spot')}<small>${v ? Math.round(v.c) : '—'}</small>`; }
+  for (const s of SPOTS) { const o = spotObjs.get(s.id), v = vals.get(s.id); if (o) { o.lbl.innerHTML = `${esc(s.name || 'Spot')}<small>${v ? Math.round(v.c) : '—'}</small>`; o.dec.userData.set((s.name || 'Spot').split(',')[0] + '  ' + (v ? Math.round(v.c) : '—'), ''); } }
   $('#tuneBtn').disabled = !SPOTS.length || tuning;
   $('#tuneBtn').textContent = tuning ? $('#tuneBtn').textContent : (nAP === 1 ? 'Place the AP for these spots' : nAP === 2 ? 'Place both APs for these spots' : 'Place all 3 APs for these spots');
   const editing = box.contains(document.activeElement) && document.activeElement.matches('input,select');
@@ -1410,7 +1443,7 @@ function setView(v) {
     controls.enableRotate = true; const k = Math.max(1, 1.3 / asp) * Math.max(bw, bd) / 38, ty = 7;
     camera.position.set(cx - 33 * k, ty + 39 * k, cz + 55 * k); controls.target.set(cx, ty, cz);
   } else {
-    controls.enableRotate = false;
+    controls.enableRotate = false; controls.autoRotate = false;
     const y = v === 'l1' ? 0 : H.L2floor / FT, k = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)), dist = Math.max(bd * 1.18 / k, bw * 1.18 / (k * asp)) + 9;
     camera.position.set(cx, y + dist, cz + 0.02); controls.target.set(cx, y, cz);
   }
@@ -1979,9 +2012,10 @@ $('#modeRes').onclick = () => setMode('results'); $('#modeDraw').onclick = () =>
 document.addEventListener('click', e => { if (e.target.id === 'planWarnGo') setMode('draw'); });
 
 // ---------- boot ----------
+const HERO = new URLSearchParams(location.search).has('hero');
 (function load() {
   let st = null;
-  try { const raw = localStorage.getItem(KEY); if (raw) st = JSON.parse(raw); } catch (e) {}
+  if (!HERO) { try { const raw = localStorage.getItem(KEY); if (raw) st = JSON.parse(raw); } catch (e) {} }
   try { if (st && st.plan) { loadStateBoot(st); return; } } catch (e) { console.warn('Saved plan ignored:', e); }
   loadStateBoot({ plan: C.demoPlan(), spots: C.demoSpots(), n: 2 });
   function loadStateBoot(o) {
@@ -1991,7 +2025,8 @@ document.addEventListener('click', e => { if (e.target.id === 'planWarnGo') setM
 })();
 note('Spots are saved in this browser, together with your plan.');
 document.body.dataset.mode = 'results';
-resize(); rebuild(); frame();
+resize(); rebuild(); frame(); armSpin();
+if (HERO) { controls.autoRotate = true; controls.autoRotateSpeed = 0.55; controls.enabled = false; requestAnimationFrame(() => requestAnimationFrame(() => { try { parent.postMessage('zv-hero-ready', '*'); } catch (e) {} })); }
 window.__planner = { C, get plan() { return plan; }, get M() { return M; }, get APS() { return APS; }, setMode, rebuild };
 })();
 </script>

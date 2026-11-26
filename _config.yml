@@ -51,8 +51,6 @@ gems:
   - jekyll-gist
   - jekyll-paginate
 
-paginate: 5
-paginate_path: "/blog/page:num/"
 
 # Exclude list
 exclude: [README.md, Gemfile, Gemfile.lock, node_modules, gulpfile.js, package.json, _site, src, vendor, CNAME, LICENSE, Rakefile, old]

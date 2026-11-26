@@ -1,179 +1,27 @@
-<!DOCTYPE HTML>
-<html>
-
-<head>
-  {% include head.html %}
-  <style>
-      body {font-family: Arial, Helvetica, sans-serif;}
-      
-      #myImg {
-          border-radius: 5px;
-          cursor: pointer;
-          transition: 0.3s;
-      }
-      
-      #myImg:hover {opacity: 0.7;}
-      
-      /* The Modal (background) */
-      .modal {
-          display: none; /* Hidden by default */
-          position: fixed; /* Stay in place */
-          z-index: 100000; /* Sit on top */
-          padding-top: 100px; /* Location of the box */
-          left: 0;
-          top: 0;
-          width: 100%; /* Full width */
-          height: 100%; /* Full height */
-          overflow: auto; /* Enable scroll if needed */
-          background-color: rgb(0,0,0); /* Fallback color */
-          background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
-      }
-      
-      /* Modal Content (image) */
-      .modal-content {
-          margin: auto;
-          display: block;
-          width: 90%;
-      }
-      
-      /* Caption of Modal Image */
-      #caption {
-          margin: auto;
-          display: block;
-          width: 90%;
-          text-align: center;
-          color: #ccc;
-          padding: 10px 0;
-          height: 150px;
-      }
-      
-      /* Add Animation */
-      .modal-content, #caption {    
-          -webkit-animation-name: zoom;
-          -webkit-animation-duration: 0.6s;
-          animation-name: zoom;
-          animation-duration: 0.6s;
-      }
-      
-      @-webkit-keyframes zoom {
-          from {-webkit-transform:scale(0)} 
-          to {-webkit-transform:scale(1)}
-      }
-      
-      @keyframes zoom {
-          from {transform:scale(0)} 
-          to {transform:scale(1)}
-      }
-      
-      /* The Close Button */
-      .close {
-          position: absolute;
-          top: 30px;
-          right: 35px;
-          color: #f1f1f1;
-          font-size: 40px;
-          font-weight: bold;
-          transition: 0.3s;
-      }
-      
-      .close:hover,
-      .close:focus {
-          color: #bbb;
-          text-decoration: none;
-          cursor: pointer;
-      }
-      
-      /* 100% Image Width on Smaller Screens */
-      @media only screen and (max-width: 700px){
-          .modal-content {
-              width: 100%;
-          }
-      }
-      </style>
-</head>
-
-<body class="is-loading">
-
-  <!-- Wrapper -->
-  <div id="wrapper" class="fade-in">
-
-    <!-- Header -->
-    <header id="header">
-      <a href="{{ "/" | absolute_url }}" class="logo">{{site.title}}</a>
-    </header>
-
-    <!-- Nav -->
-    <nav id="nav">
-      {% include nav.html %}
-    </nav>
-
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-      <span class="close">&times;</span>
-      <img class="modal-content" id="modalImage">
-      <div id="caption"></div>
-    </div>
-
-    <!-- Main -->
-    <div id="main" style="padding: 2rem;">
-      <section class="post">
-        <header class="major">
-          <span class="date">{{page.date | date_to_string}}</span>
-          <h1>{{page.title}}</h1>
-          <p>{{page.excerpt}}</p>
-        </header>
-        <div class="image main">
-          <img img id="imgX" onclick="imageModel(this.id);" src="{{page.image}}" alt="">
-        </div>
-        <p>{{content}}</p>
-      <br>
-
-      <!-- <div class="comments-wrapper">
-          <div id="disqus_thread"></div>
-          <script>
-          var disqus_config = function () {
-            this.page.url = "{{ site.url }}{{ page.url | absolute_url }}";
-            this.page.identifier = '{{ page.url }}'; 
-          };
-          
-          (function() {
-          var d = document, s = d.createElement('script');
-          s.src = 'https://zenvent.disqus.com/embed.js';
-          s.setAttribute('data-timestamp', +new Date());
-          (d.head || d.body).appendChild(s);
-          })();
-          </script>
-          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        </section>                         
-    --></div> 
-    {% include foot.html %}
+---
+layout: zv
+---
+{%- comment -%}
+Front matter options:
+  topics: [Software, Hardware, ...]   filter tabs on the home page
+  hero: app                           no banner; the embedded app leads the post
+  app: /images/<slug>/app.html        page embedded when hero: app
+  app_caption: "..."                  text after the full-screen button
+  feature_live: /images/<slug>/x?hero animated page shown on the home featured card
+{%- endcomment -%}
+<article class="zpost">
+  <a class="back" href="{{ '/' | relative_url }}">← All builds</a>
+  {%- if page.topics %}<span class="kick">{{ page.topics | join: ' · ' }}</span>{% endif %}
+  <h1>{{ page.title }}</h1>
+  {%- if page.excerpt %}<p class="sub">{{ page.excerpt | strip_html }}</p>{% endif %}
+  <div class="by">Zac · {{ page.date | date: '%b %-d, %Y' }}</div>
+  {%- if page.hero == 'app' and page.app %}
+  <div class="appembed"><iframe src="{{ page.app | relative_url }}" title="{{ page.title | escape }}" allow="fullscreen"></iframe></div>
+  <p class="appcap"><a href="{{ page.app | relative_url }}" target="_blank" rel="noopener">Open full screen ↗</a>{% if page.app_caption %}<span>{{ page.app_caption }}</span>{% endif %}</p>
+  {%- elsif page.image %}
+  <div class="hero"><img src="{{ page.image | relative_url }}" alt="{{ page.title | escape }}"></div>
+  {%- endif %}
+  <div class="prose">
+{{ content }}
   </div>
-
-  <!-- Scripts -->
-  {% include scripts-main.html %} {% include tracking.html %}
-  <script>
-      function imageModel(imageId){
-        // Get the modal
-        var modal = document.getElementById('myModal');
-      
-        // Get the image and insert it inside the modal - use its "alt" text as a caption
-        var img = document.getElementById(imageId);
-        var modalImg = document.getElementById("modalImage");
-        var captionText = document.getElementById("caption");
-        modal.style.display = "block";
-        modalImg.src = img.src;
-        captionText.innerHTML = img.alt;
-      
-        // Get the <span> element that closes the modal
-        var span = document.getElementById("myModal");
-      
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function() { 
-            modal.style.display = "none";
-        }
-      }
-      </script>
-
-</body>
-
-</html>
+</article>

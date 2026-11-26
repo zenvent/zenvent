@@ -4,6 +4,7 @@ title: "Flappy Doom Game"
 excerpt: "Fly through heck, dodge pillars, explode a lot"
 tags: [random, software]
 image: "/images/flappyDoom.PNG"
+topics: [Games, Software]
 ---
 
 While experimenting with the Unity engine I accidentally made the best game in the universe.

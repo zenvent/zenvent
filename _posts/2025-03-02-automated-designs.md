@@ -1,9 +1,10 @@
 ---
 layout: post
-title: "Parameteric Automation"
+title: "Parametric Automation"
 excerpt: "Automated Designs with Fusion 360"
 tags: [random]
-image: "images/automatedpots/banner.png"
+image: "/images/automatedpots/banner.png"
+topics: [CAD, 3D Printing]
 ---
 ![the bodies](/images/automatedpots/fusion_360_bodies.png){: width="100%" }
 
