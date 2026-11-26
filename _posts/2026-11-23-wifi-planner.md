@@ -3,11 +3,11 @@ layout: post
 title: "Smart WiFi Placement"
 excerpt: "I modeled my house in 3D to figure it out"
 tags: [networking, home, simulation]
-image: "/images/wifi-planner/banner.jpg"
+image: "/images/wifi-planner/banner-v2.jpg"
 topics: [Software, Home]
 hero: app
-app: /images/wifi-planner/planner.html
-app_embed: /images/wifi-planner/planner.html?preview
+app: /images/wifi-planner/planner.html?v=2
+app_embed: /images/wifi-planner/planner.html?preview&v=2
 app_caption: "Drag to orbit. Open it full screen to move access points, add spots and edit the house."
 ---
 
