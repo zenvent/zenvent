@@ -1146,7 +1146,9 @@ function buildScene() {
     const m = L.mask, base = li === 0 ? 0 : H.L2floor / FT;
     const fm = li === 1 ? L.slab : L.floorCells;
     GEO[li].add(new THREE.Mesh(boxesGeometry(cellRects(fm, m).map(rectQuad), base - (li === 0 ? 0.3 : 0.4), base), mats.floor));
-    GEO[li].add(Object.assign(new THREE.Mesh(boxesGeometry(L.walls.map(wallQuad), base + 0.06, base + (li === 0 ? H.L1ceil : H.L2ceil - H.L2floor) / FT), mats.wall), { renderOrder: 2 }));
+    // footing under every wall so exterior / stairwell walls never hang past the slab edge
+    GEO[li].add(new THREE.Mesh(boxesGeometry(L.walls.map(wallQuad), base - (li === 0 ? 0.3 : 0.4), base - 0.01), mats.floor));
+    GEO[li].add(Object.assign(new THREE.Mesh(boxesGeometry(L.walls.map(wallQuad), base, base + (li === 0 ? H.L1ceil : H.L2ceil - H.L2floor) / FT), mats.wall), { renderOrder: 2 }));
     const cv = document.createElement('canvas'); cv.width = m.w; cv.height = m.h;
     const tex = new THREE.CanvasTexture(cv); tex.magFilter = THREE.LinearFilter; tex.minFilter = THREE.LinearFilter;
     const W = m.w * m.cell / FT, Hh = m.h * m.cell / FT;
