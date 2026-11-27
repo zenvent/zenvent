@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap">
-<link rel="stylesheet" href="{{ '/assets/css/zv.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/zv.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 </head>
 <body>
 <header class="top">
@@ -46,6 +46,6 @@
   <span>© {{ site.time | date: '%Y' }} Zac · ZENVENT</span>
   <nav><a href="{{ site.youtube }}" rel="me noopener">YouTube</a><a href="{{ site.github }}" rel="me noopener">GitHub</a><a href="{{ site.linkedin }}" rel="me noopener">LinkedIn</a><a href="{{ '/feed.xml' | relative_url }}">RSS</a></nav>
 </footer>
-<script src="{{ '/assets/js/zv.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/zv.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 </body>
 </html>
