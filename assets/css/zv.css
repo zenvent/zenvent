@@ -49,9 +49,16 @@ main.wrap{width:100%;max-width:1100px;margin:0 auto;padding:22px 20px 70px;flex:
 /* list */
 .secbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:34px 0 12px;flex-wrap:wrap}
 .secbar h3{font-size:24px}
-.secbar .tabs{flex:1 1 auto;justify-content:flex-end}
-@media(max-width:860px){.secbar .tabs{justify-content:flex-start;flex-basis:100%}}
-.tabs{display:flex;flex-wrap:wrap;gap:6px;max-width:100%}
+.secbar .tabs{flex:1 1 0;min-width:0}
+@media(max-width:860px){.secbar .tabs{flex-basis:100%}}
+/* one line, swipe/scroll sideways; edge fades only show when there's more that way */
+.tabs{display:flex;flex-wrap:nowrap;gap:6px;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;scrollbar-width:none;padding:2px 0}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;scroll-snap-align:start}
+.tabs.fl{-webkit-mask:linear-gradient(90deg,transparent,#000 28px);mask:linear-gradient(90deg,transparent,#000 28px)}
+.tabs.fr{-webkit-mask:linear-gradient(90deg,#000 calc(100% - 44px),transparent);mask:linear-gradient(90deg,#000 calc(100% - 44px),transparent)}
+.tabs.fl.fr{-webkit-mask:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 44px),transparent);mask:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 44px),transparent)}
+@media(min-width:861px){.tabs:not(.fl):not(.fr){justify-content:flex-end}}
 .tabs button{border:1px solid var(--line);background:var(--surface);color:var(--muted);font:500 14px var(--f-body);padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;min-height:36px}
 .tabs button span{font-size:12px;opacity:.65;margin-left:6px}
 .tabs button:hover{color:var(--fg)}
