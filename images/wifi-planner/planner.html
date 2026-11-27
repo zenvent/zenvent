@@ -1149,8 +1149,8 @@ function buildScene() {
     const fm = li === 1 ? L.slab : L.floorCells;
     GEO[li].add(new THREE.Mesh(boxesGeometry(cellRects(fm, m).map(rectQuad), base - (li === 0 ? 0.3 : 0.4), base), mats.floor));
     // footing under every wall so exterior / stairwell walls never hang past the slab edge
-    GEO[li].add(new THREE.Mesh(boxesGeometry(L.walls.map(wallQuad), base - (li === 0 ? 0.3 : 0.4), base - 0.01), mats.floor));
-    GEO[li].add(Object.assign(new THREE.Mesh(boxesGeometry(L.walls.map(wallQuad), base, base + (li === 0 ? H.L1ceil : H.L2ceil - H.L2floor) / FT), mats.wall), { renderOrder: 2 }));
+    GEO[li].add(new THREE.Mesh(boxesGeometry(L.walls.map(wallQuad), base - (li === 0 ? 0.3 : 0.4), base), mats.floor));
+    GEO[li].add(Object.assign(new THREE.Mesh(boxesGeometry(L.walls.map(wallQuad), base + 0.06, base + (li === 0 ? H.L1ceil : H.L2ceil - H.L2floor) / FT), mats.wall), { renderOrder: 2 }));
     const cv = document.createElement('canvas'); cv.width = m.w; cv.height = m.h;
     const tex = new THREE.CanvasTexture(cv); tex.magFilter = THREE.LinearFilter; tex.minFilter = THREE.LinearFilter;
     const W = m.w * m.cell / FT, Hh = m.h * m.cell / FT;
@@ -1603,7 +1603,7 @@ let tuned = null;
 // Plan editor
 // ======================================================================
 const ed = $('#ed'), ectx = ed.getContext('2d');
-const ED = { floor: 0, tool: 'wall', view: { x: -60, y: -60, s: 1.2 }, sel: null, draft: null, chain: null, poly: null, doorDraft: null, hover: null,
+const ED = { floor: 0, tool: 'pan', view: { x: -60, y: -60, s: 1.2 }, sel: null, draft: null, chain: null, poly: null, doorDraft: null, hover: null,
   undo: [], redo: [], space: false, ptrs: new Map(), pinch: null, pan: null, move: null, cal: null, imgMove: false, showRooms: true, dirty: true, down: null };
 const WCOL = { ext: '--edwall', int: '--muted', wet: null, garage: '--beam' };
 const wallColor = (t) => t === 'wet' ? '#2a8f8f' : css(WCOL[t]) || '#888';
@@ -2011,7 +2011,7 @@ function setMode(m) {
   mode = m; document.body.dataset.mode = m;
   $('#modeRes').setAttribute('aria-pressed', m === 'results'); $('#modeDraw').setAttribute('aria-pressed', m === 'draw');
   if (m === 'results') { $('#hint').textContent = addMode ? $('#hint').textContent : HINT; if (builtVer !== planVer || !M) rebuild(); else { setView(view); update(false); } resize(); }
-  else { setAddMode(false); $('#hint').textContent = DRAWHINT; $('#ceilIn').value = plan.ceil; runPreview(); resize(); fitView(); setTool(ED.tool === 'calib' ? 'wall' : ED.tool); updImgBtns(); renderSel(); updHist(); $('#stat').hidden = true; }
+  else { setAddMode(false); $('#hint').textContent = DRAWHINT; $('#ceilIn').value = plan.ceil; runPreview(); resize(); fitView(); setTool('pan'); updImgBtns(); renderSel(); updHist(); $('#stat').hidden = true; }
 }
 $('#modeRes').onclick = () => setMode('results'); $('#modeDraw').onclick = () => setMode('draw'); $('#doneBtn').onclick = () => setMode('results');
 document.addEventListener('click', e => { if (e.target.id === 'planWarnGo') setMode('draw'); });
